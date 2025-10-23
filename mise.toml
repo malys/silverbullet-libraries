@@ -9,6 +9,10 @@ run = "python scripts/generate_readme.py"
 # Sync custom libraries from backup to src/
 run = "python scripts/sync_custom_libs.py"
 
+[tasks.community-libs]
+# Sync community libraries from backup to src/
+run = "python scripts/community_libraries.py"
+
 # tasks git add and commit and push
 [tasks.git]
 run = "git add . && git commit -m 'update' && git push"
@@ -20,6 +24,10 @@ depends  = [
     "gen-readme",
     "git"
 ]
+
+[tasks.update-libs]
+# Update library metadata and scan for space scripts
+run = "python scripts/update_libraries.py"
 
 # Install Python dependencies
 [tasks.setup]

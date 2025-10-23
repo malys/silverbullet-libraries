@@ -1,0 +1,83 @@
+name: Weekly Library Update
+
+on:
+  schedule:
+    # Run every Sunday at 12:00 UTC
+    - cron: '0 12 * * 0'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-libraries:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # Allow writing to repository
+      pull-requests: write  # Allow creating PRs
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run library update script
+      run: |
+        python scripts/community_libraries.py
+
+    - name: Check for changes
+      id: verify-changed-files
+      run: |
+        if git diff --quiet; then
+          echo "No changes detected"
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          echo "Changes detected"
+          echo "changed=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Commit and push changes
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
+
+        # Add all changed files
+        git add silverbullet_libraries.json space_scripts_summary.md
+
+        # Check if there are actually staged changes
+        if git diff --staged --quiet; then
+          echo "No staged changes to commit"
+          exit 0
+        fi
+
+        # Commit with descriptive message
+        git commit -m "🔄 Weekly update: Refresh library metadata and space scripts
+
+        - Updated GitHub repository metadata (stars, descriptions, etc.)
+        - Scanned for new space-lua and space-style scripts
+        - Generated comprehensive summary of available scripts"
+
+        # Push changes
+        git push
+
+    - name: Create summary
+      if: always()
+      run: |
+        echo "## 🔄 Weekly Library Update Complete" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ **Status**: Library metadata and script inventory updated" >> $GITHUB_STEP_SUMMARY
+        echo "📊 **Files Updated**:" >> $GITHUB_STEP_SUMMARY
+        echo "  - \`silverbullet_libraries.json\` - Repository metadata" >> $GITHUB_STEP_SUMMARY
+        echo "  - \`space_scripts_summary.md\` - Space scripts catalog with GitHub viewing links" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "🔍 **Next Update**: Scheduled for next Sunday at 12:00 UTC" >> $GITHUB_STEP_SUMMARY
