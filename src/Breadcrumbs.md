@@ -1,17 +1,20 @@
 ---
 tags: function
+githubUrl: "https://github.com/malys/silverbullet-libraries/blob/main/src/Breadcrumbs.md"
 ---
 # Breadcrumbs
 Fork of [source](https://community.silverbullet.md/t/breadcrumbs-for-hierarchical-pages/737) to improve breadcrumbs with last updated children pages.
 
-> **example** 
-> [🏡 home](https://silverbullet.l.malys.ovh/home)/[z-custom](https://silverbullet.l.malys.ovh/z-custom) /[breadcrumbs](https://silverbullet.l.malys.ovh/z-custom/breadcrumbs)  -[template](https://silverbullet.l.malys.ovh/z-custom/breadcrumbs/template)
+> **example** Example
+> [🏡 home](https://silverbullet.l.malys.ovh/home)/[z-custom](https://silverbullet.l.malys.ovh/z-custom)/[breadcrumbs](https://silverbullet.l.malys.ovh/z-custom/breadcrumbs)-[template](https://silverbullet.l.malys.ovh/z-custom/breadcrumbs/template)
 
 
 ```space-lua
 yg=yg or {}
-yg.t_bc = template.new[==[/[[${name}]] ]==]
-yg.t_bcsub = template.new[==[-[[${name}]] ]==]
+yg.t_bc = template.new
+[==[/[[${name}]]​]==]
+yg.t_bcsub = template.new
+[==[-[[${name}]]​]==]
 
 function yg.breadcrumbs(path)
   local mypage = path or editor.getCurrentPage()
@@ -31,7 +34,7 @@ function yg.breadcrumbs(path)
 end
 
 function yg.bc(path)
-  return "[[home]]"..(template.each(yg.breadcrumbs(path),yg.t_bc)).." "..(template.each(yg.children(path),yg.t_bcsub)) 
+  return "[[home]]"..(template.each(yg.breadcrumbs(path),yg.t_bc))..""..(template.each(yg.children(path),yg.t_bcsub)) 
 end
 
 function compareDate(a, b)
@@ -66,7 +69,6 @@ event.listen {
     return widgets.breadcrumbs()
   end
 }
-
 ```
 
 See [flex table](https://community.silverbullet.md/t/space-lua-flexbox-columns/2017)
