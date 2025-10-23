@@ -16,7 +16,6 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md)
 - [Mdtablesheet](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md)
 - [Newchildpage](https://github.com/malys/silverbullet-libraries/blob/main/src/NewChildPage.md)
-- [Organization Person](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/entity/Organization-Person.md)
 - [Organization Chart](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md)
 - [Organization Company](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md)
 - [Organization Person](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Person.md)
