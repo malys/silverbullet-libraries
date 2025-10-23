@@ -1,18 +1,74 @@
 [
   {
     "name": "silverbullet libraries",
-    "url": "https://github.com/silverbulletmd/silverbullet-libraries"
+    "url": "https://github.com/silverbulletmd/silverbullet-libraries",
+    "author": "silverbulletmd",
+    "description": "Awesome SilverBullet libraries",
+    "stars": 19,
+    "last_updated": "2025-10-23T11:28:19Z",
+    "category": "misc"
   },
   {
     "name": "silverbullet libraries",
-    "url": "https://github.com/Mr-xRed/silverbullet-libraries"
+    "url": "https://github.com/Mr-xRed/silverbullet-libraries",
+    "author": "Mr-xRed",
+    "description": "Awesome SilverBullet libraries",
+    "stars": 5,
+    "last_updated": "2025-10-23T12:59:23Z",
+    "category": "misc"
   },
   {
     "name": "silverbullet libraries",
-    "url": "https://github.com/malys/silverbullet-libraries"
+    "url": "https://github.com/malys/silverbullet-libraries",
+    "author": "malys",
+    "description": "Awesome SilverBullet libraries",
+    "stars": 3,
+    "last_updated": "2025-10-23T15:03:55Z",
+    "category": "misc"
   },
   {
     "name": "silverbullet libraries",
-    "url": "https://github.com/janssen-io/silverbullet-libraries"
+    "url": "https://github.com/janssen-io/silverbullet-libraries",
+    "author": "janssen-io",
+    "description": "Public Libraries (such as themes and useful functions) for SilverBullet ",
+    "stars": 6,
+    "last_updated": "2025-10-23T12:57:59Z",
+    "category": "theme"
+  },
+  {
+    "name": "github.com/malys/silverbullet-libraries",
+    "url": "https://github.com/malys/silverbullet-libraries/blob/main/space_scripts_summary.md",
+    "author": "malys",
+    "description": "Awesome SilverBullet libraries",
+    "stars": 3,
+    "last_updated": "2025-10-23T15:03:55Z",
+    "category": "misc"
+  },
+  {
+    "name": "space_scripts_summary.md",
+    "url": "https://github.com/malys/silverbullet-libraries/blob/main/space_scripts_summary.md",
+    "author": "malys",
+    "description": "Awesome SilverBullet libraries",
+    "stars": 3,
+    "last_updated": "2025-10-23T15:03:55Z",
+    "category": "misc"
+  },
+  {
+    "name": "main",
+    "url": "https://github.com/malys/silverbullet-libraries/blob/main/space_scripts_summary.md",
+    "author": "malys",
+    "description": "Awesome SilverBullet libraries",
+    "stars": 3,
+    "last_updated": "2025-10-23T15:03:55Z",
+    "category": "misc"
+  },
+  {
+    "name": "show original",
+    "url": "https://github.com/malys/silverbullet-libraries/blob/main/space_scripts_summary.md",
+    "author": "malys",
+    "description": "Awesome SilverBullet libraries",
+    "stars": 3,
+    "last_updated": "2025-10-23T15:03:55Z",
+    "category": "misc"
   }
 ]
