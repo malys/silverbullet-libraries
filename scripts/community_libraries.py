@@ -26,20 +26,33 @@ def fetch_page(url):
 
 def parse_library_list(html):
     """Extract GitHub repository links from HTML anchor tags in the forum post."""
-    soup = BeautifulSoup(html, "html.parser")
+    soup = BeautifulSoup(html, 'html.parser')
 
     # Find all anchor tags with href attributes
     links = soup.find_all('a', href=True)
 
     libs = []
+    processed_urls = set()  # Track processed repository URLs to avoid duplicates
+    
     for link in links:
         url = link['href'].strip()
         # Only include GitHub URLs
-        if 'github.com' in url:
+        # Exclude the summary file from the community page
+        if url != 'https://github.com/malys/silverbullet-libraries/blob/main/space_scripts_summary.md' and 'github.com' in url:
+            # Normalize URL to handle different formats (with/without .git, http/https, etc.)
+            normalized_url = url.lower().replace('.git', '').rstrip('/')
+            if 'http://' in normalized_url:
+                normalized_url = normalized_url.replace('http://', 'https://')
+            
+            # Skip if we've already processed this repository
+            if normalized_url in processed_urls:
+                continue
+                
             name = link.get_text().strip()
             # Skip empty names or navigation links
             if name and not any(skip in name.lower() for skip in ['home', 'categories', 'guidelines', 'terms', 'privacy']):
                 libs.append({"name": name, "url": url})
+                processed_urls.add(normalized_url)
 
     return libs
 
@@ -153,6 +166,7 @@ def find_space_scripts_in_repo(owner, repo):
     api_url = f"https://api.github.com/repos/{owner}/{repo}/contents"
     scan_contents(api_url)
 
+
     return scripts
 
 
@@ -173,7 +187,7 @@ def generate_summary_message(libraries, file_url):
 
     # Generate markdown message
     lines = ["# SilverBullet Space Scripts", ""]
-    lines.append(f"Found **{len(all_scripts)}** space-lua and space-style scripts across **{len(set(s['repo'] for s in all_scripts))}** repositories.")
+    lines.append(f"Found space-lua and space-style scripts across defined repositories.")
     lines.append("")
 
     if all_scripts:
@@ -191,7 +205,11 @@ def generate_summary_message(libraries, file_url):
         for repo, scripts in scripts_by_repo.items():
             lines.append(f"### {repo}")
             lines.append("")
-
+            
+            # Filter scripts to remove duplicate entries based on script['name']
+            seen_names = set()
+            scripts = [s for s in scripts if not (s['name'] in seen_names or seen_names.add(s['name']))]
+            
             for script in scripts:
                 script_url = f"https://github.com/{repo}/blob/main/{script['path']}"
                 lines.append(f"- **{script['name']}**")
