@@ -1,3 +1,7 @@
+---
+author: malys
+description: Display most commun shortcuts.
+---
 # Help: Shortcuts
 Display helper on demand.
 

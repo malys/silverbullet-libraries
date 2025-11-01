@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import re
 from pathlib import Path
 
 def get_markdown_files(directory, exclude=None):
@@ -10,6 +11,23 @@ def get_markdown_files(directory, exclude=None):
         if file_path.name not in exclude and not any(part.startswith('.') for part in file_path.parts):
             markdown_files.append(file_path)
     return sorted(markdown_files)
+
+def get_description(file_path):
+    """Extract the description from a markdown file's frontmatter."""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            # Look for frontmatter between ---
+            frontmatter_match = re.search(r'^---\n(.*?)\n---', content, re.DOTALL)
+            if frontmatter_match:
+                frontmatter = frontmatter_match.group(1)
+                # Look for description field
+                desc_match = re.search(r'^description:\s*(.*?)(?:\n|$)', frontmatter, re.MULTILINE)
+                if desc_match:
+                    return desc_match.group(1).strip()
+    except Exception as e:
+        print(f"Warning: Could not read {file_path}: {e}")
+    return None
 
 def generate_readme():
     # Get all markdown files from src directory (excluding README.md and hidden directories)
@@ -36,7 +54,16 @@ def generate_readme():
             
         # Format the display name (convert kebab-case to Title Case)
         display_name = ' '.join(word.capitalize() for word in rel_path.stem.split('-'))
-        content.append(f"- [{display_name}](https://github.com/malys/silverbullet-libraries/blob/main/src/{rel_path.as_posix().replace('\\', '/')})")
+        url = f"https://github.com/malys/silverbullet-libraries/blob/main/src/{rel_path.as_posix().replace('\\', '/')}"
+        
+        # Get description from frontmatter
+        description = get_description(file)
+        
+        # Add to content with description if available
+        if description:
+            content.append(f"- [{display_name}]({url}) - {description}")
+        else:
+            content.append(f"- [{display_name}]({url})")
     
 
     # Add usage instructions

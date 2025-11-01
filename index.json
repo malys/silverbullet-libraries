@@ -1,0 +1,130 @@
+[
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/BashCode.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/BashCode.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Quickly insert bash code."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/EmbedEditor.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/EmbedEditor.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Insert Iframe with editors."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/ExternalTransclusion.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Transclude data form external resource."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/FastTagExplorer.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Generate wall of children page tags"
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/HelpShortcuts.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Display most commun shortcuts."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/MarpSlides.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Marp](https://marp.app/) slides integration."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/MdTableSheet.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Integrate FormulaJS in markdown table (table = sheet)."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/Organization/Organization-Chart.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/Organization/Organization-Company.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Organization Company card template."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/Organization/Organization-Employee.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Organization employee template"
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/Organization/Organization-VCFExport.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Generate VCF of company's employees."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/ReplacePlaceholders.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Replace Placeholders feature allows you to easily replace placeholders in your markdown content with specific values"
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/Taiga.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Taiga, open-source project management tool, integration."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/Theme/theme-malys.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "Dark theme thought for readibility and productivity."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/Utilities.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "List of reusable functions."
+  },
+  {
+    "githubUrl": "https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md",
+    "rawUrl": "https://raw.githubusercontent.com/malys/silverbullet-libraries/main/src/VSCodePalette.md",
+    "updateDate": "2025-11-01T09:46:10Z",
+    "lastCommitDate": "2025-11-01T09:46:10Z",
+    "author": "malys",
+    "description": "universal palette (as VScode Palette), use '>' to execute commands"
+  }
+]

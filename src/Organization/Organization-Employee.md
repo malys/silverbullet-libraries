@@ -1,5 +1,5 @@
 ---
-command:  new person
+command:  "Employee: New"
 confirmName: true
 openIfExists: true
 tags: meta/template/page
@@ -34,7 +34,7 @@ frontmatter: |
       - 
       children:
       - 
-pageDecoration:
-  disableTOC: true
+author: malys
+description: Organization employee template
 ---
 ${person.insertImageFromFrontmatter()}

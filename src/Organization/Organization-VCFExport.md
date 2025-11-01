@@ -1,5 +1,14 @@
+---
+author: malys
+description: Generate VCF of company's employees.
+
+---
 # VCF exporter
-Export `person` template to an unique vcf file.
+Export `Employees` template to an unique VCF file.
+
+Use with:
+- Organization-Employee:  employee card
+
 ```space-lua
 
 local function join(tbl, sep)

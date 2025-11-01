@@ -1,3 +1,7 @@
+---
+author: malys
+description: Insert Iframe with editors.
+---
 # Embedded editor
 
 Create IFrame to insert editors on current page.

@@ -1,3 +1,7 @@
+---
+author: malys
+description: Quickly insert bash code.
+---
 # Bash code
 Quickly insert bash code.
 

@@ -5,6 +5,10 @@
 # Generate README.md based on available libraries
 run = "python scripts/generate_readme.py"
 
+[tasks.gen-index]
+# Generate index.json with library metadata
+run = "python scripts/generate_index.py"
+
 [tasks.sync-libs]
 # Sync custom libraries from backup to src/
 run = "python scripts/sync_custom_libs.py"
@@ -17,11 +21,12 @@ run = "python scripts/community_libraries.py"
 [tasks.git]
 run = "git add . && git commit -m 'update' && git push"
 
-# Run both sync and generate README
+# Run sync, generate README and index
 [tasks.update]
 depends  = [
     "sync-libs",
     "gen-readme",
+    "gen-index",
     "git"
 ]
 

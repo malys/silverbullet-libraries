@@ -1,11 +1,19 @@
+---
+author: malys
+description: Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart.
+---
 # Organization Chart
 
-This library provides a way to create [Plantuml](https://plantuml.com/fr/) organization chart.
+Organization Chart create [Plantuml](https://plantuml.com/fr/) organization chart.
 
 With Organization Chart, you can:
-- Create a visual representation of your organizational structure
+- Create a visual representation of your organizational structure (employee are defined using Organization-People)
 - Show the hierarchy of departments and personnel
 - Include information about individuals such as their roles and contact information.
+
+Use with:
+- Organization-Company: company description
+- Organization-Employee:  employee card
 
 ```space-lua
 function prettyPrint(tbl, indent)

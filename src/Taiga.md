@@ -1,5 +1,10 @@
+---
+author: malys
+description: Taiga, open-source project management tool, integration.
+---
+
 # Taiga 
-[Taiga](https://taiga.io/): *The* free and open-source project management tool
+[Taiga](https://taiga.io/): *The* free and open-source project management tool.
 
 ```toml
 # Check network queries in browser to define userId &  projectId

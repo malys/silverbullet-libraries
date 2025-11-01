@@ -1,5 +1,5 @@
 ---
-command:  new company
+command:  "Company: New"
 confirmName: true
 openIfExists: true
 suggestedName: ${editor.prompt("page name",editor.getCurrentPage().."/")}
@@ -25,7 +25,7 @@ frontmatter: |
     - 
     references:
     - 
-pageDecoration:
-  disableTOC: true
+author: malys
+description: Organization Company card template.  
 ---
 ${person.insertImageFromFrontmatter()}

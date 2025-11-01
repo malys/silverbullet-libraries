@@ -1,9 +1,7 @@
 ---
-pageDecoration:
-  prefix: "🎄 "
-  disableTOC: true
+author: malys
+description: Dark theme thought for readibility and productivity.
 ---
-
 # Malys theme
 
 Dark theme thought for readibility and productivity.
