@@ -24,6 +24,7 @@ run = "git add . && git commit -m 'update' && git push"
 # Run sync, generate README and index
 [tasks.update]
 depends  = [
+    "community-libs",
     "sync-libs",
     "gen-readme",
     "gen-index",
