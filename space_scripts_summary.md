@@ -68,6 +68,10 @@ Found space-lua and space-style scripts across defined repositories.
   - Path: `TopPageBanner.md`
   - [View File](https://github.com/Mr-xRed/silverbullet-libraries/blob/main/TopPageBanner.md)
 
+- **Treeview_Extension_DragAndResize.md**
+  - Path: `Treeview_Extension_DragAndResize.md`
+  - [View File](https://github.com/Mr-xRed/silverbullet-libraries/blob/main/Treeview_Extension_DragAndResize.md)
+
 - **UpdateSilverbulletLibraries.md**
   - Path: `UpdateSilverbulletLibraries.md`
   - [View File](https://github.com/Mr-xRed/silverbullet-libraries/blob/main/UpdateSilverbulletLibraries.md)
@@ -163,6 +167,18 @@ Found space-lua and space-style scripts across defined repositories.
 - **README.md**
   - Path: `Library/DevIcons/README.md`
   - [View File](https://github.com/janssen-io/silverbullet-libraries/blob/main/Library/DevIcons/README.md)
+
+- **theme.md**
+  - Path: `Library/LogseqDarkTheme/theme.md`
+  - [View File](https://github.com/janssen-io/silverbullet-libraries/blob/main/Library/LogseqDarkTheme/theme.md)
+
+- **tree.md**
+  - Path: `Library/LogseqDarkTheme/theme/tree.md`
+  - [View File](https://github.com/janssen-io/silverbullet-libraries/blob/main/Library/LogseqDarkTheme/theme/tree.md)
+
+- **commands.md**
+  - Path: `Library/OpenPageInSidebar/commands.md`
+  - [View File](https://github.com/janssen-io/silverbullet-libraries/blob/main/Library/OpenPageInSidebar/commands.md)
 
 ---
 📊 **Metadata**: [View full library metadata](https://github.com/silverbulletmd/silverbullet-libraries/blob/main/silverbullet_libraries.json)
