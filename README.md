@@ -9,6 +9,8 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Externaltransclusion](https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md) - Transclude data form external resource.
 - [Fasttagexplorer](https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md) - Generate wall of children page tags
 - [Helpshortcuts](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md) - Display most commun shortcuts.
+- [Hhh](https://github.com/malys/silverbullet-libraries/blob/main/src/HHH.md)
+- [Llminstructions](https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md) - System prompt to pilot LLM in SB plugin coding.
 - [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - Marp](https://marp.app/) slides integration.
 - [Mdtablesheet](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md) - Integrate FormulaJS in markdown table (table = sheet).
 - [Organization Chart](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md) - Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart.
