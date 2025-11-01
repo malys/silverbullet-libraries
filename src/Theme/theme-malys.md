@@ -63,8 +63,6 @@ html {
   font-size: 1em !important;
   color: #ffa500 !important;
 }
-
-
 .sb-line-h1::before {
   content: "h1";
   margin-right: 0.5em;

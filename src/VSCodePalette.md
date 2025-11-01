@@ -16,6 +16,7 @@ local vscode = {}
 vscode.enabledObjectToPopulate = {"page", "command", "header"}  
 vscode.cacheTimeout = 30 * 60  
 vscode.maxItems = 200  
+vscode.truncate=80
 vscode.usageHistory = {}  
   
 -- Load usage history from datastore with nil check  
@@ -101,7 +102,7 @@ local function populate()
                 for _, item in ipairs(pages) do  
                     if item and item.name and #item.name>0  then   
                         category="header"
-                        name= string.sub(item.name,1,40)
+                        name= string.sub(item.name,1,vscode.truncate)
                         table.insert(opts, {  
                             name = name,  
                             prefix= "✨" , 
@@ -179,7 +180,7 @@ vscode.previousCheck = os.time()
 command.define {  
     name = "Universal Palette",  
     key = "Ctrl-p",  
-    priority = 1,  
+    priority = 10,  
     run = function()  
         if not vscode.entries or #vscode.entries == 0 then  
             vscode.entries = populate()  
