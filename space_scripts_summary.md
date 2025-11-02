@@ -106,9 +106,17 @@ Found space-lua and space-style scripts across defined repositories.
   - Path: `src/FastTagExplorer.md`
   - [View File](https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md)
 
+- **HHH.md**
+  - Path: `src/HHH.md`
+  - [View File](https://github.com/malys/silverbullet-libraries/blob/main/src/HHH.md)
+
 - **HelpShortcuts.md**
   - Path: `src/HelpShortcuts.md`
   - [View File](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md)
+
+- **LLMInstructions.md**
+  - Path: `src/LLMInstructions.md`
+  - [View File](https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md)
 
 - **MarpSlides.md**
   - Path: `src/MarpSlides.md`
