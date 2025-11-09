@@ -64,6 +64,10 @@ Found space-lua and space-style scripts across defined repositories.
   - Path: `OpenWeatherMap_Widgets.md`
   - [View File](https://github.com/Mr-xRed/silverbullet-libraries/blob/main/OpenWeatherMap_Widgets.md)
 
+- **PDF_with_Pandoc_and_Weasyprint.md**
+  - Path: `PDF_with_Pandoc_and_Weasyprint.md`
+  - [View File](https://github.com/Mr-xRed/silverbullet-libraries/blob/main/PDF_with_Pandoc_and_Weasyprint.md)
+
 - **SearchBar_ModernStyle.md**
   - Path: `SearchBar_ModernStyle.md`
   - [View File](https://github.com/Mr-xRed/silverbullet-libraries/blob/main/SearchBar_ModernStyle.md)
@@ -71,6 +75,10 @@ Found space-lua and space-style scripts across defined repositories.
 - **SelectionToCodeblockToggle.md**
   - Path: `SelectionToCodeblockToggle.md`
   - [View File](https://github.com/Mr-xRed/silverbullet-libraries/blob/main/SelectionToCodeblockToggle.md)
+
+- **TitleBar_ModernStyle.md**
+  - Path: `TitleBar_ModernStyle.md`
+  - [View File](https://github.com/Mr-xRed/silverbullet-libraries/blob/main/TitleBar_ModernStyle.md)
 
 - **TopPageBanner.md**
   - Path: `TopPageBanner.md`
@@ -188,33 +196,57 @@ Found space-lua and space-style scripts across defined repositories.
   - Path: `CONFIG.md`
   - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG.md)
 
-- **Last Opened.md**
-  - Path: `CONFIG/Add Fields for Obj/Last Opened.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Add Fields for Obj/Last Opened.md)
+- **Page_Navigation.md**
+  - Path: `CONFIG/API/Page_Navigation.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/API/Page_Navigation.md)
 
-- **SB approach.md**
-  - Path: `CONFIG/Add Fields for Obj/Last Opened/SB approach.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Add Fields for Obj/Last Opened/SB approach.md)
+- **Last_Opened-Page.md**
+  - Path: `CONFIG/Add_Fields_for_Obj/Last_Opened-Page.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Add_Fields_for_Obj/Last_Opened-Page.md)
 
-- **Cursor Position.md**
-  - Path: `CONFIG/Copy as/External Link/Cursor Position.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Copy as/External Link/Cursor Position.md)
+- **Query_Last_Opened.md**
+  - Path: `CONFIG/Add_Fields_for_Obj/Last_Opened-Page/Query_Last_Opened.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Add_Fields_for_Obj/Last_Opened-Page/Query_Last_Opened.md)
 
-- **Inline Format.md**
-  - Path: `CONFIG/Copy as/Markdown/Inline Format.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Copy as/Markdown/Inline Format.md)
+- **Natural_Language_Dates.md**
+  - Path: `CONFIG/Auto_Completions/Natural_Language_Dates.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Auto_Completions/Natural_Language_Dates.md)
 
-- **Header Level Toggle.md**
-  - Path: `CONFIG/Edit/Header Level Toggle.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Edit/Header Level Toggle.md)
+- **Cursor_Link.md**
+  - Path: `CONFIG/Copy_as/Cursor_Link.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Copy_as/Cursor_Link.md)
 
-- **Read Only Toggle.md**
-  - Path: `CONFIG/Edit/Read Only Toggle.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Edit/Read Only Toggle.md)
+- **Cursor_Wiki.md**
+  - Path: `CONFIG/Copy_as/Cursor_Wiki.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Copy_as/Cursor_Wiki.md)
 
-- **Selection To Codeblock Toggle.md**
-  - Path: `CONFIG/Edit/Selection To Codeblock Toggle.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Edit/Selection To Codeblock Toggle.md)
+- **Folder_Url.md**
+  - Path: `CONFIG/Copy_as/page_title/Folder_Url.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Copy_as/page_title/Folder_Url.md)
+
+- **Github_Url.md**
+  - Path: `CONFIG/Copy_as/page_title/Github_Url.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Copy_as/page_title/Github_Url.md)
+
+- **Page_Link.md**
+  - Path: `CONFIG/Copy_as/page_title/Page_Link.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Copy_as/page_title/Page_Link.md)
+
+- **Page_Wiki.md**
+  - Path: `CONFIG/Copy_as/page_title/Page_Wiki.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Copy_as/page_title/Page_Wiki.md)
+
+- **Header_Level_Toggle.md**
+  - Path: `CONFIG/Edit/Header_Level_Toggle.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Edit/Header_Level_Toggle.md)
+
+- **Read_Only_Toggle.md**
+  - Path: `CONFIG/Edit/Read_Only_Toggle.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Edit/Read_Only_Toggle.md)
+
+- **Selection_To_Codeblock_Toggle.md**
+  - Path: `CONFIG/Edit/Selection_To_Codeblock_Toggle.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Edit/Selection_To_Codeblock_Toggle.md)
 
 - **KeyBinding.md**
   - Path: `CONFIG/KeyBinding.md`
@@ -228,17 +260,21 @@ Found space-lua and space-style scripts across defined repositories.
   - Path: `CONFIG/KeyBinding/Update.md`
   - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/KeyBinding/Update.md)
 
-- **.md**
-  - Path: `CONFIG/KeyBindings/.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/KeyBindings/.md)
+- **Delete.md**
+  - Path: `CONFIG/Nearest_Pattern/Delete.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Nearest_Pattern/Delete.md)
 
-- **Md Excel.md**
-  - Path: `CONFIG/Office/Md Excel.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Office/Md Excel.md)
+- **Duplicate.md**
+  - Path: `CONFIG/Nearest_Pattern/Duplicate.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Nearest_Pattern/Duplicate.md)
 
-- **Image Url.md**
-  - Path: `CONFIG/Paste as/Markdown/Image Url.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Paste as/Markdown/Image Url.md)
+- **Md_Excel.md**
+  - Path: `CONFIG/Office/Md_Excel.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Office/Md_Excel.md)
+
+- **Image_Url.md**
+  - Path: `CONFIG/Paste_as/Markdown/Image_Url.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Paste_as/Markdown/Image_Url.md)
 
 - **Heading.md**
   - Path: `CONFIG/Picker/Heading.md`
@@ -248,21 +284,21 @@ Found space-lua and space-style scripts across defined repositories.
   - Path: `CONFIG/Picker/Tag.md`
   - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Picker/Tag.md)
 
-- **Github Url.md**
-  - Path: `CONFIG/Plug dev/Github Url.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Plug dev/Github Url.md)
+- **Library_Manager.md**
+  - Path: `CONFIG/Plug_dev/Library_Manager.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Plug_dev/Library_Manager.md)
 
-- **Update SB Libs.md**
-  - Path: `CONFIG/Plug dev/Update SB Libs.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Plug dev/Update SB Libs.md)
+- **Update_SB_Libs.md**
+  - Path: `CONFIG/Plug_dev/Update_SB_Libs.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Plug_dev/Update_SB_Libs.md)
 
-- **Silver Search.md**
-  - Path: `CONFIG/Search/Silver Search.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Search/Silver Search.md)
+- **Silver_Search.md**
+  - Path: `CONFIG/Search/Silver_Search.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Search/Silver_Search.md)
 
-- **全局搜索结果在md中.md**
-  - Path: `CONFIG/Search/全局搜索结果在md中.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Search/全局搜索结果在md中.md)
+- **全局搜索结果在侧边栏.md**
+  - Path: `CONFIG/Search/全局搜索结果在侧边栏.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Search/全局搜索结果在侧边栏.md)
 
 - **Git.md**
   - Path: `CONFIG/Sync/Git.md`
@@ -272,9 +308,9 @@ Found space-lua and space-style scripts across defined repositories.
   - Path: `CONFIG/View/Graph.md`
   - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/View/Graph.md)
 
-- **Sidebar Page.md**
-  - Path: `CONFIG/View/Sidebar Page.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/View/Sidebar Page.md)
+- **Sidebar_Page.md**
+  - Path: `CONFIG/View/Sidebar_Page.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/View/Sidebar_Page.md)
 
 - **Tree.md**
   - Path: `CONFIG/View/Tree.md`
@@ -292,33 +328,33 @@ Found space-lua and space-style scripts across defined repositories.
   - Path: `CONFIG/Widget/BreadCrumbs/Top.md`
   - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/BreadCrumbs/Top.md)
 
-- **Embed External.md**
-  - Path: `CONFIG/Widget/Embed External.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Embed External.md)
+- **Embed_External.md**
+  - Path: `CONFIG/Widget/Embed_External.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Embed_External.md)
 
-- **External Transclusion.md**
-  - Path: `CONFIG/Widget/External Transclusion.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/External Transclusion.md)
+- **External_Transclusion.md**
+  - Path: `CONFIG/Widget/External_Transclusion.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/External_Transclusion.md)
 
-- **Chess Board.md**
-  - Path: `CONFIG/Widget/Game/Chess Board.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Game/Chess Board.md)
+- **Chess_Board.md**
+  - Path: `CONFIG/Widget/Game/Chess_Board.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Game/Chess_Board.md)
 
 - **Navigation.md**
   - Path: `CONFIG/Widget/Journal/Navigation.md`
   - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Journal/Navigation.md)
 
-- **Day Progress.md**
-  - Path: `CONFIG/Widget/Reality/Day Progress.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Reality/Day Progress.md)
+- **Day_Progress.md**
+  - Path: `CONFIG/Widget/Reality/Day_Progress.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Reality/Day_Progress.md)
 
-- **Embed GMaps.md**
-  - Path: `CONFIG/Widget/Reality/Embed GMaps.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Reality/Embed GMaps.md)
+- **Embed_GMaps.md**
+  - Path: `CONFIG/Widget/Reality/Embed_GMaps.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Reality/Embed_GMaps.md)
 
-- **Weather Map.md**
-  - Path: `CONFIG/Widget/Reality/Weather Map.md`
-  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Reality/Weather Map.md)
+- **Weather_Map.md**
+  - Path: `CONFIG/Widget/Reality/Weather_Map.md`
+  - [View File](https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/CONFIG/Widget/Reality/Weather_Map.md)
 
 - **QUERY.md**
   - Path: `QUERY.md`
