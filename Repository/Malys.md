@@ -19,6 +19,11 @@ uri: github:malys/silverbullet-libraries/FastTagExplorer.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md
 description: "Generate wall of children page tags"
 ---
+name: "Githistory"
+uri: github:malys/silverbullet-libraries/GitHistory.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md
+description: "Implement Git commands (log, diff, revert)"
+---
 name: "Helpshortcuts"
 uri: github:malys/silverbullet-libraries/HelpShortcuts.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md
@@ -37,7 +42,12 @@ description: "System prompt to pilot LLM in SB plugin coding."
 name: "Marpslides"
 uri: github:malys/silverbullet-libraries/MarpSlides.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md
-description: "Marp](https://marp.app/) slides integration."
+description: "[Marp](https://marp.app/) slides integration."
+---
+name: "Mdtablerender"
+uri: github:malys/silverbullet-libraries/MdTableRender.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md
+description: "Automatically formats Markdown table cells based on hashtag column tags in SilverBullet"
 ---
 name: "Mdtablesheet"
 uri: github:malys/silverbullet-libraries/MdTableSheet.md
