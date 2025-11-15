@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import os
 import re
+import subprocess
 from pathlib import Path
+from datetime import datetime
 
 def get_markdown_files(directory, exclude=None):
     if exclude is None:
@@ -11,6 +13,11 @@ def get_markdown_files(directory, exclude=None):
         if file_path.name not in exclude and not any(part.startswith('.') for part in file_path.parts):
             markdown_files.append(file_path)
     return sorted(markdown_files)
+
+def fix_markdown_links(text):
+    """Fix malformed Markdown links in the text."""
+    # Fix patterns like 'text](url)' to '[text](url)'
+    return re.sub(r'(?<![\[\]\w])(\w+\s*)(]\()', r'[\1\2', text)
 
 def get_description(file_path):
     """Extract the description from a markdown file's frontmatter."""
@@ -24,9 +31,26 @@ def get_description(file_path):
                 # Look for description field
                 desc_match = re.search(r'^description:\s*(.*?)(?:\n|$)', frontmatter, re.MULTILINE)
                 if desc_match:
-                    return desc_match.group(1).strip()
+                    description = desc_match.group(1).strip()
+                    # Fix any malformed Markdown links
+                    return fix_markdown_links(description)
     except Exception as e:
         print(f"Warning: Could not read {file_path}: {e}")
+    return None
+
+def get_last_commit_date(file_path):
+    """Get the last commit date of a file in a human-readable format."""
+    try:
+        # Get the last commit date in ISO format
+        cmd = ['git', 'log', '-1', '--format=%cI', str(file_path)]
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        if result.stdout.strip():
+            # Parse the ISO date and format it as YYYY-MM-DD
+            date_str = result.stdout.strip()
+            date_obj = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+            return date_obj.strftime('%Y-%m-%d')
+    except (subprocess.CalledProcessError, ValueError) as e:
+        print(f"Warning: Could not get commit date for {file_path}: {e}")
     return None
 
 def generate_readme():
@@ -59,22 +83,23 @@ def generate_readme():
         # Get description from frontmatter
         description = get_description(file)
         
-        # Add to content with description if available
+        # Get last commit date
+        last_commit = get_last_commit_date(file)
+        date_suffix = f" - ({last_commit})" if last_commit else ""
+        
+        # Add to content with description and date if available
         if description:
-            content.append(f"- [{display_name}]({url}) - {description}")
+            content.append(f"- [{display_name}]({url}) - {description}{date_suffix}")
         else:
-            content.append(f"- [{display_name}]({url})")
+            content.append(f"- [{display_name}]({url}){date_suffix}")
     
 
     # Add usage instructions
     content.extend([
         "\n## 🛠️ Installation",
-        "1. Browse the libraries above and find one you'd like to use\n"
-        "2. Click on the library to view its contents\n"
-        "3. Copy the file URL (e.g., `https://github.com/malys/silverbullet-libraries/blob/main/src/example.md`)\n"
-        "4. In SilverBullet, run the `Import: URL` command\n"
-        "5. Paste the URL and select `Github: Repo file` as the source\n"
-        "6. Run `System: Reload` to activate the library\n",
+        "1. Navigate to your `Library Manager` inside Silverbullet\n"
+        "2. Add my repository: `https://github.com/malys/silverbullet-libraries/blob/main/Repository/Malys.md`\n"
+        "3. Add any script my repository\n",
         "## 🤝 Contributing",
         "We welcome contributions! Here's how you can help:",
         "- Add new libraries or improve existing ones",

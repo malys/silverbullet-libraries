@@ -1,6 +1,6 @@
 ---
 author: malys
-description: Marp](https://marp.app/) slides integration.
+description: [Marp](https://marp.app/) slides integration.
 ---
 
 # Marp slides
