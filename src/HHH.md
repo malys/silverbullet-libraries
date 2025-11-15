@@ -5,6 +5,8 @@ udpateDate: 2025-10-28
 ---rawUrl: "https://raw.githubusercontent.com/ChenZhu-Xie/xczphysics_SilverBullet/main/STYLE/Theme/HHH.md"
 updateDate: "2025-11-01T13:24:02Z"
 lastCommitDate: "2025-10-31T09:45:25Z"
+author: chenzhu-xie
+description: Fork of  "https://github.com/ChenZhu-Xie/xczphysics_SilverBullet/blob/main/STYLE/Theme/HHH.md"
 ---
   
 # HierarchyHighlightHeadings - HHH Theme
@@ -231,39 +233,39 @@ event.listen {
 
 ```space-style
 :root {
-  /* Dark theme 颜色变量 */
-  --h1-color-dark: #ee82ee;
-  --h2-color-dark: #6a5acd;
-  --h3-color-dark: #4169e1;
-  --h4-color-dark: #008000;
-  --h5-color-dark: #ffff00;
-  --h6-color-dark: #ffa500;
+  /* 🌑 Dark theme - version plus flashy */
+  --h1-color-dark: #ff4dff; /* violet électrique */
+  --h2-color-dark: #7b68ee; /* bleu-violet vif */
+  --h3-color-dark: #1e90ff; /* bleu clair néon */
+  --h4-color-dark: #00ff7f; /* vert menthe fluo */
+  --h5-color-dark: #ffff33; /* jaune vif */
+  --h6-color-dark: #ff8000; /* orange saturé */
 
-  --h1-underline-dark: rgba(230,200,255,0.3);
-  --h2-underline-dark: rgba(160,216,255,0.3);
-  --h3-underline-dark: rgba(152,255,179,0.3);
-  --h4-underline-dark: rgba(255,243,168,0.3);
-  --h5-underline-dark: rgba(255,180,140,0.3);
-  --h6-underline-dark: rgba(255,168,255,0.3);
+  --h1-underline-dark: rgba(255,77,255,0.5);
+  --h2-underline-dark: rgba(123,104,238,0.5);
+  --h3-underline-dark: rgba(30,144,255,0.5);
+  --h4-underline-dark: rgba(0,255,127,0.5);
+  --h5-underline-dark: rgba(255,255,51,0.5);
+  --h6-underline-dark: rgba(255,128,0,0.5);
 
-  
-  /* Light theme 颜色变量 */
-  --h1-color-light: #6b2e8c;
-  --h2-color-light: #1c4e8b;
-  --h3-color-light: #1a6644;
-  --h4-color-light: #a67c00;
-  --h5-color-light: #b84c1c;
-  --h6-color-light: #993399;
+  /* ☀️ Light theme - version plus flashy */
+  --h1-color-light: #a020f0; /* violet pur */
+  --h2-color-light: #0077ff; /* bleu saturé */
+  --h3-color-light: #00cc66; /* vert intense */
+  --h4-color-light: #ffb700; /* or lumineux */
+  --h5-color-light: #ff4500; /* orange rouge vif */
+  --h6-color-light: #cc00cc; /* magenta néon */
 
-  --h1-underline-light: rgba(107,46,140,0.3);
-  --h2-underline-light: rgba(28,78,139,0.3);
-  --h3-underline-light: rgba(26,102,68,0.3);
-  --h4-underline-light: rgba(166,124,0,0.3);
-  --h5-underline-light: rgba(184,76,28,0.3);
-  --h6-underline-light: rgba(153,51,153,0.3);
+  --h1-underline-light: rgba(160,32,240,0.5);
+  --h2-underline-light: rgba(0,119,255,0.5);
+  --h3-underline-light: rgba(0,204,102,0.5);
+  --h4-underline-light: rgba(255,183,0,0.5);
+  --h5-underline-light: rgba(255,69,0,0.5);
+  --h6-underline-light: rgba(204,0,204,0.5);
 
   --title-opacity: 0.9;
 }
+
 
 /* 公共 H1–H6 样式 */
 .sb-line-h1, .sb-line-h2, .sb-line-h3,

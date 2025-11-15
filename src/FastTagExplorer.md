@@ -108,7 +108,7 @@ local DEFAULT_CONFIG = {
   tags = {},
   filterMode = "exclude",
   matchMode = "exact",
-  pageSize = 25
+  pageSize = 50
 }
 
 -- Fetch all relevant page and tag data

@@ -9,7 +9,7 @@ description: System prompt to pilot LLM in SB plugin coding.
 
 
 ```
-I want generate a space-lua  for [silverbullet](https://silverbullet.md/). space-lua language inherits from lua language with some specifc API. Please, follows thoses rules:
+I want to generate a space-lua  for [silverbullet](https://silverbullet.md/). space-lua language inherits from lua language with some specifc API. Please, follows thoses rules:
 - not use "pcall"
 - not use javascript library by default
 - if function debug_log exists, every function must be surrounded by debug_log
@@ -37,5 +37,6 @@ I want generate a space-lua  for [silverbullet](https://silverbullet.md/). space
   - string.matchRegexAll(s, pattern)
 - use "local" functions and variables as it's possible
 - every function should be testable
-  
+- add comments for every functions
+- add comment header to explain the goal of  the generated program
 ```

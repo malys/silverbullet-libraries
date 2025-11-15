@@ -12,6 +12,10 @@ With Marp Preview, you can:
 - See how your slides look in real-time as you modify your markdown
 - Use the Marp Preview panel to navigate through your slides and see them in action
 
+> **warning** Caution
+> Depends on Utilities.md
+
+
 ## Configuration
 
 To manage easily JS code source,  We use a dynamic introspection mechanism based on md page path.
@@ -27,76 +31,6 @@ config.set("marp.source","xxxx")
  ```space-lua
 local LOG_ENABLE = false
 
-local function debug_log(message)
-  if LOG_ENABLE then
-    js.log("[DEBUG] " .. message)
-  end
-end
-
- 
-local getChild = function(node, type)
-  for _, child in ipairs(node.children) do
-    if child.type == type then
-      return child
-    end
-  end
-end
-
-local getText = function(node)
-  if not node then
-    return nil
-  end
-  if node.text then
-    return node.text
-  else
-    for _, child in ipairs(node.children) do
-      local text = getText(child)
-      if text then
-        return text
-      end
-    end
-  end
-end
-
-local findMyFence = function(node,blockId)
-    if not node.children then
-      return nil
-    end
-    for _, child in ipairs(node.children) do
-        --debug_log(child)
-        if child.type == "FencedCode" then
-          local info = getText(getChild(child, "CodeInfo"))
-          --debug_log(info)
-          if info  and info:find(blockId) then
-            return getChild(child, "CodeText")
-          end
-        end
-        local result= findMyFence(child,blockId)
-        if resul ~=nil then
-          return result
-        end
-      --break --  for loop
-    end --for
-end
- 
-local getCodeBlock = function(page,blockId,token,text)
-  local tree = markdown.parseMarkdown(space.readPage(page))
-  --debug_log(tree)
-  if tree then
-    local fence = findMyFence(tree,blockId)
-    --debug_log(fence)
-    if fence then
-      local result=fence.children[1].text
-      if token == nil or text==nill then
-        return result
-      else
-        return string.gsub(result, token, text)
-      end
-    end
-  end
-  return "Error"
-end
-
 local is_panel_visible = false
 local current_panel_id = "rhs"
 -- Function to render Marp slides
@@ -105,19 +39,19 @@ local function render_marp_slides(mode)
     if source == nil then 
       editor.flashNotification("'marp.source' configuration not set", "error")
     end
-    debug_log("mode:"..mode)
+    utilities.debug(mode)
     if (not is_panel_visible and mode) or (not mode and is_panel_visible) then
       -- Get the current page content
       local page_content = editor.getText()
-      --debug_log("page_content: "..page_content)
+      --  utilities.debug("page_content: "..page_content)
       local panel_html =  '<div id="render" style="flex: 1; overflow-y: auto"></div>'
       local contentBase64=encoding.base64Encode(page_content)
-      local content0= string.gsub(getCodeBlock(source,"template")," `"," \\`")
-      local content1=getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
+      local content0= string.gsub( utilities.getCodeBlock(source,"template")," `"," \\`")
+      local content1= utilities.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
       local content2=string.gsub(content1,"@TEMPLATE@",encoding.base64Encode(content0))
       
-      local marp_js =getCodeBlock(source,"jsInject","@CONTENT@",content2)
-      debug_log(marp_js)
+      local marp_js = utilities.getCodeBlock(source,"jsInject","@CONTENT@",content2)
+        utilities.debug(marp_js)
       editor.showPanel(current_panel_id,1,  panel_html, marp_js)
       is_panel_visible = true
     else

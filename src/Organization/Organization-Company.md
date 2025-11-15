@@ -28,4 +28,4 @@ frontmatter: |
 author: malys
 description: Organization Company card template.  
 ---
-${person.insertImageFromFrontmatter()}
+${"$"}{person.insertImageFromFrontmatter()}

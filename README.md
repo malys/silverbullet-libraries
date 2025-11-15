@@ -11,7 +11,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Helpshortcuts](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md) - Display most commun shortcuts. - (2025-11-01)
 - [Hhh](https://github.com/malys/silverbullet-libraries/blob/main/src/HHH.md) - (2025-11-01)
 - [Llminstructions](https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md) - System prompt to pilot LLM in SB plugin coding. - (2025-11-01)
-- [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - Marp](https://marp.app/) slides integration. - (2025-11-01)
+- [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - [Marp](https://marp.app/) slides integration. - (2025-11-15)
 - [Mdtablesheet](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md) - Integrate FormulaJS in markdown table (table = sheet). - (2025-11-01)
 - [Organization Chart](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md) - Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart. - (2025-11-01)
 - [Organization Company](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md) - Organization Company card template. - (2025-11-01)

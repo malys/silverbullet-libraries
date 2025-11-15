@@ -178,7 +178,7 @@ vscode.entries = populate()
 vscode.previousCheck = os.time()  
   
 command.define {  
-    name = "Universal Palette",  
+    name = "Palette: Universal",  
     key = "Ctrl-p",  
     priority = 10,  
     run = function()  
