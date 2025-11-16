@@ -38,8 +38,14 @@ def generate_repository_file():
     lib_files.sort(key=lambda x: str(x).lower())
     
     # Start with the meta/library/remote block
-    content = ['```#meta/library/remote']
-    
+    content = ['---',
+        'name: "Repository/Malys Repo"',
+        'tags: meta/repository',
+        'pageDecoration.prefix: "🦩"',
+        '---',
+        '```#meta/library/remote'
+    ]
+
     # Add all library entries
     for file in lib_files:
         rel_path = file.relative_to('./src')
@@ -58,7 +64,7 @@ def generate_repository_file():
         # Format the library entry
         library_entry = [
             f'name: "{display_name}"',
-            f'uri: github:malys/silverbullet-libraries/{file_name}.md',
+            f'uri: https://github.com/malys/silverbullet-libraries/blob/main/src/{rel_path.as_posix().replace("\\", "/")}',
             f'website: https://github.com/malys/silverbullet-libraries/blob/main/src/{rel_path.as_posix().replace("\\", "/")}',
             f'description: "{description}"',
             '---'

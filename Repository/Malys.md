@@ -1,101 +1,106 @@
+---
+name: "Repository/Malys Repo"
+tags: meta/repository
+pageDecoration.prefix: "🦩"
+---
 ```#meta/library/remote
 name: "Bashcode"
-uri: github:malys/silverbullet-libraries/BashCode.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/BashCode.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/BashCode.md
 description: "Quickly insert bash code."
 ---
 name: "Embededitor"
-uri: github:malys/silverbullet-libraries/EmbedEditor.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/EmbedEditor.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/EmbedEditor.md
 description: "Insert Iframe with editors."
 ---
 name: "Externaltransclusion"
-uri: github:malys/silverbullet-libraries/ExternalTransclusion.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md
 description: "Transclude data form external resource."
 ---
 name: "Fasttagexplorer"
-uri: github:malys/silverbullet-libraries/FastTagExplorer.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md
 description: "Generate wall of children page tags"
 ---
 name: "Githistory"
-uri: github:malys/silverbullet-libraries/GitHistory.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md
 description: "Implement Git commands (log, diff, revert)"
 ---
 name: "Helpshortcuts"
-uri: github:malys/silverbullet-libraries/HelpShortcuts.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md
 description: "Display most commun shortcuts."
 ---
 name: "Hhh"
-uri: github:malys/silverbullet-libraries/HHH.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/HHH.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/HHH.md
 description: "Hhh library"
 ---
 name: "Llminstructions"
-uri: github:malys/silverbullet-libraries/LLMInstructions.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md
 description: "System prompt to pilot LLM in SB plugin coding."
 ---
 name: "Marpslides"
-uri: github:malys/silverbullet-libraries/MarpSlides.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md
 description: "[Marp](https://marp.app/) slides integration."
 ---
 name: "Mdtablerender"
-uri: github:malys/silverbullet-libraries/MdTableRender.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md
 description: "Automatically formats Markdown table cells based on hashtag column tags in SilverBullet"
 ---
 name: "Mdtablesheet"
-uri: github:malys/silverbullet-libraries/MdTableSheet.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md
 description: "Integrate FormulaJS in markdown table (table = sheet)."
 ---
 name: "Organization Chart"
-uri: github:malys/silverbullet-libraries/Organization-Chart.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md
 description: "Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart."
 ---
 name: "Organization Company"
-uri: github:malys/silverbullet-libraries/Organization-Company.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md
 description: "Organization Company card template."
 ---
 name: "Organization Employee"
-uri: github:malys/silverbullet-libraries/Organization-Employee.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md
 description: "Organization employee template"
 ---
 name: "Organization Vcfexport"
-uri: github:malys/silverbullet-libraries/Organization-VCFExport.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md
 description: "Generate VCF of company's employees."
 ---
 name: "Replaceplaceholders"
-uri: github:malys/silverbullet-libraries/ReplacePlaceholders.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md
 description: "Replace Placeholders feature allows you to easily replace placeholders in your markdown content with specific values"
 ---
 name: "Taiga"
-uri: github:malys/silverbullet-libraries/Taiga.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md
 description: "Taiga, open-source project management tool, integration."
 ---
 name: "Theme Malys"
-uri: github:malys/silverbullet-libraries/theme-malys.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md
 description: "Dark theme thought for readibility and productivity."
 ---
 name: "Utilities"
-uri: github:malys/silverbullet-libraries/Utilities.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md
 description: "List of reusable functions."
 ---
 name: "Vscodepalette"
-uri: github:malys/silverbullet-libraries/VSCodePalette.md
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md
 description: "universal palette (as VScode Palette), use '>' to execute commands"
 ---
