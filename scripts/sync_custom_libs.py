@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import re
 import shutil
 from pathlib import Path
 
@@ -18,6 +19,29 @@ def run_command(cmd, cwd=None):
         return (True, result.stdout.strip())
     except subprocess.CalledProcessError as e:
         return (False, f"Error: {e.stderr.strip()}")
+
+def has_description_frontmatter(file_path):
+    """Check if a markdown file has a description in its frontmatter.
+    
+    Args:
+        file_path: Path to the markdown file
+        
+    Returns:
+        bool: True if the file has a description in frontmatter, False otherwise
+    """
+    try:
+        content = file_path.read_text(encoding='utf-8')
+        # Look for frontmatter between triple-dashed lines
+        frontmatter_match = re.search(r'^---\n(.*?)\n---\n', content, re.DOTALL)
+        
+        if frontmatter_match:
+            frontmatter = frontmatter_match.group(1)
+            # Check for description field in frontmatter (case insensitive)
+            return bool(re.search(r'^description\s*:', frontmatter, re.MULTILINE | re.IGNORECASE))
+        return False
+    except Exception as e:
+        print(f"Error reading {file_path}: {e}")
+        return False
 
 def sync_custom_libraries():
     # Base directories
@@ -52,16 +76,28 @@ def sync_custom_libraries():
     src_dir = current_dir / 'src'
     src_dir.mkdir(exist_ok=True)
     
-    # First, collect all files to copy (excluding test files and Templates folder)
+    # First, collect all files to copy (excluding test files, Templates folder, and files without description)
     print("\nScanning for files to copy...")
     files_to_copy = []
+    skipped_files = 0
+    
     for src_file in source_dir.rglob('*.md'):
         # Skip test files, Templates, and import folders
         skip_patterns = ['test', 'Templates', 'import']
         if any(pattern.lower() in str(src_file).lower() for pattern in skip_patterns):
-            print(f"Skipping: {src_file.relative_to(source_dir)}")
+            print(f"Skipping (excluded pattern): {src_file.relative_to(source_dir)}")
+            skipped_files += 1
             continue
-        files_to_copy.append(src_file)
+            
+        # Check for description in frontmatter
+        if has_description_frontmatter(src_file):
+            files_to_copy.append(src_file)
+            print(f"Including (has description): {src_file.relative_to(source_dir)}")
+        else:
+            print(f"Skipping (no description): {src_file.relative_to(source_dir)}")
+            skipped_files += 1
+    
+    print(f"\nFound {len(files_to_copy)} files with descriptions, skipped {skipped_files} files")
     
     if not files_to_copy:
         print("No files to copy after filtering.")

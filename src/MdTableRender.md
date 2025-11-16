@@ -40,13 +40,14 @@ Just add the renderer as a hashtag tag in your table header:
 ```
 ![](https://community.silverbullet.md/uploads/default/original/2X/e/e2598b9faf8fb223eb5b68b9d03b0729384c5351.png)
 
+## Installation
 
 ## Code
 ```js
 // ==UserScript==
 // @name        Table renderer
 // @namespace   Violentmonkey Scripts
-// @match       https://silverbullet.l.malys.ovh/*
+// @match       TODO:silverbullet url/*
 // @grant       none
 // @version     1.0
 // @author      -
