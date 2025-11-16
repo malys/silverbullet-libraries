@@ -92,11 +92,6 @@ local function log(...)
   end
 end
 
-local source = config.get("history.source")
-if source == nil then
-  editor.flashNotification("'marp.source' configuration not set", "error")
-end
-
 local current_panel_id = "rhs"
 local is_panel_visible = false
 
