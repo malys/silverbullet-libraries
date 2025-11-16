@@ -3,7 +3,8 @@ author: malys
 description: Automatically formats Markdown table cells based on hashtag column tags in SilverBullet
 ---
 # Md table column rendering
-This script enhances Markdown tables inside SilverBullet by applying dynamic formatting rules to columns marked with hashtag-style format tags (e.g. `#euro`, `#percent`, `#stars`). It observes table changes in real time and transforms raw text values into styled, formatted elements — such as currency, percentages, booleans, dates, badges, emojis, trends, and star ratings — without altering the original Markdown source. It is designed to be non-intrusive, editable-friendly, and resilient thanks to mutation observers, debouncing, and a polling fallback.
+This script enhances Markdown tables inside SilverBullet by applying dynamic formatting rules to columns marked with hashtag-style format tags (e.g. `#euro`, `#percent`, `#stars`).
+It observes table changes in real time and transforms raw text values into styled, formatted elements — such as currency, percentages, booleans, dates, badges, emojis, trends, and star ratings — without altering the original Markdown source. It is designed to be non-intrusive, editable-friendly, and resilient thanks to mutation observers, debouncing, and a polling fallback.
 
 ## Supported renderers (via `#tag` in header)
 
@@ -41,6 +42,30 @@ Just add the renderer as a hashtag tag in your table header:
 ![](https://community.silverbullet.md/uploads/default/original/2X/e/e2598b9faf8fb223eb5b68b9d03b0729384c5351.png)
 
 ## Installation
+A **userscript** is a small piece of JavaScript that runs **inside your browser**, on top of an existing website, and modifies how that site behaves or looks — **without requiring any changes to the site itself**.
+
+It works by installing the script into a **userscript manager extension**, which loads and executes it when you visit matching pages.
+
+### A userscript manager extension
+
+You only need **one** of these:
+
+| Extension | Browser | Notes |
+| --- | --- | --- |
+| **Violentmonkey** |  Firefox, Edge | Open-source, lightweight, very popular |
+| **Tampermonkey** | Chrome, Firefox, Edge | Most popular, closed-source core |
+| **OrangeMonkey** | Chrome, Edge | Lightweight alternative to Tampermonkey |
+| **Greasemonkey** | Firefox | Original userscript manager (older / slower) |
+
+---
+
+### Installing the script (example: Chrome + OrangeMonkey)
+
+1.  Open Chrome
+2.  Install **OrangeMonkey** from the Chrome Web Store
+3.  Click the OrangeMonkey icon in your toolbar
+4.  Choose **"Create a new script"** or **"Add script from URL/file"**
+5.  Paste the entire script:
 
 ## Code
 ```js

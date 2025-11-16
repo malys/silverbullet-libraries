@@ -100,8 +100,4 @@ website: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities
 description: "List of reusable functions."
 ---
 name: "Vscodepalette"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md
-description: "universal palette (as VScode Palette), use '>' to execute commands"
----
-```
+uri: https://github.com/malys/silverbullet-libraries/blob/main/sr
