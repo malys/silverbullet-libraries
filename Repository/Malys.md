@@ -34,11 +34,6 @@ uri: https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md
 description: "Display most commun shortcuts."
 ---
-name: "Hhh"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/HHH.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/HHH.md
-description: "Hhh library"
----
 name: "Llminstructions"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md
@@ -100,4 +95,8 @@ website: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities
 description: "List of reusable functions."
 ---
 name: "Vscodepalette"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/sr
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md
+description: "universal palette (as VScode Palette), use '>' to execute commands"
+---
+```
