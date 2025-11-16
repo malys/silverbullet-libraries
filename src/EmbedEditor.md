@@ -1,6 +1,8 @@
 ---
 author: malys
 description: Insert Iframe with editors.
+name: "Library/Malys/EmbedEditor"
+tags: meta/library
 ---
 # Embedded editor
 

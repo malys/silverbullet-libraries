@@ -1,6 +1,8 @@
 ---
 author: malys
 description: Transclude data form external resource.
+name: "Library/Malys/ExternalTransclusion"
+tags: meta/library
 ---
 # External transclusion
 Transclude data form external resource.

@@ -1,8 +1,9 @@
 ---
 author: malys
 description:  Integrate FormulaJS in markdown table (table = sheet).
+name: "Library/Malys/MdTableSheet"
+tags: meta/library
 ---
-
 # Md Table + Formulajs evaluator
 
 This feature allows you to embed dynamic formulas in your Markdown tables. You can use the \`F\` function to evaluate formulas and display their results in your tables.

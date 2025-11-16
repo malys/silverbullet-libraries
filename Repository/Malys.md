@@ -1,5 +1,5 @@
 ---
-name: "Repository/Malys Repo"
+name: "Repository/malys Repo"
 tags: meta/repository
 pageDecoration.prefix: "🦩"
 ---

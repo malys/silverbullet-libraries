@@ -1,6 +1,8 @@
 ---
 author: malys
 description: Display most commun shortcuts.
+name: "Library/Malys/HelpShortcuts"
+tags: meta/library
 ---
 # Help: Shortcuts
 Display helper on demand.

@@ -1,8 +1,9 @@
 ---
 author: malys
 description: universal palette (as VScode Palette), use '>' to execute commands
+name: "Library/Malys/VSCodePalette"
+tags: meta/library
 ---
-
 # Universal Palette
 
 The VSCode Palette feature allows you to search and open content items (pages, commands, etc.) quickly. 

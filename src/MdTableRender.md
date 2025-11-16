@@ -1,6 +1,8 @@
 ---
 author: malys
 description: Automatically formats Markdown table cells based on hashtag column tags in SilverBullet
+name: "Library/Malys/MdTableRender"
+tags: meta/library
 ---
 # Md table column rendering
 This script enhances Markdown tables inside SilverBullet by applying dynamic formatting rules to columns marked with hashtag-style format tags (e.g. `#euro`, `#percent`, `#stars`).

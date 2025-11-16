@@ -22,7 +22,7 @@ jobs:
         
     - name: Generate README
       run: |
-        python scripts/generate_readme.py
+        python scripts/generate_files.py --readme --index
         
     - name: Commit and push changes
       run: |

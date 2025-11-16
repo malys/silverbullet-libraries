@@ -1,6 +1,9 @@
 ---
 author: malys
 description: Implement Git commands (log, diff, revert)
+name: "Library/Malys/GitHistory"
+tags: meta/library
+---
 ---
 # Git History Module
 

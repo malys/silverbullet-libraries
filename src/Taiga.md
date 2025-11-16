@@ -1,8 +1,9 @@
 ---
 author: malys
 description: Taiga, open-source project management tool, integration.
+name: "Library/Malys/Taiga"
+tags: meta/library
 ---
-
 # Taiga 
 [Taiga](https://taiga.io/): *The* free and open-source project management tool.
 

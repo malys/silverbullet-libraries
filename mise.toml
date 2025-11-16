@@ -3,11 +3,11 @@
 
 [tasks.gen-readme]
 # Generate README.md based on available libraries
-run = "python scripts/generate_readme.py"
+run = "python scripts/generate_files.py --readme"
 
 [tasks.gen-index]
-# Generate index.json with library metadata
-run = "python scripts/generate_index.py"
+# Generate Repository/Malys.md with library metadata
+run = "python scripts/generate_files.py --index"
 
 [tasks.sync-libs]
 # Sync custom libraries from backup to src/
@@ -18,14 +18,16 @@ run = "python scripts/sync_custom_libs.py"
 [tasks.git]
 run = "git add . && git commit -m 'update' && git push"
 
-# Run sync, generate README and index
+# Generate both README and index in one command
+[tasks.gen-all]
+run = "python scripts/generate_files.py --readme --index"
+
+# Run sync, generate all files, and commit changes
 [tasks.update]
-# Run sync, generate README, generate index, and commit changes
 depends = [
     "clean",
     "sync-libs",
-    "gen-readme",
-    "gen-index",
+    "gen-all",
     "git"
 ]
 

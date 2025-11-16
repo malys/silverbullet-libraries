@@ -2,6 +2,8 @@
 author: malys
 description: Generate VCF of company's employees.
 
+name: "Library/Malys/Organization-VCFExport"
+tags: meta/library
 ---
 # VCF exporter
 Export `Employees` template to an unique VCF file.

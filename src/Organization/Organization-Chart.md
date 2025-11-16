@@ -1,6 +1,8 @@
 ---
 author: malys
 description: Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart.
+name: "Library/Malys/Organization-Chart"
+tags: meta/library
 ---
 # Organization Chart
 

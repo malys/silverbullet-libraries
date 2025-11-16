@@ -21,13 +21,13 @@ def run_command(cmd, cwd=None):
         return (False, f"Error: {e.stderr.strip()}")
 
 def has_description_frontmatter(file_path):
-    """Check if a markdown file has a description in its frontmatter.
+    """Check if a markdown file has a non-empty description in its frontmatter.
     
     Args:
         file_path: Path to the markdown file
         
     Returns:
-        bool: True if the file has a description in frontmatter, False otherwise
+        bool: True if the file has a non-empty description in frontmatter, False otherwise
     """
     try:
         content = file_path.read_text(encoding='utf-8')
@@ -36,8 +36,11 @@ def has_description_frontmatter(file_path):
         
         if frontmatter_match:
             frontmatter = frontmatter_match.group(1)
-            # Check for description field in frontmatter (case insensitive)
-            return bool(re.search(r'^description\s*:', frontmatter, re.MULTILINE | re.IGNORECASE))
+            # Check for description field in frontmatter (case insensitive) and ensure it's not empty
+            desc_match = re.search(r'^description\s*:\s*(.*?)(?:\n|$)', frontmatter, re.MULTILINE | re.IGNORECASE)
+            if desc_match:
+                # Check if description has non-whitespace content
+                return bool(desc_match.group(1).strip())
         return False
     except Exception as e:
         print(f"Error reading {file_path}: {e}")
@@ -114,6 +117,45 @@ def sync_custom_libraries():
             
             # Copy file
             shutil.copy2(src_file, dest_file)
+            
+            # Read the file content
+            content = dest_file.read_text(encoding='utf-8')
+            
+            # Add name and tags to frontmatter
+            if content.startswith('---\n'):
+                # Find the end of frontmatter
+                end_of_frontmatter = content.find('\n---\n') + 5
+                if end_of_frontmatter > 4:  # Found frontmatter
+                    # Get frontmatter without the ---
+                    frontmatter = content[4:end_of_frontmatter-5]
+                    updated = False
+                    
+                    # Get filename without extension
+                    filename = dest_file.stem
+                    name_entry = f'name: "Library/Malys/{filename}"'
+                    
+                    # Add name if not exists
+                    if 'name:' not in frontmatter.lower():
+                        frontmatter = f"{frontmatter}\n{name_entry}"
+                        updated = True
+                    
+                    # Add tags if not exists
+                    if 'tags:' not in frontmatter.lower():
+                        frontmatter = f"{frontmatter}\ntags: meta/library"
+                        updated = True
+                    
+                    if updated:
+                        updated_frontmatter = f"---\n{frontmatter}\n---\n"
+                        # Ensure content after frontmatter starts with a newline if it's not empty
+                        remaining_content = content[end_of_frontmatter:].lstrip('\n')
+                        content = updated_frontmatter + remaining_content
+                        dest_file.write_text(content, encoding='utf-8')
+                        print(f"Updated frontmatter: {rel_path}")
+                    else:
+                        print(f"Frontmatter already complete: {rel_path}")
+                else:
+                    print(f"Warning: Malformed frontmatter in {rel_path}")
+            
             print(f"Copied to src/: {rel_path}")
         except Exception as e:
             print(f"Error copying {src_file}: {e}")

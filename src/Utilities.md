@@ -1,6 +1,8 @@
 ---
 author: malys
 description: List of reusable functions.
+name: "Library/Malys/Utilities"
+tags: meta/library
 ---
 # Utilities
 ```space-lua

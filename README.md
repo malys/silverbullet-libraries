@@ -26,7 +26,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 
 ## 🛠️ Installation
 1. Navigate to your `Library Manager` inside Silverbullet
-2. Add my repository: `https://github.com/malys/silverbullet-libraries/blob/main/Repository/Malys.md`
+2. Add my repository: `https://github.com/malys/silverbullet-libraries/blob/main/Repository/malys.md`
 3. Add any script my repository
 
 ## 🤝 Contributing

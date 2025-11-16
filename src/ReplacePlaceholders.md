@@ -4,6 +4,8 @@ replace:
   d: demonstration
 author: malys
 description: Replace Placeholders feature allows you to easily replace placeholders in your markdown content with specific values
+name: "Library/Malys/ReplacePlaceholders"
+tags: meta/library
 ---
 ---
 

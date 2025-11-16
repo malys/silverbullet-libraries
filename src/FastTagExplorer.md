@@ -1,6 +1,8 @@
 ---
 author: malys
 description: Generate wall of children page tags 
+name: "Library/Malys/FastTagExplorer"
+tags: meta/library
 ---
 # Fast tag explorer
 

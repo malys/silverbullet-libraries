@@ -1,6 +1,8 @@
 ---
 author: malys
 description: Quickly insert bash code.
+name: "Library/Malys/BashCode"
+tags: meta/library
 ---
 # Bash code
 Quickly insert bash code.
