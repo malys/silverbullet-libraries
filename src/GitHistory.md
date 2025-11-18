@@ -88,9 +88,12 @@ local LOG_ENABLE = false
 
 local function log(...)
   if LOG_ENABLE and utilities and utilities.debug then
-     -- utilities.debug(table.concat({...}, " "))
+     if type(utilities.debug) == "function" then 
+       utilities.debug(table.concat({...}, " "))
+     end  
   end
 end
+
 
 local current_panel_id = "rhs"
 local is_panel_visible = false
