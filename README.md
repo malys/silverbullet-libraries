@@ -5,12 +5,12 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 ## 📦 Available Libraries
 
 - [Bashcode](https://github.com/malys/silverbullet-libraries/blob/main/src/BashCode.md) - Quickly insert bash code. - (2025-11-16)
-- [Breadcrumb](https://github.com/malys/silverbullet-libraries/blob/main/src/Breadcrumb.md) - Generate breadcrumbs for a page
-- [Cursorposition](https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md) - Generate and copy links to specific cursor positions and headers in markdown documents - (2025-11-01)
+- [Breadcrumb](https://github.com/malys/silverbullet-libraries/blob/main/src/Breadcrumb.md) - Generate breadcrumbs for a page - (2025-11-18)
+- [Cursorposition](https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md) - Generate and copy links to specific cursor positions and headers in markdown documents - (2025-11-18)
 - [Embededitor](https://github.com/malys/silverbullet-libraries/blob/main/src/EmbedEditor.md) - Insert Iframe with editors. - (2025-11-16)
 - [Externaltransclusion](https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md) - Transclude data form external resource. - (2025-11-16)
 - [Fasttagexplorer](https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md) - Generate wall of children page tags - (2025-11-16)
-- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2025-11-16)
+- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2025-11-18)
 - [Helpshortcuts](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md) - Display most commun shortcuts. - (2025-11-16)
 - [Llminstructions](https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md) - System prompt to pilot LLM in SB plugin coding. - (2025-11-16)
 - [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - [Marp](https://marp.app/) slides integration. - (2025-11-16)
@@ -21,11 +21,11 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Organization Employee](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md) - Organization employee template - (2025-11-01)
 - [Organization Vcfexport](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md) - Generate VCF of company's employees. - (2025-11-16)
 - [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md) - Replace Placeholders feature allows you to easily replace placeholders in your markdown content with specific values - (2025-11-16)
-- [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Enhanced Risk Audit for SilverBullet that analyzes scripts for potentially dangerous constructs and API calls.
+- [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Enhanced Risk Audit for SilverBullet that analyzes scripts for potentially dangerous constructs and API calls. - (2025-11-18)
 - [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga, open-source project management tool, integration. - (2025-11-16)
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity. - (2025-11-16)
 - [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2025-11-16)
-- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration.
+- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2025-11-18)
 - [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - universal palette (as VScode Palette), use '>' to execute commands - (2025-11-16)
 
 ## 🛠️ Installation
