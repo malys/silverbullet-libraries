@@ -184,7 +184,7 @@ local analyze_block = _wrap_with_debug("analyze_block", function(block)
     apis_found = {},
     api_calls = {},
     dangerous = {},
-    score = 100,
+    score = 0,
     page = block.page
   }
 
@@ -233,7 +233,7 @@ local analyze_block = _wrap_with_debug("analyze_block", function(block)
         analysis.findings,
         ("URL detected: %s %s"):format(url, get_wikilink(analysis.page, ln))
       )
-      analysis.score = analysis.score - 5
+      analysis.score = analysis.score + 5
     end
 
     ----------------------------------------------------------------------
@@ -245,7 +245,7 @@ local analyze_block = _wrap_with_debug("analyze_block", function(block)
           analysis.findings,
           ("Base64 blob detected %s"):format(get_wikilink(analysis.page, ln))
         )
-        analysis.score = analysis.score - 10
+        analysis.score = analysis.score + 10
       end
     end
 
@@ -258,7 +258,7 @@ local analyze_block = _wrap_with_debug("analyze_block", function(block)
           analysis.findings,
           ("Hex blob detected %s"):format(get_wikilink(analysis.page, ln))
         )
-        analysis.score = analysis.score - 10
+        analysis.score = analysis.score + 10
       end
     end
 
@@ -274,7 +274,7 @@ local analyze_block = _wrap_with_debug("analyze_block", function(block)
         analysis.findings,
         ("High-entropy string %s"):format(get_wikilink(analysis.page, ln))
       )
-      analysis.score = analysis.score - 15
+      analysis.score = analysis.score + 15
     end
   end
 
@@ -282,18 +282,22 @@ local analyze_block = _wrap_with_debug("analyze_block", function(block)
   -- Scoring
   ----------------------------------------------------------------------
   local api_count = count_keys(analysis.apis_found)
-  if api_count > 0 then analysis.score = analysis.score - (api_count * 5) end
+  if api_count > 0 then analysis.score = analysis.score + (api_count * 5) end
 
   if #analysis.dangerous > 0 then
-    analysis.score = analysis.score - (#analysis.dangerous * 25)
+    analysis.score = analysis.score + (#analysis.dangerous * 25)
   end
 
-  if analysis.score < 0 then analysis.score = 0 end
+  if analysis.score >100 then analysis.score = 100 end
 
   local severity = "Low"
-  if analysis.score < 90 then severity = "Medium" end
-  if analysis.score < 70 then severity = "High" end
-  if analysis.score < 40 then severity = "Critical" end
+  if analysis.score > 90 then 
+    severity = "Critical" 
+  elseif analysis.score > 70 then
+    severity = "High" 
+  elseif analysis.score > 40 then 
+    severity = "Medium"
+  end
 
   analysis.summary = string.format(
     "Score=%d (%s) APIs=%d Dangerous=%d Findings=%d",
