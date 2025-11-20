@@ -17,6 +17,11 @@ It provides a risk audit report that includes a trust score for each code block,
 - **Security: Scan All Children Pages**: Scans all child pages of the current page and generates a risk audit report for each page.
 _
 
+## Reports
+
+![](https://community.silverbullet.md/uploads/default/original/2X/3/359702815a70766b4c38b7b6c007d94b222278f7.gif)
+
+![](https://community.silverbullet.md/uploads/default/original/2X/5/5176409b91850c5189da3423f47c1b41808deda2.gif)
 ## Code
 ```space-lua
 -- ###########################################################################

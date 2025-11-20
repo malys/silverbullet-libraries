@@ -16,7 +16,7 @@ run = "python scripts/sync_custom_libs.py"
 
 # tasks git add and commit and push
 [tasks.git]
-run = "sleep 2 && git add . && git commit -m 'update' && git push"
+run = "sleep 5 && git pull&& git add . && git commit -m 'update' && git push"
 
 # Generate both README and index in one command
 [tasks.gen-all]
@@ -25,16 +25,11 @@ run = "python scripts/generate_files.py --readme --index"
 # Run sync, generate all files, and commit changes
 [tasks.publish]
 depends = [
-    "clean",
     "sync-libs",
     "gen-all",
     "git"
 ]
 
 # Install Python dependencies
-[tasks.setup]
+[tasks.install]
 run = "pip install -r requirements.txt"
-
-# Clean up Python cache files
-[tasks.clean]
-run = """python -c "import shutil\nfrom pathlib import Path\nshutil.rmtree('__pycache__', ignore_errors=True)\n[p.unlink() for p in Path('.').rglob('*.py[co]')]\n[d.rmdir() for d in Path('.').rglob('__pycache__') if d.is_dir()]"""
