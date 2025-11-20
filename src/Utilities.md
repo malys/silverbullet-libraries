@@ -29,24 +29,61 @@ end
 ---------------------------------------------
 ---- Debug  ---
 ---------------------------------------------
-function utilities.debug(message, prefix)
-  local result=message
-  if LOG_ENABLE or true then
-    local log_message = ""
-    if type(message) == "table" then
-      log_message = tostring(message)
-    else
-      -- Assume it's a string, number, boolean, or nil
-      log_message = tostring(message)
-    end
-    result="[DEBUG] " .. log_message
-    if prefix ~= nil then 
-      result="[DEBUG]"..  "["..prefix.."] " .. log_message
-    end
-    js.log(result)  
+-- Pretty-print any Lua value (tables included)
+local function dump(value, depth)
+  depth = depth or 0
+
+  if type(value) ~= "table" then
+    return tostring(value)
   end
+
+  -- Prevent going too deep (avoid infinite recursion)
+  if depth > 5 then
+    return "{ ... }"
+  end
+
+  local indent = string.rep("  ", depth)
+  local next_indent = string.rep("  ", depth + 1)
+
+  local parts = {}
+  table.insert(parts, "{")
+
+  for k, v in pairs(value) do
+    local key = tostring(k)
+    local val
+
+    if type(v) == "table" then
+      val = dump(v, depth + 1)
+    else
+      val = tostring(v)
+    end
+
+    table.insert(parts, next_indent .. key .. " = " .. val .. ",")
+  end
+
+  table.insert(parts, indent .. "}")
+
+  return table.concat(parts, "\n")
+end
+
+function utilities.debug(message, prefix)
+  if not LOG_ENABLE then
+    return message
+  end
+
+  local log_message = dump(message)
+
+  local result = "[DEBUG]"
+  if prefix then
+    result = result .. "[" .. prefix .. "]"
+  end
+
+  result = result .. " " .. log_message
+  js.log(result)
+
   return result
 end
+
 
 ---------------------------------------------
 ---- Code Block code extraction ---
