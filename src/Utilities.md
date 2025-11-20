@@ -1,0 +1,161 @@
+---
+author: malys
+description: List of reusable functions.
+name: "Library/Malys/Utilities"
+tags: meta/library
+---
+# Utilities
+```space-lua
+utilities=utilities or {}
+
+-- Convert meeting note title
+function utilities.getmeetingTitle()
+  local t=string.split(string.split(editor.getCurrentPage(),"/")[#string.split(editor.getCurrentPage(),"/")],"_")
+  table.remove(t,1)
+  t=table.concat(t, " ")
+  return t
+end
+
+-- Embed external resources
+function utilities.embedUrl(specOrUrl,w,h) 
+  local width = w or "100%"
+  local height = h or "400px"
+  return widget.html(dom.iframe {
+    src=specOrUrl,
+    style="width: " .. width .. "; height: " .. height
+  })
+end
+
+---------------------------------------------
+---- Debug  ---
+---------------------------------------------
+-- Pretty-print any Lua value (tables included)
+local function dump(value, depth)
+  depth = depth or 0
+
+  if type(value) ~= "table" then
+    return tostring(value)
+  end
+
+  -- Prevent going too deep (avoid infinite recursion)
+  if depth > 5 then
+    return "{ ... }"
+  end
+
+  local indent = string.rep("  ", depth)
+  local next_indent = string.rep("  ", depth + 1)
+
+  local parts = {}
+  table.insert(parts, "{")
+
+  for k, v in pairs(value) do
+    local key = tostring(k)
+    local val
+
+    if type(v) == "table" then
+      val = dump(v, depth + 1)
+    else
+      val = tostring(v)
+    end
+
+    table.insert(parts, next_indent .. key .. " = " .. val .. ",")
+  end
+
+  table.insert(parts, indent .. "}")
+
+  return table.concat(parts, "\n")
+end
+
+function utilities.debug(message, prefix)
+  if not LOG_ENABLE then
+    return message
+  end
+
+  local log_message = dump(message)
+
+  local result = "[DEBUG]"
+  if prefix then
+    result = result .. "[" .. prefix .. "]"
+  end
+
+  result = result .. " " .. log_message
+  js.log(result)
+
+  return result
+end
+
+
+---------------------------------------------
+---- Code Block code extraction ---
+---------------------------------------------
+-- Get child of node  
+local getChild = function(node, type)
+  for _, child in ipairs(node.children) do
+    if child.type == type then
+      return child
+    end
+  end
+end
+
+-- Get text of Node
+local getText = function(node)
+  if not node then
+    return nil
+  end
+  if node.text then
+    return node.text
+  else
+    for _, child in ipairs(node.children) do
+      local text = getText(child)
+      if text then
+        return text
+      end
+    end
+  end
+end
+
+-- Find codeblock
+local findMyFence = function(node,blockId)
+    if not node.children then
+      return nil
+    end
+    for _, child in ipairs(node.children) do
+        --debug_log(child)
+        if child.type == "FencedCode" then
+          local info = getText(getChild(child, "CodeInfo"))
+          --debug_log(info)
+          if info  and info:find(blockId) then
+            return getChild(child, "CodeText")
+          end
+        end
+        local result= findMyFence(child,blockId)
+        if resul ~=nil then
+          return result
+        end
+      --break --  for loop
+    end --for
+end
+
+-- Get code source in md codeblock
+function utilities.getCodeBlock  (page,blockId,token,text)
+  local tree = markdown.parseMarkdown(space.readPage(page))
+  --debug_log(tree)
+  if tree then
+    local fence = findMyFence(tree,blockId)
+    --debug_log(fence)
+    if fence then
+      local result=fence.children[1].text
+      if token == nil or text==nill then
+        return result
+      else
+        return string.gsub(result, token, text)
+      end
+    end
+  end
+  return "Error"
+end
+```
+
+
+${utilities.debug("test")}
+${      utilities.debug("mode:"..true)}
