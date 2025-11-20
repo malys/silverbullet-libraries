@@ -20,13 +20,13 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Organization Company](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md) - Organization Company card template. - (2025-11-20)
 - [Organization Employee](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md) - Organization employee template - (2025-11-20)
 - [Organization Vcfexport](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md) - Generate VCF of company's employees. - (2025-11-20)
-- [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md) - Replace Placeholders feature allows you to easily replace placeholders in your markdown content with specific values - (2025-11-20)
-- [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Enhanced Risk Audit for SilverBullet that analyzes scripts for potentially dangerous constructs and API calls. - (2025-11-20)
-- [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga, open-source project management tool, integration. - (2025-11-20)
-- [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity. - (2025-11-20)
-- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions.
-- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md)
-- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md)
+- [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md) - Replace Placeholders feature allows you to easily replace placeholders in your markdown content with specific values
+- [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md)
+- [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md)
+- [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md)
+- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - (2025-11-20)
+- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2025-11-20)
+- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - universal palette (as VScode Palette), use '>' to execute commands - (2025-11-20)
 
 ## 🛠️ Installation
 1. Navigate to your `Library Manager` inside Silverbullet
