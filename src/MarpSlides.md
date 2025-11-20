@@ -1,9 +1,8 @@
 ---
 author: malys
 description: [Marp](https://marp.app/) slides integration.
-name: "Library/Malys/MarpSlides"
-tags: meta/library
 ---
+
 # Marp slides
  
 This library provides a way to preview your [Marp](https://marp.app/) slides in a panel while you are editing your space.
