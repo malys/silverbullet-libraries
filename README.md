@@ -21,10 +21,10 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Organization Employee](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md) - Organization employee template - (2025-11-01)
 - [Organization Vcfexport](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md) - Generate VCF of company's employees. - (2025-11-16)
 - [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md) - Replace Placeholders feature allows you to easily replace placeholders in your markdown content with specific values - (2025-11-16)
-- [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Enhanced Risk Audit for SilverBullet that analyzes scripts for potentially dangerous constructs and API calls. - (2025-11-18)
+- [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Enhanced Risk Audit for SilverBullet that analyzes scripts for potentially dangerous constructs and API calls. - (2025-11-20)
 - [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga, open-source project management tool, integration. - (2025-11-16)
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity. - (2025-11-16)
-- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2025-11-16)
+- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2025-11-20)
 - [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2025-11-18)
 - [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - universal palette (as VScode Palette), use '>' to execute commands - (2025-11-16)
 

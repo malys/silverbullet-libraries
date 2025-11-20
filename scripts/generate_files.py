@@ -71,6 +71,15 @@ def get_last_commit_date(file_path):
 
 def generate_readme():
     """Generate README.md file with library information."""
+    # Remove existing README.md if it exists
+    readme_path = Path('README.md')
+    if readme_path.exists():
+        try:
+            readme_path.unlink()
+            print(f"Removed existing {readme_path}")
+        except Exception as e:
+            print(f"Warning: Could not remove {readme_path}: {e}")
+    
     lib_files = get_markdown_files(SOURCE_PATH, ['README.md'])
     lib_files.sort(key=lambda x: str(x).lower())
     
@@ -121,6 +130,15 @@ def generate_readme():
 
 def generate_repository_file():
     """Generate Repository/NAME.md file with library information."""
+    # Remove existing malys.md if it exists
+    malys_path = Path(f"{NAME}.md")
+    if malys_path.exists():
+        try:
+            malys_path.unlink()
+            print(f"Removed existing {malys_path}")
+        except Exception as e:
+            print(f"Warning: Could not remove {malys_path}: {e}")
+    
     lib_files = get_markdown_files(SOURCE_PATH, ['README.md'])
     lib_files.sort(key=lambda x: str(x).lower())
     
@@ -162,20 +180,43 @@ def generate_repository_file():
     
     print(f"Successfully generated Repository/{NAME}.md")
 
+def commit_src_changes():
+    """Commit changes in the src directory."""
+    try:
+        # Stage all .md files in src directory
+        subprocess.run(['git', 'add', 'src/*.md'], check=True, capture_output=True, text=True)
+        
+        # Check if there are any changes to commit
+        result = subprocess.run(['git', 'diff', '--cached', '--quiet'], capture_output=True)
+        if result.returncode != 0:
+            # There are changes to commit
+            commit_msg = "chore: update markdown files in src directory"
+            subprocess.run(['git', 'commit', '-m', commit_msg], check=True, capture_output=True, text=True)
+            print("Committed changes in src/*.md")
+        else:
+            print("No changes to commit in src/*.md")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"Warning: Could not commit changes: {e.stderr}")
+        return False
+
 def main():
+    # First commit any changes in the src directory
+    commit_src_changes()
+    
     parser = argparse.ArgumentParser(description='Generate repository files.')
     parser.add_argument('--readme', action='store_true', help='Generate README.md')
-    parser.add_argument('--index', action='store_true', help=f'Generate Repository/{NAME}.md')
-    
-    if len(sys.argv) == 1:
-        parser.print_help()
-        sys.exit(1)
-    
+    parser.add_argument('--repo', '--index', dest='repo', action='store_true', 
+                       help=f'Generate {NAME}.md (--index is an alias for --repo)')
     args = parser.parse_args()
-    
+
+    if not args.readme and not args.repo:
+        args.readme = True
+        args.repo = True
+
     if args.readme:
         generate_readme()
-    if args.index:
+    if args.repo:
         generate_repository_file()
 
 if __name__ == "__main__":

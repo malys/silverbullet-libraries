@@ -23,7 +23,7 @@ run = "git add . && git commit -m 'update' && git push"
 run = "python scripts/generate_files.py --readme --index"
 
 # Run sync, generate all files, and commit changes
-[tasks.update]
+[tasks.publish]
 depends = [
     "clean",
     "sync-libs",
