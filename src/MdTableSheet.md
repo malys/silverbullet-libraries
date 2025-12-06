@@ -53,7 +53,7 @@ The `G` function takes four arguments:
 - `YRange`: The range of cells to use for the Y-axis.
 - `options` (optional): An object containing additional options for the chart.
 
-Here's an example usage: \${G("MyChart", "Page 1", "A1:A5", "B1:B5", { type: "line", w: 400, h: 600, serieLabel: "Series 1" })}
+Here's an example usage: \${G("MyChart", "Page 1", "A1:A5", "B1:B5", { type= "line", w= 400, h= 600, serieLabel= "Series 1" })}
 
 Here's an example chart:
 
@@ -116,7 +116,7 @@ ${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=400,height=2
 -- ---------------------------
 
 
-local LOG_ENABLE = true
+local LOG_ENABLE = false
 local function log(...)
   if LOG_ENABLE and utilities and utilities.debug then
      if type(utilities.debug) == "function" then 
