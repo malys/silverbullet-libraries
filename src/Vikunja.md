@@ -18,24 +18,40 @@ tags: meta/library
 ```lua
 ${template.each(
   query[[
-    from getVikunjaTasks() 
+    from vikunja.get() 
     where due_date <= date.nextmonth()
     order by due_date
-  ]], templates.vikunjaRecurringTasks
+  ]], vikunja.template
 )}
 ```
 
 
 ```space-lua
-function getVikunjaTasks(criteria)
-  local baseUrl =  config.get("vikunja").baseUrl
+vikunja={}
+-- prioity: 9
+config.define("vikunja", {
+    type = "object"
+})
+
+-- Select language first
+local vik = config.get("vikunja") or ""
+if vik == "" then 
+  editor.flashNotification("Vikunja: Configuration is missing!","error")
+  vikunja.baseUrl="missing"
+else 
+  local baseUrl =config.get("vikunja").baseUrl.."/"
+  string.sub(baseUrl,"//","/")
+  vikunja.baseUrl=baseUrl
+end
+
+vikunja.get=function (criteria)
+  print(vikunja)
   local c=criteria
   if c==nil then
-    c="/tasks/all?filter=done=false"
+    c="done=false"
   end
   local token = config.get("vikunja").token
-  local apiUrl = (baseUrl .. "api/v1" .. c )
-  print(apiUrl)
+  local apiUrl = (vikunja.baseUrl .. "api/v1/tasks/all?filter=" .. c )
   local response = http.request(
     apiUrl, {
     method = "GET",
@@ -47,17 +63,55 @@ function getVikunjaTasks(criteria)
   if response.ok then 
     return response.body
   else 
-    return "Not OK response"
+    return {id="0",title="No response"..response}
   end
 end
 
-templates.vikunjaRecurringTasks = function(task)
-  local function convert_date(date)
-    return date:sub(1,10)
+
+vikunja.template = function(task)
+  local due =""
+  local short=task.due_date:sub(1,10)
+  if short~= "0001-01-01" then
+     due="("..short..")" 
   end
-    
-  return string.format("* [Link](" .. baseUrl .. "tasks/%s) [due: %s] %s", task.id, convert_date(task.due_date), task.title ) .. "\n"
+  local result=string.format("* [Link]("..vikunja.baseUrl.."tasks/%s) %s %s", task.id, due , task.title ) .. "\n"
+  return result
 end
 ```
+${template.each(
+  query[[
+    from vikunja.get() 
+    where done
+  ]], vikunja.template
+)}
+## Fields
 
-${config.get("vikunja")}
+* id
+* title
+* description
+* done
+* done_at
+* due_date
+* reminders
+* project_id
+* repeat_after
+* repeat_mode
+* priority
+* start_date
+* end_date
+* assignees
+* labels
+* hex_color
+* percent_done
+* identifier
+* index
+* related_tasks
+* attachments
+* cover_image_attachment_id
+* is_favorite
+* created
+* updated
+* bucket_id
+* position
+* reactions
+* created_by

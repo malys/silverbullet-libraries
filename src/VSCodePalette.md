@@ -181,7 +181,7 @@ vscode.previousCheck = os.time()
 command.define {  
     name = "Palette: Universal",  
     key = "Ctrl-p",  
-    priority = 10,  
+    priority = 9,  
     run = function()  
         if not vscode.entries or #vscode.entries == 0 then  
             vscode.entries = populate()  

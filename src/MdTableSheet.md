@@ -4,7 +4,9 @@ description:  Integrate FormulaJS in markdown table (table = sheet).
 name: "Library/Malys/MdTableSheet"
 tags: meta/library
 ---
-# Md Table + Formulajs evaluator
+# Md Table 
+
+## Formulajs evaluator
 
 This feature allows you to embed dynamic formulas in your Markdown tables. You can use the \`F\` function to evaluate formulas and display their results in your tables.
 
@@ -35,6 +37,35 @@ Here's an example usage: \${F("SUM(A1:A5)","1")}\`
 | ${F("SUM(A1:B5)","1")} | ${F("SUM(B1:B5)","2")} | ${F("AVERAGE(C1:C5)","2")} |
 
 
+## ChartJS
+
+This feature allows you to embed interactive charts in your Markdown tables using ChartJS library. You can use the `G` function to create charts and display them in your tables.
+
+The `G` function takes four arguments:
+
+- `label` (mandatory, unique id of chart): A label to differentiate between the same chart in different tables.
+- `pageName` (optional): The name of the page where the chart should be displayed. If not provided, the current page will be used.
+- `XRange`: The range of cells to use for the X-axis.
+- `YRange`: The range of cells to use for the Y-axis.
+- `options` (optional): An object containing additional options for the chart.
+
+Here's an example usage: \${G("MyChart", "Page 1", "A1:A5", "B1:B5", { type: "line", w: 400, h: 600, serieLabel: "Series 1" })}
+
+Here's an example chart:
+
+| Header A | Header B |
+| --- | --- |
+| 1.2 | 2   |
+| 3   | 4   |
+| 5   | 6   |
+| 7   | 8   |
+| 9   | 10  |
+
+${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=400,height=200})}
+
+
+## Code source
+
 
 ```space-lua
 -- ---------------------------
@@ -44,7 +75,7 @@ Here's an example usage: \${F("SUM(A1:A5)","1")}\`
 -- Example: ${F("SUM(A1:A5)","1")}
 
 -- Instructions to generate space lua scripts for silverbullet https://silverbullet.md
--- every function must be surrounded by debug_log (not only main)
+-- every function must be surrounded by log (not only main)
 -- **not use lua standard methods but space-lua silverbullet api (https://silverbullet.md/API)** Be sure to use same function signature
 -- [asset](https://silverbullet.md/API/asset)
 -- [clientStore](https://silverbullet.md/API/clientStore)
@@ -81,18 +112,12 @@ Here's an example usage: \${F("SUM(A1:A5)","1")}\`
 -- ---------------------------
 
 
-local LOG_ENABLE = false
-function debug_log(message)
-  if LOG_ENABLE then
-    local log_message = ""
-    if type(message) == "table" then
-      log_message = tostring(message)
-    else
-      -- Assume it's a string, number, boolean, or nil
-      log_message = tostring(message)
-    end
-    
-    js.log("[DEBUG] " .. log_message)
+local LOG_ENABLE = true
+local function log(...)
+  if LOG_ENABLE and utilities and utilities.debug then
+     if type(utilities.debug) == "function" then 
+       utilities.debug(table.concat({...}, " "))
+     end  
   end
 end
 
@@ -104,7 +129,7 @@ local formulajs = js.import("https://esm.sh/@formulajs/formulajs")
 -- =========================
 
 -- Convert column letters to number (A=1, B=2, ..., AA=27)
-function colToNumber(col)
+local function colToNumber(col)
   local n = 0
   for i = 1, string.len(col) do
     n = n * 26 + (string.byte(col, i) - string.byte("A") + 1)
@@ -113,7 +138,7 @@ function colToNumber(col)
 end
 
 -- Convert number to column letters (1=A, 27=AA)
-function numberToColLetters(c)
+local function numberToColLetters(c)
   local s = ""
   while c > 0 do
     local r = (c - 1) % 26
@@ -127,14 +152,14 @@ end
 -- Markdown table parsing / cell map (uses index for formula eval)
 -- =========================
 
-function expandRange(range, cellMap)
-  debug_log("Expanding range: " .. range)
+local function expandRange(range, cellMap)
+  log("Expanding range: " .. range)
   local colStart, rowStart, colEnd, rowEnd = string.match(range, "([A-Z]+)(%d+):([A-Z]+)(%d+)")
   if not colStart then
-    debug_log("Invalid range: " .. range)
+    log("Invalid range: " .. range)
     return {}
   end
-  
+   log("Expanding range: " .. colStart.." ".. rowStart.." ".. colEnd.." ".. rowEnd)
   local sCol, eCol = colToNumber(colStart), colToNumber(colEnd)
   local sRow, eRow = tonumber(rowStart), tonumber(rowEnd)
   local vals = {}
@@ -145,11 +170,15 @@ function expandRange(range, cellMap)
       if v ~= nil then table.insert(vals, v) end
     end
   end
-  debug_log("Expanded " .. range .. " into " .. tostring(#vals) .. " values")
+  log("Expanded " .. range .. " into " .. tostring(#vals) .. " values")
   return vals
 end
 
-function extractTable(rows)
+-- Expand a single cell range, e.g. A1 or A1:B2
+-- This function is used when a cell range is not given, e.g. F(A1)
+-- In this case, the range is A1:A1
+
+local function extractTable(rows)
    local data = {}
    for _, row in ipairs(rows) do
       local rowData = {}
@@ -167,11 +196,25 @@ function extractTable(rows)
    return data
 end
 
-function extractTables(pageName)
-   if not pageName then pageName = editor.getCurrentPage() end
-   debug_log("Extracting tables from page: " .. pageName)
+-- Returns a table of tables where each inner table is a row in the table.
+-- Inner tables are dictionaries where keys are column numbers and values are cell values.
+--
+-- Example usage:
+--
+-- local tables = extractTables('Page 1')
+-- for _, table in ipairs(tables) do
+--    for _, row in ipairs(table) do
+--       for column, value in pairs(row) do
+--          print(column, value)
+--       end
+--    end
+-- end
 
-   local allRows = query[[from index.tag "table" where page == pageName]]
+local function extractTables(pageName)
+   if not pageName then pageName = editor.getCurrentPage() end
+   log("Extracting tables from page: " .. pageName)
+
+   local allRows = query[[from index.tag "table" where page == pageName order by pos]]
    local tableGroups = {}
    for _, row in ipairs(allRows) do
       if not tableGroups[row.tableref] then tableGroups[row.tableref] = {} end
@@ -182,11 +225,20 @@ function extractTables(pageName)
    for tRef, rows in pairs(tableGroups) do
       results[tRef] = extractTable(rows)
    end
-   debug_log("Extracted " .. tostring(#(allRows or {})) .. " table rows")
+   log("Extracted " .. tostring(#(allRows or {})) .. " table rows")
    return results
 end
 
-function toCellMap(tableData)
+-- Returns a dictionary where keys are cell addresses (e.g. "A1", "B2") and values are cell values.
+--
+-- Example usage:
+--
+-- local cellMap = toCellMap(extractTables('Page 1')[1])
+-- for cellAddress, value in pairs(cellMap) do
+--    print(cellAddress, value)
+-- end
+
+local function toCellMap(tableData)
    local map = {}
    for r, row in ipairs(tableData) do
       for c, val in ipairs(row) do
@@ -197,8 +249,18 @@ function toCellMap(tableData)
    return map
 end
 
-function findTableOfFormula(pageName, formulaString, label)
-   debug_log("Searching table for formula: " .. formulaString .. " / label=" .. (label or "nil"))
+-- Returns the table that contains the given formula.
+-- If no table is found, returns nil.
+--
+-- Example usage:
+--
+-- local table = findTableOfFormula('Page 1', 'SUM(A1:A5)')
+-- if table then
+--    print(table)
+-- end
+
+local function findTableOfFormula(pageName, formulaString, label)
+   log("Searching table for formula: " .. formulaString .. " / label=" .. (label or "nil"))
    if not pageName then pageName = editor.getCurrentPage() end
    local allRows = query[[from index.tag "table" where page == pageName]]
    local search = formulaString
@@ -209,14 +271,44 @@ function findTableOfFormula(pageName, formulaString, label)
               k ~= "itags" and k ~= "page" and k ~= "pos" and
               k ~= "tableref" then
             if type(v) == "string" and string.find(v, search, 1, true) then
-               debug_log("Formula found in table: " .. row.tableref)
+               log("Formula found in table: " .. row.tableref)
                return row.tableref
             end
          end
       end
    end
-   debug_log("Formula not found in any table")
+   log("Formula not found in any table")
    return nil
+end
+
+---
+-- Finds the position of a pattern in a page.
+--
+-- @param pageName string - The name of the page to search.
+-- @param pattern string - The pattern to search for.
+-- @return number - The position of the first occurrence of the pattern, or nil if not found.
+
+local function findPosition(pageName, pattern)
+   if not pageName or pageName == "" then
+      pageName = editor.getCurrentPage()
+   end
+
+   log("findPosition: loading page " .. tostring(pageName) .. " and searching for pattern "..pattern)
+
+   local page = space.readPage(pageName)
+   if not page then
+      log("findPosition: page not found or has no text")
+      return nil
+   end
+
+   local s, e = string.find(page, pattern, 1, true)
+   if not s then
+      log("findPosition: pattern not found")
+      return nil
+   end
+
+   log("findPosition: pattern found at position " .. tostring(s) .. "-" .. tostring(e))
+   return s
 end
 
 -- =========================
@@ -224,7 +316,7 @@ end
 -- =========================
 
 function F(formulaString, label, pageName)
-   debug_log("Evaluating F: " .. formulaString .. " / label=" .. (label or "nil"))
+   log("Evaluating F: " .. formulaString .. " / label=" .. (label or "nil"))
 
    if not pageName then pageName = editor.getCurrentPage() end
    local tRef = findTableOfFormula(pageName, formulaString, label)
@@ -238,7 +330,7 @@ function F(formulaString, label, pageName)
    local argsStr   = string.match(formulaString, "%((.*)%)")
    if not funcName then return "ERROR: invalid formula syntax" end
 
-   debug_log("Function: " .. funcName .. " Args: " .. (argsStr or ""))
+   log("Function: " .. funcName .. " Args: " .. (argsStr or ""))
 
    local args = {}
    for a in string.gmatch(argsStr or "", "([^,]+)") do
@@ -254,14 +346,14 @@ function F(formulaString, label, pageName)
    end
 
    if not formulajs[funcName] then
-      debug_log("Unknown function: " .. funcName)
+      log("Unknown function: " .. funcName)
       return "ERROR: unknown function " .. funcName
    end
 
    local status, result = pcall(function() return formulajs[funcName](table.unpack(args)) end)
    if not status then return "ERROR: " .. tostring(result) end
 
-   debug_log("Formula result: " .. tostring(result))
+   log("Formula result: " .. tostring(result))
    return result
 end
 
@@ -269,7 +361,15 @@ end
 -- Table helpers for editing (must use live text, not indexed data)
 -- =========================
 
-function isCursorInTable()
+
+
+---
+-- Returns true if the cursor is currently inside a table.
+-- @return boolean
+-- @see isCursorInTable
+---
+
+local function isCursorInTable()
    local line = editor.getCurrentLine()
    if line == nil then
      line =false 
@@ -283,7 +383,12 @@ function isCursorInTable()
    end
 end
 
-function getTableBlock()
+---
+-- Returns the block of text that contains the cursor.
+-- @return string
+-- @see getTableBlock
+---
+local function getTableBlock()
    local lines = string.split(editor.getText(), "\n") 
    local cursorLine = editor.getCursor() or 1
    local startLine=cursorLine
@@ -312,27 +417,53 @@ function getTableBlock()
    return  lines,startLine,endLine
 end
 
-function splitRow(line)
+---
+-- Splits a row into cells.
+-- @param line string
+-- @return table
+---
+local function splitRow(line)
    local cells = {}
    for cell in string.gmatch(line, "|([^|]*)") do
       table.insert(cells, string.trim(cell)) 
    end
+   while #cells > 0 and (cells[#cells] == nil or string.trim(cells[#cells]) == "") do
+      table.remove(cells)
+   end
+
    return cells
 end
 
-function joinRow(cells)
+---
+-- Joins a row of cells into a single string.
+-- @param cells table
+-- @return string
+---
+local function joinRow(cells)
    local out = {}
    for i = 1, #cells do out[i] = tostring(cells[i] or "") end
-   debug_log(out)
+   log(out)
    return "| " .. table.concat(out, " | ") .. " |" -- Use table.concat
 end
 
-function firstNonEmptyOffset(cellText)
+---
+-- Returns the offset of the first non-empty character in a cell.
+-- @param cellText string
+-- @return number
+---
+local function firstNonEmptyOffset(cellText)
    if not cellText or cellText == "" then return 1 end
    return string.find(cellText, "%S") or 1
 end
 
-function getCellAbsolutePosition(lines, lineIndex, colIndex)
+---
+-- Returns the absolute position of a cell in a table.
+-- @param lines table
+-- @param lineIndex number
+-- @param colIndex number
+-- @return number
+---
+local function getCellAbsolutePosition(lines, lineIndex, colIndex)
     local line = lines[lineIndex] or ""
     local currentPos = 1 -- Start position in the string (1-indexed)
     local colCount = 0
@@ -375,7 +506,47 @@ function getCellAbsolutePosition(lines, lineIndex, colIndex)
     return pos or (string.find(line, "|") or 1) + 1
 end
 
-function withTableEdit(fn)
+---
+-- Expands a single cell range into a list of values.
+-- @param rangeStr string
+-- @param cellMap table
+-- @return table
+---
+local function expandSingleRange(rangeStr,cellMap)
+    local dest = {}
+    log("expandSingleRange: start")
+    log(rangeStr)
+    if not rangeStr or rangeStr == "" then
+        return dest
+    end
+    rangeStr = string.upper(rangeStr)
+
+    if string.match(rangeStr, "^[A-Z]+%d+:[A-Z]+%d+$") then
+        log("expandSingleRange: 1")
+        local vals = expandRange(rangeStr, cellMap)
+        for _, v in ipairs(vals) do
+            log(_,v)
+            table.insert(dest, v)
+        end
+    elseif string.match(rangeStr, "^[A-Z]+%d+$") then
+        log("expandSingleRange: 2")
+        local v = cellMap[rangeStr]
+        if v ~= nil then
+            log(v) 
+            table.insert(dest, v)
+        end
+    else
+        table.insert(dest, rangeStr)
+    end
+    log("expandSingleRange: end")
+    return dest
+end
+
+---
+-- Edits a table in place.
+-- @param fn function
+---
+local function withTableEdit(fn)
    if not isCursorInTable() then return end
    local lines, s, e = getTableBlock()
    fn(lines, s, e)
@@ -386,7 +557,12 @@ end
 -- Cell Navigation (Ctrl+Arrow)
 -- =========================
 
-function moveCell(dx, dy)
+---
+-- Moves the cursor to the specified cell.
+-- @param dx number
+-- @param dy number
+---
+local function moveCell(dx, dy)
    if not isCursorInTable() then return end
    local lines, s, e = getTableBlock()
    local cur = editor.getCursor()
@@ -518,5 +694,224 @@ command.define { name="Table: Sort Column Descending", run=function()
       table.insert(lines,s,header) -- Use table.insert
    end)
 end}
-```
 
+
+-- =========================
+-- Chartjs
+-- =========================
+
+-- QuickChart configuration table
+local quickchart = {}
+
+-- Define configurable QuickChart settings
+config.define("quickchart", {
+  type = "object"
+})
+
+-- Initialize QuickChart base URL from config with a sensible default
+local qc = config.get("quickchart") or ""
+if qc == "" then
+  quickchart.baseUrl = "https://quickchart.io"
+  quickchart.version = "2.9.4"
+else
+  local cfg = config.get("quickchart") or {}
+  local baseUrl = cfg.baseUrl or "https://quickchart.io"
+  if string.endsWith(baseUrl, "/") then
+    baseUrl = string.sub(baseUrl, 1, string.len(baseUrl) - 1)
+  end
+  quickchart.baseUrl = baseUrl
+  quickchart.version = cfg.version or "2.9.4"
+end
+
+
+-- Validate that the given value is an array-like table
+local function validate_series(xValues, yValues)
+  log("validate_series: start")
+
+  local ok = true
+  local message = ""
+
+  if type(xValues) ~= "table" then
+    ok = false
+    message = "xValues must be an array (table)"
+  elseif type(yValues) ~= "table" then
+    ok = false
+    message = "yValues must be an array (table)"
+  else
+    local xLen = 0
+    for _ in ipairs(xValues) do
+      xLen = xLen + 1
+    end
+
+    local yLen = 0
+    for _ in ipairs(yValues) do
+      yLen = yLen + 1
+    end
+
+    if xLen == 0 then
+      ok = false
+      message = "xValues must not be empty"
+    elseif yLen == 0 then
+      ok = false
+      message = "yValues must not be empty"
+    elseif xLen ~= yLen then
+      ok = false
+      message = "xValues and yValues must have the same length"
+    end
+  end
+
+  log("validate_series: end - ok=" .. tostring(ok))
+  return ok, message
+end
+
+-- Build the Chart.js config as a Lua table (later converted with js.stringify)
+local function build_chart_config(xValues, yValues, chartType,serieLabel)
+  log("build_chart_config: start")
+
+  local t = chartType
+  if t == nil or t == "" then
+    t = "line"
+  end
+
+  local config = {
+    type = t,
+    data = {
+      labels = xValues,
+      datasets = {
+        {
+          label = serieLabel,
+          data = yValues,
+        },
+      },
+    },
+  }
+
+  log("build_chart_config: end")
+  return config
+end
+
+local function getClosestTable(label,pageName,tables)
+   log("getClosestTable: start")
+   local functionPosition=tonumber(findPosition(pageName, 'G("'..label..'"'))
+
+   local minDiff = 100000
+   local nearestTable
+   for _, t in pairs(tables) do
+      nearestTable = t
+      break
+   end
+   for k,v in pairs(tables) do
+      local tablePosition = tonumber(string.match(k, "@([0-9]+)")) or 0
+      log("getClosestTable: tablePosition "..tablePosition)
+      local diff = functionPosition - tablePosition
+      if diff >= 0 and diff < minDiff and v ~= nil then
+         log("getClosestTable: diff "..diff)
+         minDiff = diff
+         nearestTable = v
+      end
+   end
+
+   if nearestTable then
+      log("getClosestTable: found ")
+      log(nearestTable)
+      return nearestTable
+   end
+   log("getClosestTable: end")
+end
+
+---
+-- Returns the HTML for the chart.
+-- @param xValues table
+-- @param yValues table
+-- @param chartType string
+-- @param serieLabel string
+-- @param w number
+-- @param h number
+-- @return string
+---
+local function getHtml(xValues, yValues, chartType,serieLabel, w, h)
+  log("getHtml: start")
+
+  local ok, validationMessage = validate_series(xValues, yValues)
+  if not ok then
+    log("G: invalid data -> returning error html")
+    return validationMessage
+  end
+
+  local configTable = build_chart_config(xValues, yValues, chartType,serieLabel)
+  local configJson = js.window.encodeURIComponent(js.stringify(js.tojs(configTable)))
+  log(configJson)
+  local width = w 
+  local height = h 
+  local baseUrl = quickchart.baseUrl
+  local version = quickchart.version
+
+  local quickchartUrl =
+    baseUrl .. '/chart?w=' .. width .. '&h=' .. height .. '&v=' .. version .. '&c=' .. configJson
+    
+  log(quickchartUrl)
+
+  local html =
+    '<div class="sb-chartjs-container">' ..
+      '<img src="' .. quickchartUrl .. '" alt="Chart" />' ..
+    '</div>'
+
+  log("getHtml: end")
+  return html
+end
+
+---
+-- Main HTML widget local function:
+-- @param label string
+-- @param pageName string
+-- @param XRange string
+-- @param YRange string
+-- @param options table
+-- @return string
+---
+function G(label, pageName, XRange, YRange, options)
+  log("G: start")
+
+  if not pageName or pageName == "" then
+    pageName = editor.getCurrentPage()
+  end
+
+  local tables = extractTables(pageName)
+  if not tables then
+    return "No tables found on page"
+  end
+  local tbl = nil
+
+  if label and label ~= "" then
+    log("G: found table 1")
+    tbl = tables[label]
+  end
+
+  if not tbl then
+   tbl = getClosestTable(label,pageName,tables)
+  end
+
+  if not tbl then
+   return "Missing table"
+  end
+
+
+  local cellMap = toCellMap(tbl)
+  local xValues = expandSingleRange(XRange, cellMap)
+  local yValues = expandSingleRange(YRange, cellMap)
+
+  local chartType="line"
+  local w=400
+  local h=600
+  local serieLabel="Series 1"
+  if type(options) == "table" then
+    chartType = options.chartType or options.type or chartType
+    w = options.w or options.width or w
+    h = options.h or options.height or h
+    serieLabel = options.serieLabel or serieLabel
+  end
+
+  local html = getHtml(xValues, yValues, chartType,serieLabel, w, h)
+  return widget.htmlBlock(html)
+end
+```

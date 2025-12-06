@@ -32,7 +32,6 @@ end
 -- Pretty-print any Lua value (tables included)
 local function dump(value, depth)
   depth = depth or 0
-
   if type(value) ~= "table" then
     return tostring(value)
   end
@@ -70,7 +69,6 @@ function utilities.debug(message, prefix)
   if not LOG_ENABLE then
     return message
   end
-
   local log_message = dump(message)
 
   local result = "[DEBUG]"
@@ -154,8 +152,21 @@ function utilities.getCodeBlock  (page,blockId,token,text)
   end
   return "Error"
 end
+
+function utilities.parseISODate(isoDate)
+    local pattern = "(%d+)%-(%d+)%-(%d+)%a(%d+)%:(%d+)%:([%d%.]+)([Z%+%-])(%d?%d?)%:?(%d?%d?)"
+    local year, month, day, hour, minute, 
+        seconds, offsetsign, offsethour, offsetmin = json_date:match(pattern)
+    local timestamp = os.time{year = year, month = month, 
+        day = day, hour = hour, min = minute, sec = seconds}
+    local offset = 0
+    if offsetsign ~= 'Z' then
+      offset = tonumber(offsethour) * 60 + tonumber(offsetmin)
+      if xoffset == "-" then offset = offset * -1 end
+    end
+    
+    return timestamp + offset
+end
 ```
 
 
-${utilities.debug("test")}
-${      utilities.debug("mode:"..true)}
