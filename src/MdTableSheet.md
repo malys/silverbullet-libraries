@@ -8,6 +8,8 @@ tags: meta/library
 
 ## Formulajs evaluator
 
+![](https://community.silverbullet.md/uploads/default/original/2X/2/2331d5ffb379c3209dc7c0b1065283137f873d72.gif)
+
 This feature allows you to embed dynamic formulas in your Markdown tables. You can use the \`F\` function to evaluate formulas and display their results in your tables.
 
 The \`F\` function takes two arguments:
@@ -37,7 +39,9 @@ Here's an example usage: \${F("SUM(A1:A5)","1")}\`
 | ${F("SUM(A1:B5)","1")} | ${F("SUM(B1:B5)","2")} | ${F("AVERAGE(C1:C5)","2")} |
 
 
-## ChartJS
+## ChartJS (online)
+
+![](https://community.silverbullet.md/uploads/default/original/2X/a/a79eebba75448fb6f9a1890855b683a4a9b8c282.gif)
 
 This feature allows you to embed interactive charts in your Markdown tables using ChartJS library. You can use the `G` function to create charts and display them in your tables.
 
