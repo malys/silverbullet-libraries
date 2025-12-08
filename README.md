@@ -24,13 +24,13 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Enhanced Risk Audit for SilverBullet that analyzes scripts for potentially dangerous constructs and API calls. - (2025-11-20)
 - [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga, open-source project management tool, integration. - (2025-11-20)
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity. - (2025-11-20)
-- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions.
-- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md)
-- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md)
+- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2025-12-06)
+- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2025-12-06)
+- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - universal palette (as VScode Palette), use '>' to execute commands - (2025-12-06)
 
 ## 🛠️ Installation
 1. Navigate to your `Library Manager` inside Silverbullet
-2. Add my repository: `https://github.com/malys/silverbullet-libraries/blob/main/Repository/malys.md`
+2. Add my repository: `https://github.com/malys/silverbullet-libraries/blob/main/Repositories/malys.md`
 3. Add any script my repository
 
 ## 🤝 Contributing

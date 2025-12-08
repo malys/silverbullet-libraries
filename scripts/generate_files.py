@@ -109,7 +109,7 @@ def generate_readme():
     content.extend([
         "\n## 🛠️ Installation",
         f"1. Navigate to your `Library Manager` inside Silverbullet\n"
-        f"2. Add my repository: `https://github.com/{REPOSITORY}/blob/main/Repository/{NAME}.md`\n"
+        f"2. Add my repository: `https://github.com/{REPOSITORY}/blob/main/Repositories/{NAME}.md`\n"
         "3. Add any script my repository\n",
         "## 🤝 Contributing",
         "We welcome contributions! Here's how you can help:",
@@ -129,7 +129,7 @@ def generate_readme():
     print("Successfully generated README.md")
 
 def generate_repository_file():
-    """Generate Repository/NAME.md file with library information."""
+    """Generate Repositories/NAME.md file with library information."""
     # Remove existing malys.md if it exists
     malys_path = Path(f"{NAME}.md")
     if malys_path.exists():
@@ -143,7 +143,7 @@ def generate_repository_file():
     lib_files.sort(key=lambda x: str(x).lower())
     
     content = ['---',
-        f'name: "Repository/{NAME} Repo"',
+        f'name: "Repositories/{NAME}"',
         'tags: meta/repository',
         'pageDecoration.prefix: "🦩"',
         '---',
@@ -173,12 +173,12 @@ def generate_repository_file():
     
     content.append('```')
     
-    os.makedirs('Repository', exist_ok=True)
+    os.makedirs('Repositories', exist_ok=True)
     
-    with open(f'Repository/{NAME}.md', 'w', encoding='utf-8') as f:
+    with open(f'Repositories/{NAME}.md', 'w', encoding='utf-8') as f:
         f.write('\n'.join(content))
     
-    print(f"Successfully generated Repository/{NAME}.md")
+    print(f"Successfully generated Repositories/{NAME}.md")
 
 def commit_src_changes():
     """Commit changes in the src directory."""

@@ -6,7 +6,7 @@
 run = "python scripts/generate_files.py --readme"
 
 [tasks.gen-index]
-# Generate Repository/Malys.md with library metadata
+# Generate Repositories/Malys.md with library metadata
 run = "python scripts/generate_files.py --index"
 
 [tasks.sync-libs]
