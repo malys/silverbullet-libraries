@@ -1,6 +1,6 @@
 ---
 author: malys
-description: [Marp](https://marp.app/) slides integration.
+description: Marp slides integration.
 name: "Library/Malys/MarpSlides"
 tags: meta/library
 ---
@@ -14,7 +14,7 @@ With Marp Preview, you can:
 - Use the Marp Preview panel to navigate through your slides and see them in action
 
 > **warning** Caution
-> Depends on Utilities.md
+> Depends on [Utilities.md](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md)
 
 
 ## Configuration
@@ -39,6 +39,10 @@ local function render_marp_slides(mode)
     local source=config.get("marp.source")
     if source == nil then 
       editor.flashNotification("'marp.source' configuration not set", "error")
+      source="Library/Malys/MarpSlides"
+    end
+    if utilities == nil then 
+      editor.flashNotification("'utilities' must be installed", "error")
     end
     utilities.debug(mode)
     if (not is_panel_visible and mode) or (not mode and is_panel_visible) then

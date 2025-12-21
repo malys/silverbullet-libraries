@@ -1,6 +1,6 @@
 ---
 author: malys
-description:  [MarkMap](https://markmap.js.org/) mindmap integration.
+description:  MarkMap mindmap integration.
 name: "Library/Malys/MarkmapMindmap"
 tags: meta/library
 ---
@@ -12,7 +12,6 @@ With MarkMap Preview, you can:
 - Preview your slides without leaving the context of your space
 - See how your slides look in real-time as you modify your markdown
 - Use the MarkMap Preview panel to navigate through your slides and see them in action
-
 ![](https://community.silverbullet.md/uploads/default/original/2X/4/493e4db01035bc5d0ef5189f8f502ac7fc449709.gif)
 
 
@@ -26,6 +25,10 @@ config.set("markmap.source ","xxxx")
 -- where xxx is the path of MarkmapMindmap md page ex: Library/MarkmapMindmap
 ```
 
+> **warning** Caution
+> Depends on [Utilities.md](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md)
+
+
 ## Code
 
  ```space-lua
@@ -36,6 +39,10 @@ local function render(mode)
     local source=config.get("markmap.source")
     if source == nil then 
       editor.flashNotification("'markmap.source' configuration not set", "error")
+      source="Library/Malys/MarkmapMindmap"
+    end
+    if utilities == nil then 
+      editor.flashNotification("'utilities' must be installed", "error")
     end
     if (not is_panel_visible and mode) or (not mode and is_panel_visible) then
       -- Get the current page content
