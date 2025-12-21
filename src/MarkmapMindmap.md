@@ -13,6 +13,9 @@ With MarkMap Preview, you can:
 - See how your slides look in real-time as you modify your markdown
 - Use the MarkMap Preview panel to navigate through your slides and see them in action
 
+![](https://community.silverbullet.md/uploads/default/original/2X/4/493e4db01035bc5d0ef5189f8f502ac7fc449709.gif)
+
+
 ## Configuration
 
 To easily manage JS code source, we use a dynamic introspection mechanism based on md page path.
@@ -26,8 +29,6 @@ config.set("markmap.source ","xxxx")
 ## Code
 
  ```space-lua
-local LOG_ENABLE = false
-
 local is_panel_visible = false
 local current_panel_id = "rhs"
 -- Function to render Marp slides

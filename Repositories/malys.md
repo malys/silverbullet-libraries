@@ -49,74 +49,14 @@ uri: https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructio
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md
 description: "System prompt to pilot LLM in SB plugin coding."
 ---
+name: "Markmapmindmap"
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md
+description: "[MarkMap](https://markmap.js.org/) mindmap integration."
+---
 name: "Marpslides"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md
 description: "[Marp](https://marp.app/) slides integration."
----
-name: "Mdtablerender"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md
-description: "Automatically formats Markdown table cells based on hashtag column tags in SilverBullet"
----
-name: "Mdtablesheet"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md
-description: "Integrate FormulaJS in markdown table (table = sheet)."
----
-name: "Organization Chart"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md
-description: "Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart."
----
-name: "Organization Company"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md
-description: "Organization Company card template."
----
-name: "Organization Employee"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md
-description: "Organization employee template"
----
-name: "Organization Vcfexport"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md
-description: "Generate VCF of company's employees."
----
-name: "Replaceplaceholders"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md
-description: "Replace Placeholders feature allows you to easily replace placeholders in your markdown content with specific values"
----
-name: "Riskaudit"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md
-description: "Enhanced Risk Audit for SilverBullet that analyzes scripts for potentially dangerous constructs and API calls."
----
-name: "Taiga"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md
-description: "Taiga, open-source project management tool, integration."
----
-name: "Theme Malys"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md
-description: "Dark theme thought for readibility and productivity."
----
-name: "Utilities"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md
-description: "List of reusable functions."
----
-name: "Vikunja"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md
-description: "Vikunja, open-source project management tool, integration."
----
-name: "Vscodepalette"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md
-description: "universal palette (as VScode Palette), use '>' to execute commands"
 ---
 ```
