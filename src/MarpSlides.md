@@ -53,7 +53,7 @@ local function render_marp_slides(mode)
       
       local marp_js = utilities.getCodeBlock(source,"jsInject","@CONTENT@",content2)
         utilities.debug(marp_js)
-      editor.showPanel(current_panel_id,1,  panel_html, marp_js)
+      editor.showPanel(current_panel_id,2,  panel_html, marp_js)
       is_panel_visible = true
     else
         -- Hide the panel if it's visible
@@ -64,7 +64,7 @@ end
 
 -- Define the command
 command.define({
-    name = "Marp Preview: Toggle",
+    name = "Marp: Toggle preview",
     description = "Toggle Marp slides render in a panel",
     run = function(e)
       render_marp_slides(true)
@@ -91,13 +91,18 @@ end
 ```js jsInject
 const scriptId = "marp-inject";
 
-//if (!document.getElementById(scriptId)) {
-    const script = document.createElement("script");
-    script.type = "module";
-    script.id = scriptId;
-    script.textContent = `@CONTENT@`;
-    document.documentElement.appendChild(script);
-//}
+// Remove existing script if present
+const existingScript = document.getElementById(scriptId);
+if (existingScript) {
+  existingScript.remove();
+}
+
+// Create and inject the script again
+const script = document.createElement("script");
+script.type = "module";
+script.id = scriptId;
+script.textContent = `@CONTENT@`;
+document.documentElement.appendChild(script);
 ```
 ```js innerHTML  
 import { Marp } from "https://esm.sh/@marp-team/marp-core?bundle"
