@@ -6,7 +6,7 @@ tags: meta/library
 ---
 # Malys theme
 
-Dark theme thought for readibility and productivity.
+Dark theme thought for readability and productivity.
 
 ## Example
 # 1 
@@ -26,9 +26,9 @@ Dark theme thought for readibility and productivity.
 
 ```space-style
 html {
-  --ui-font: ui-sans-serif, sans-serif !important;
-  --editor-font: ui-sans-serif, sans-serif !important;
-  --editor-width: 1100px !important;
+  --ui-font: firacode-nf, sans-serif !important;
+  --editor-font: firacode-nf  , sans-serif !important;
+  --editor-width: 99.9% !important;
   line-height: 1 !important;
 }
 

@@ -10,7 +10,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Embededitor](https://github.com/malys/silverbullet-libraries/blob/main/src/EmbedEditor.md) - Insert Iframe with editors. - (2025-11-16)
 - [Externaltransclusion](https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md) - Transclude data form external resource. - (2025-11-16)
 - [Fasttagexplorer](https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md) - Generate wall of children page tags - (2025-11-16)
-- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2025-11-18)
+- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2025-12-09)
 - [Helpshortcuts](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md) - Display most commun shortcuts. - (2025-11-16)
 - [Llminstructions](https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md) - System prompt to pilot LLM in SB plugin coding. - (2025-12-06)
 - [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - [Marp](https://marp.app/) slides integration. - (2025-11-20)
@@ -26,7 +26,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity. - (2025-11-20)
 - [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2025-12-06)
 - [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2025-12-06)
-- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - universal palette (as VScode Palette), use '>' to execute commands - (2025-12-06)
+- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - universal palette (as VScode Palette), use '>' to execute commands
 
 ## 🛠️ Installation
 1. Navigate to your `Library Manager` inside Silverbullet

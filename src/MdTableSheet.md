@@ -65,7 +65,7 @@ Here's an example chart:
 | 7   | 8   |
 | 9   | 10  |
 
-${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=400,height=200})}
+${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=300,height=80})}
 
 
 ## Code source
@@ -788,6 +788,12 @@ local function build_chart_config(xValues, yValues, chartType,serieLabel)
         },
       },
     },
+    options= {
+    responsive=true,
+    legend= {
+      position="right"
+    },
+  }
   }
 
   log("build_chart_config: end")
