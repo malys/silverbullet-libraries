@@ -16,7 +16,7 @@ run = "python scripts/sync_custom_libs.py"
 
 # tasks git add and commit and push
 [tasks.git]
-run = "sleep 5 && git pull&& git add . && git commit -m 'update' && git push"
+run = "sleep 7 && git pull&& git add . && git commit -m 'update' && git push"
 
 # Generate both README and index in one command
 [tasks.gen-all]
