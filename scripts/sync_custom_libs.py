@@ -49,7 +49,7 @@ def has_description_frontmatter(file_path):
 def sync_custom_libraries():
     # Base directories
     current_dir = Path('.').resolve()
-    source_dir = current_dir.parent / 'silverbullet_backup' / 'z-custom'
+    source_dir = current_dir.parent / 'silverbullet_backup' / 'Library' / 'Malys'
     src_dir = current_dir / 'src'
     
     if not source_dir.exists():

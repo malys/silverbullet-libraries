@@ -52,12 +52,12 @@ description: "System prompt to pilot LLM in SB plugin coding."
 name: "Markmapmindmap"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md
-description: "[MarkMap](https://markmap.js.org/) mindmap integration."
+description: "MarkMap mindmap integration."
 ---
 name: "Marpslides"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md
-description: "[Marp](https://marp.app/) slides integration."
+description: "Marp slides integration."
 ---
 name: "Mdtablerender"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md
