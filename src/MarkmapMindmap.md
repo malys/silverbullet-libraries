@@ -18,15 +18,16 @@ With MarkMap Preview, you can:
 ## Configuration
 
 To easily manage JS code source, we use a dynamic introspection mechanism based on md page path.
-We have to set:
+If you don’t install program to default path `Library/Malys/xxx`,we have to set:
 
 ```lua
 config.set("markmap.source ","xxxx")
--- where xxx is the path of MarkmapMindmap md page ex: Library/MarkmapMindmap
+-- ex: config.set("markmap.source ","Library/Malys/MarkmapMindmap")
+-- where xxx is the path of MarkmapMindmap md page
 ```
 
 > **warning** Caution
-> Depends on [Utilities.md](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md)
+> **Depends on** [Utilities.md](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md). It will be installed automatically
 
 
 ## Code
@@ -38,11 +39,12 @@ local current_panel_id = "rhs"
 local function render(mode)  
     local source=config.get("markmap.source")
     if source == nil then 
-      editor.flashNotification("'markmap.source' configuration not set", "error")
       source="Library/Malys/MarkmapMindmap"
+      editor.flashNotification("'markmap.source' use default value:"..source , "info")
     end
     if utilities == nil then 
-      editor.flashNotification("'utilities' must be installed", "error")
+      library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
+      editor.flashNotification("'Utilities' has been installed", "Info")
     end
     if (not is_panel_visible and mode) or (not mode and is_panel_visible) then
       -- Get the current page content
