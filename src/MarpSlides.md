@@ -14,7 +14,7 @@ With Marp Preview, you can:
 - Use the Marp Preview panel to navigate through your slides and see them in action
 
 > **warning** Caution
-> **Depends on** [Utilities.md](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md). It will be installed automatically
+> **Depends on** [Utilities.md](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md). It will be installed automatically.
 
 
 ## Configuration
@@ -40,7 +40,6 @@ local function render_marp_slides(mode)
     local source=config.get("marp.source")
     if source == nil then 
       source="Library/Malys/MarpSlides"
-      editor.flashNotification("'marp.source' use default value:"..source , "info")
     end
     if utilities == nil then 
       library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
@@ -79,7 +78,7 @@ command.define({
 
 -- Listen for page modifications
 event.listen({
-    name = "editor:pageModified",
+    name = "editor:pageSaved",
     run = function(e)
       render_marp_slides(false)
     end

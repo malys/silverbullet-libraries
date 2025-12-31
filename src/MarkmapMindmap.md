@@ -27,7 +27,7 @@ config.set("markmap.source ","xxxx")
 ```
 
 > **warning** Caution
-> **Depends on** [Utilities.md](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md). It will be installed automatically
+> **Depends on** [Utilities.md](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md). It will be installed automatically.
 
 
 ## Code
@@ -40,7 +40,6 @@ local function render(mode)
     local source=config.get("markmap.source")
     if source == nil then 
       source="Library/Malys/MarkmapMindmap"
-      editor.flashNotification("'markmap.source' use default value:"..source , "info")
     end
     if utilities == nil then 
       library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
@@ -75,7 +74,7 @@ command.define({
 
 -- Listen for page modifications
 event.listen({
-    name = "editor:pageModified",
+    name = "editor:pageSaved",
     run = function(e)
       render(false)
     end

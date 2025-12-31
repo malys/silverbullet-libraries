@@ -13,8 +13,8 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2025-12-09)
 - [Helpshortcuts](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md) - Display most commun shortcuts. - (2025-11-16)
 - [Llminstructions](https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md) - System prompt to pilot LLM in SB plugin coding. - (2025-12-06)
-- [Markmapmindmap](https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md) - MarkMap mindmap integration. - (2025-12-21)
-- [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - Marp slides integration. - (2025-12-21)
+- [Markmapmindmap](https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md) - MarkMap mindmap integration. - (2025-12-30)
+- [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - Marp slides integration. - (2025-12-30)
 - [Mdtablerender](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md) - Automatically formats Markdown table cells based on hashtag column tags in SilverBullet - (2025-11-20)
 - [Mdtablesheet](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md) - Integrate FormulaJS in markdown table (table = sheet). - (2025-12-21)
 - [Organization Chart](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md) - Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart. - (2025-11-20)
@@ -25,9 +25,9 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Enhanced Risk Audit for SilverBullet that analyzes scripts for potentially dangerous constructs and API calls. - (2025-11-20)
 - [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga, open-source project management tool, integration. - (2025-11-20)
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity. - (2025-12-21)
-- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2025-12-06)
-- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2025-12-06)
-- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - universal palette (as VScode Palette), use '>' to execute commands - (2025-12-06)
+- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions.
+- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md)
+- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md)
 
 ## 🛠️ Installation
 1. Navigate to your `Library Manager` inside Silverbullet
