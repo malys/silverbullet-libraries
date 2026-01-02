@@ -14,6 +14,18 @@ With MarkMap Preview, you can:
 - Use the MarkMap Preview panel to navigate through your slides and see them in action
 ![](https://community.silverbullet.md/uploads/default/original/2X/4/493e4db01035bc5d0ef5189f8f502ac7fc449709.gif)
 
+## Disclaimer & Contributions
+
+This code is provided **as-is**, **without any kind of support or warranty**.  
+I do **not** provide user support, bug-fixing on demand, or feature development.
+
+If you detect a bug, please **actively participate in debugging it** (analysis, proposed fix, or pull request) **before reporting it**. Bug reports without investigation may be ignored.
+
+🚫 **No new features will be added.**  
+✅ **All types of contributions are welcome**, including bug fixes, refactoring, documentation improvements, and optimizations.
+
+By using or contributing to this project, you acknowledge and accept these conditions.
+
 
 ## Configuration
 
@@ -34,13 +46,11 @@ config.set("markmap.source ","xxxx")
 
  ```space-lua
 local is_panel_visible = false
-local current_panel_id = "rhs"
+local current_panel_id = config.get("markmap.panelPosition") or "rhs"
 -- Function to render Marp slides
 local function render(mode)  
-    local source=config.get("markmap.source")
-    if source == nil then 
-      source="Library/Malys/MarkmapMindmap"
-    end
+    local source=config.get("markmap.source") or "Library/Malys/MarkmapMindmap"
+    local panelSize=config.get("markmap.panelSize") or 4
     if utilities == nil then 
       library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
       editor.flashNotification("'Utilities' has been installed", "Info")
@@ -54,7 +64,7 @@ local function render(mode)
       local js = utilities.getCodeBlock(source,"jsInject","@CONTENT@",content1)      
       local panel_html= utilities.getCodeBlock(source,"template")
       
-      editor.showPanel(current_panel_id,4,  panel_html, js)
+      editor.showPanel(current_panel_id,panelSize,  panel_html, js)
       is_panel_visible = true
     else
         -- Hide the panel if it's visible
@@ -123,16 +133,20 @@ window.mm = Markmap.create(
   root
 );
 
-// 👉 Toolbar
-const toolbar = new Toolbar();
-toolbar.attach(window.mm);
-
-const el = toolbar.render();
-el.style.position = "absolute";
-el.style.bottom = "20px";
-el.style.right = "20px";
+const existing = document.getElementsByClassName("mm-toolbar");
+if(existing.length==0){
+  // 👉 Toolbar
+  const toolbar = new Toolbar();
+  toolbar.attach(window.mm);
+  
+  const el = toolbar.render();
+  el.style.position = "absolute";
+  el.style.bottom = "20px";
+  el.style.right = "20px";
 document.body.appendChild(el);
+}  
 
+// 👉 print
 window.addEventListener("beforeprint", () => {
   window.mm?.fit();
 });

@@ -6,14 +6,27 @@ tags: meta/library
 ---
 # Md Table 
 
+## Disclaimer & Contributions
+
+This code is provided **as-is**, **without any kind of support or warranty**.  
+I do **not** provide user support, bug-fixing on demand, or feature development.
+
+If you detect a bug, please **actively participate in debugging it** (analysis, proposed fix, or pull request) **before reporting it**. Bug reports without investigation may be ignored.
+
+🚫 **No new features will be added.**  
+✅ **All types of contributions are welcome**, including bug fixes, refactoring, documentation improvements, and optimizations.
+
+By using or contributing to this project, you acknowledge and accept these conditions.
+
+
 ## Formulajs evaluator
 
 ![](https://community.silverbullet.md/uploads/default/original/2X/2/2331d5ffb379c3209dc7c0b1065283137f873d72.gif)
 
-This feature allows you to embed dynamic formulas in your Markdown tables. You can use the \`F\` function to evaluate formulas and display their results in your tables.
+This feature allows you to embed dynamic formulas in your Markdown tables. You can use the \`F\` local function to evaluate formulas and display their results in your tables.
 
-The \`F\` function takes two arguments:
-- \`formulajs\`: The formula to evaluate using the Formulajs library.
+The \`F\` local function takes two arguments:
+- \`formulajs\`: The formula to evaluate using the [Formulajs](https://formulajs.info/functions/) library.
 - \`label\` (optional): A label to differentiate between the same formula in different tables.
 
 Here's an example usage: \${F("SUM(A1:A5)","1")}\`
@@ -38,14 +51,23 @@ Here's an example usage: \${F("SUM(A1:A5)","1")}\`
 | 90  | 100 | 50  |
 | ${F("SUM(A1:B5)","1")} | ${F("SUM(B1:B5)","2")} | ${F("AVERAGE(C1:C5)","2")} |
 
+### Supported functions
 
+Every function in [list](https://formulajs.info/functions/) is in theory supported.
+
+But, I have tested only:
+* AVERAGE
+* CONCAT
+* SUM
+* SUMIF
+  
 ## ChartJS (online)
 
 ![](https://community.silverbullet.md/uploads/default/original/2X/a/a79eebba75448fb6f9a1890855b683a4a9b8c282.gif)
 
-This feature allows you to embed interactive charts in your Markdown tables using ChartJS library. You can use the `G` function to create charts and display them in your tables.
+This feature allows you to embed interactive charts in your Markdown tables using ChartJS library. You can use the `G` local function to create charts and display them in your tables.
 
-The `G` function takes four arguments:
+The `G` local function takes four arguments:
 
 - `label` (mandatory, unique id of chart): A label to differentiate between the same chart in different tables.
 - `pageName` (optional): The name of the page where the chart should be displayed. If not provided, the current page will be used.
@@ -79,8 +101,8 @@ ${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=300,height=8
 -- Example: ${F("SUM(A1:A5)","1")}
 
 -- Instructions to generate space lua scripts for silverbullet https://silverbullet.md
--- every function must be surrounded by log (not only main)
--- **not use lua standard methods but space-lua silverbullet api (https://silverbullet.md/API)** Be sure to use same function signature
+-- every local function must be surrounded by log (not only main)
+-- **not use lua standard methods but space-lua silverbullet api (https://silverbullet.md/API)** Be sure to use same local function signature
 -- [asset](https://silverbullet.md/API/asset)
 -- [clientStore](https://silverbullet.md/API/clientStore)
 -- [codeWidget](https://silverbullet.md/API/codeWidget)
@@ -115,8 +137,6 @@ ${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=300,height=8
 -- make code syntax simple, **safe** and easy debugable (during the pediod of development functions are public and at the end, switch to local function by default)
 -- ---------------------------
 
-
-local LOG_ENABLE = false
 local function log(...)
   if LOG_ENABLE and utilities and utilities.debug then
      if type(utilities.debug) == "function" then 
@@ -179,7 +199,7 @@ local function expandRange(range, cellMap)
 end
 
 -- Expand a single cell range, e.g. A1 or A1:B2
--- This function is used when a cell range is not given, e.g. F(A1)
+-- This local function is used when a cell range is not given, e.g. F(A1)
 -- In this case, the range is A1:A1
 
 local function extractTable(rows)
@@ -315,6 +335,20 @@ local function findPosition(pageName, pattern)
    return s
 end
 
+---
+-- Extract formula name.
+--
+-- @param formula string.
+local function extractFormula(formulaString)
+ return string.match(formulaString, "^(%w+)%(")
+end
+---
+-- Extract formula arguments.
+--
+-- @param formula string.
+local function extractArgsFormula(formulaString)
+   return string.match(formulaString, "%((.*)%)")
+end
 -- =========================
 -- Formula evaluator
 -- =========================
@@ -330,8 +364,8 @@ function F(formulaString, label, pageName)
    if not tbl then return "ERROR: table not found" end
    local cellMap = toCellMap(tbl)
 
-   local funcName = string.match(formulaString, "^(%w+)%(")
-   local argsStr   = string.match(formulaString, "%((.*)%)")
+   local funcName =extractFormula(formulaString)
+   local argsStr   = extractArgsFormula(formulaString)
    if not funcName then return "ERROR: invalid formula syntax" end
 
    log("Function: " .. funcName .. " Args: " .. (argsStr or ""))
@@ -341,7 +375,9 @@ function F(formulaString, label, pageName)
       a = string.trim(a) -- Use string.trim
       if string.match(a, "^[A-Z]+%d+:[A-Z]+%d+$") then
          local vals = expandRange(a, cellMap)
-         for _, v in ipairs(vals) do table.insert(args, v) end
+         local tmp={}
+         for _, v in ipairs(vals) do table.insert(tmp, v) end
+         table.insert(args, tmp)
       elseif string.match(a, "^[A-Z]+%d+$") then
          table.insert(args, cellMap[a])
       else
@@ -351,9 +387,9 @@ function F(formulaString, label, pageName)
 
    if not formulajs[funcName] then
       log("Unknown function: " .. funcName)
-      return "ERROR: unknown function " .. funcName
+      return "ERROR: unknown local function " .. funcName
    end
-
+   log("local function after: " .. funcName .. " Args: " .. (table.concat(args," ") or ""))
    local status, result = pcall(function() return formulajs[funcName](table.unpack(args)) end)
    if not status then return "ERROR: " .. tostring(result) end
 
@@ -588,10 +624,241 @@ local function moveCell(dx, dy)
    editor.moveCursor({ line = s + targetRow - 1, ch = newCh })
 end
 
+-- TODO add commands
+
+
+-- =========================
+-- Chartjs
+-- =========================
+
+-- QuickChart configuration table
+local quickchart = {}
+
+-- Define configurable QuickChart settings
+config.define("quickchart", {
+  type = "object"
+})
+
+-- Initialize QuickChart base URL from config with a sensible default
+local qc = config.get("quickchart") or ""
+if qc == "" then
+  quickchart.baseUrl = "https://quickchart.io"
+  quickchart.version = "2.9.4"
+else
+  local cfg = config.get("quickchart") or {}
+  local baseUrl = cfg.baseUrl or "https://quickchart.io"
+  if string.endsWith(baseUrl, "/") then
+    baseUrl = string.sub(baseUrl, 1, string.len(baseUrl) - 1)
+  end
+  quickchart.baseUrl = baseUrl
+  quickchart.version = cfg.version or "2.9.4"
+end
+
+
+-- Validate that the given value is an array-like table
+local function validate_series(xValues, yValues)
+  log("validate_series: start")
+
+  local ok = true
+  local message = ""
+
+  if type(xValues) ~= "table" then
+    ok = false
+    message = "xValues must be an array (table)"
+  elseif type(yValues) ~= "table" then
+    ok = false
+    message = "yValues must be an array (table)"
+  else
+    local xLen = 0
+    for _ in ipairs(xValues) do
+      xLen = xLen + 1
+    end
+
+    local yLen = 0
+    for _ in ipairs(yValues) do
+      yLen = yLen + 1
+    end
+
+    if xLen == 0 then
+      ok = false
+      message = "xValues must not be empty"
+    elseif yLen == 0 then
+      ok = false
+      message = "yValues must not be empty"
+    elseif xLen ~= yLen then
+      ok = false
+      message = "xValues and yValues must have the same length"
+    end
+  end
+
+  log("validate_series: end - ok=" .. tostring(ok))
+  return ok, message
+end
+
+-- Build the Chart.js config as a Lua table (later converted with js.stringify)
+local function build_chart_config(xValues, yValues, chartType,serieLabel)
+  log("build_chart_config: start")
+
+  local t = chartType
+  if t == nil or t == "" then
+    t = "line"
+  end
+
+  local config = {
+    type = t,
+    data = {
+      labels = xValues,
+      datasets = {
+        {
+          label = serieLabel,
+          data = yValues,
+        },
+      },
+    },
+    options= {
+    responsive=true,
+    legend= {
+      position="right"
+    },
+  }
+  }
+
+  log("build_chart_config: end")
+  return config
+end
+
+local function getClosestTable(label,pageName,tables)
+   log("getClosestTable: start")
+   functionPosition=tonumber(findPosition(pageName, 'G("'..label..'"'))
+
+   local minDiff = 100000
+   local nearestTable
+   for _, t in pairs(tables) do
+      nearestTable = t
+      break
+   end
+   for k,v in pairs(tables) do
+      local tablePosition = tonumber(string.match(k, "@([0-9]+)")) or 0
+      log("getClosestTable: tablePosition "..tablePosition)
+      local diff = functionPosition - tablePosition
+      if diff >= 0 and diff < minDiff and v ~= nil then
+         log("getClosestTable: diff "..diff)
+         minDiff = diff
+         nearestTable = v
+      end
+   end
+
+   if nearestTable then
+      log("getClosestTable: found ")
+      log(nearestTable)
+      return nearestTable
+   end
+   log("getClosestTable: end")
+end
+
+---
+-- Returns the HTML for the chart.
+-- @param xValues table
+-- @param yValues table
+-- @param chartType string
+-- @param serieLabel string
+-- @param w number
+-- @param h number
+-- @return string
+---
+local function getHtml(xValues, yValues, chartType,serieLabel, w, h)
+  log("getHtml: start")
+
+  local ok, validationMessage = validate_series(xValues, yValues)
+  if not ok then
+    log("G: invalid data -> returning error html")
+    return validationMessage
+  end
+
+  local configTable = build_chart_config(xValues, yValues, chartType,serieLabel)
+  local configJson = js.window.encodeURIComponent(js.stringify(js.tojs(configTable)))
+  log(configJson)
+  local width = w 
+  local height = h 
+  local baseUrl = quickchart.baseUrl
+  local version = quickchart.version
+
+  local quickchartUrl =
+    baseUrl .. '/chart?w=' .. width .. '&h=' .. height .. '&v=' .. version .. '&c=' .. configJson
+    
+  log(quickchartUrl)
+
+  local html =
+    '<div class="sb-chartjs-container">' ..
+      '<img src="' .. quickchartUrl .. '" alt="Chart" />' ..
+    '</div>'
+
+  log("getHtml: end")
+  return html
+end
+
+---
+-- Main HTML widget function:
+-- @param label string
+-- @param pageName string
+-- @param XRange string
+-- @param YRange string
+-- @param options table
+-- @return string
+---
+function G(label, pageName, XRange, YRange, options)
+  log("G: start")
+
+  if not pageName or pageName == "" then
+    pageName = editor.getCurrentPage()
+  end
+
+  local tables = extractTables(pageName)
+  if not tables then
+    return "No tables found on page"
+  end
+  local tbl = nil
+
+  if label and label ~= "" then
+    log("G: found table 1")
+    tbl = tables[label]
+  end
+
+  if not tbl then
+   tbl = getClosestTable(label,pageName,tables)
+  end
+
+  if not tbl then
+   return "Missing table"
+  end
+
+
+  local cellMap = toCellMap(tbl)
+  local xValues = expandSingleRange(XRange, cellMap)
+  local yValues = expandSingleRange(YRange, cellMap)
+
+  local chartType="line"
+  local w=400
+  local h=600
+  local serieLabel="Series 1"
+  if type(options) == "table" then
+    chartType = options.chartType or options.type or chartType
+    w = options.w or options.width or w
+    h = options.h or options.height or h
+    serieLabel = options.serieLabel or serieLabel
+  end
+
+  local html = getHtml(xValues, yValues, chartType,serieLabel, w, h)
+  return widget.htmlBlock(html)
+end
+```
+
+
+## Disabled features
+```lua
 -- =========================
 -- Commands (all use correct syntax)
 -- =========================
-
 command.define { name="Table: Move Cell Left",   run=function() moveCell(-1,0) end }
 command.define { name="Table: Move Cell Right", run=function() moveCell(1,0) end }
 command.define { name="Table: Move Cell Up",      run=function() moveCell(0,-1) end }
@@ -698,230 +965,4 @@ command.define { name="Table: Sort Column Descending", run=function()
       table.insert(lines,s,header) -- Use table.insert
    end)
 end}
-
-
--- =========================
--- Chartjs
--- =========================
-
--- QuickChart configuration table
-local quickchart = {}
-
--- Define configurable QuickChart settings
-config.define("quickchart", {
-  type = "object"
-})
-
--- Initialize QuickChart base URL from config with a sensible default
-local qc = config.get("quickchart") or ""
-if qc == "" then
-  quickchart.baseUrl = "https://quickchart.io"
-  quickchart.version = "2.9.4"
-else
-  local cfg = config.get("quickchart") or {}
-  local baseUrl = cfg.baseUrl or "https://quickchart.io"
-  if string.endsWith(baseUrl, "/") then
-    baseUrl = string.sub(baseUrl, 1, string.len(baseUrl) - 1)
-  end
-  quickchart.baseUrl = baseUrl
-  quickchart.version = cfg.version or "2.9.4"
-end
-
-
--- Validate that the given value is an array-like table
-local function validate_series(xValues, yValues)
-  log("validate_series: start")
-
-  local ok = true
-  local message = ""
-
-  if type(xValues) ~= "table" then
-    ok = false
-    message = "xValues must be an array (table)"
-  elseif type(yValues) ~= "table" then
-    ok = false
-    message = "yValues must be an array (table)"
-  else
-    local xLen = 0
-    for _ in ipairs(xValues) do
-      xLen = xLen + 1
-    end
-
-    local yLen = 0
-    for _ in ipairs(yValues) do
-      yLen = yLen + 1
-    end
-
-    if xLen == 0 then
-      ok = false
-      message = "xValues must not be empty"
-    elseif yLen == 0 then
-      ok = false
-      message = "yValues must not be empty"
-    elseif xLen ~= yLen then
-      ok = false
-      message = "xValues and yValues must have the same length"
-    end
-  end
-
-  log("validate_series: end - ok=" .. tostring(ok))
-  return ok, message
-end
-
--- Build the Chart.js config as a Lua table (later converted with js.stringify)
-local function build_chart_config(xValues, yValues, chartType,serieLabel)
-  log("build_chart_config: start")
-
-  local t = chartType
-  if t == nil or t == "" then
-    t = "line"
-  end
-
-  local config = {
-    type = t,
-    data = {
-      labels = xValues,
-      datasets = {
-        {
-          label = serieLabel,
-          data = yValues,
-        },
-      },
-    },
-    options= {
-    responsive=true,
-    legend= {
-      position="right"
-    },
-  }
-  }
-
-  log("build_chart_config: end")
-  return config
-end
-
-local function getClosestTable(label,pageName,tables)
-   log("getClosestTable: start")
-   local functionPosition=tonumber(findPosition(pageName, 'G("'..label..'"'))
-
-   local minDiff = 100000
-   local nearestTable
-   for _, t in pairs(tables) do
-      nearestTable = t
-      break
-   end
-   for k,v in pairs(tables) do
-      local tablePosition = tonumber(string.match(k, "@([0-9]+)")) or 0
-      log("getClosestTable: tablePosition "..tablePosition)
-      local diff = functionPosition - tablePosition
-      if diff >= 0 and diff < minDiff and v ~= nil then
-         log("getClosestTable: diff "..diff)
-         minDiff = diff
-         nearestTable = v
-      end
-   end
-
-   if nearestTable then
-      log("getClosestTable: found ")
-      log(nearestTable)
-      return nearestTable
-   end
-   log("getClosestTable: end")
-end
-
----
--- Returns the HTML for the chart.
--- @param xValues table
--- @param yValues table
--- @param chartType string
--- @param serieLabel string
--- @param w number
--- @param h number
--- @return string
----
-local function getHtml(xValues, yValues, chartType,serieLabel, w, h)
-  log("getHtml: start")
-
-  local ok, validationMessage = validate_series(xValues, yValues)
-  if not ok then
-    log("G: invalid data -> returning error html")
-    return validationMessage
-  end
-
-  local configTable = build_chart_config(xValues, yValues, chartType,serieLabel)
-  local configJson = js.window.encodeURIComponent(js.stringify(js.tojs(configTable)))
-  log(configJson)
-  local width = w 
-  local height = h 
-  local baseUrl = quickchart.baseUrl
-  local version = quickchart.version
-
-  local quickchartUrl =
-    baseUrl .. '/chart?w=' .. width .. '&h=' .. height .. '&v=' .. version .. '&c=' .. configJson
-    
-  log(quickchartUrl)
-
-  local html =
-    '<div class="sb-chartjs-container">' ..
-      '<img src="' .. quickchartUrl .. '" alt="Chart" />' ..
-    '</div>'
-
-  log("getHtml: end")
-  return html
-end
-
----
--- Main HTML widget local function:
--- @param label string
--- @param pageName string
--- @param XRange string
--- @param YRange string
--- @param options table
--- @return string
----
-function G(label, pageName, XRange, YRange, options)
-  log("G: start")
-
-  if not pageName or pageName == "" then
-    pageName = editor.getCurrentPage()
-  end
-
-  local tables = extractTables(pageName)
-  if not tables then
-    return "No tables found on page"
-  end
-  local tbl = nil
-
-  if label and label ~= "" then
-    log("G: found table 1")
-    tbl = tables[label]
-  end
-
-  if not tbl then
-   tbl = getClosestTable(label,pageName,tables)
-  end
-
-  if not tbl then
-   return "Missing table"
-  end
-
-
-  local cellMap = toCellMap(tbl)
-  local xValues = expandSingleRange(XRange, cellMap)
-  local yValues = expandSingleRange(YRange, cellMap)
-
-  local chartType="line"
-  local w=400
-  local h=600
-  local serieLabel="Series 1"
-  if type(options) == "table" then
-    chartType = options.chartType or options.type or chartType
-    w = options.w or options.width or w
-    h = options.h or options.height or h
-    serieLabel = options.serieLabel or serieLabel
-  end
-
-  local html = getHtml(xValues, yValues, chartType,serieLabel, w, h)
-  return widget.htmlBlock(html)
-end
 ```

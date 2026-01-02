@@ -8,6 +8,18 @@ tags: meta/library
 This script enhances Markdown tables inside SilverBullet by applying dynamic formatting rules to columns marked with hashtag-style format tags (e.g. `#euro`, `#percent`, `#stars`).
 It observes table changes in real time and transforms raw text values into styled, formatted elements — such as currency, percentages, booleans, dates, badges, emojis, trends, and star ratings — without altering the original Markdown source. It is designed to be non-intrusive, editable-friendly, and resilient thanks to mutation observers, debouncing, and a polling fallback.
 
+## Disclaimer & Contributions
+
+This code is provided **as-is**, **without any kind of support or warranty**.  
+I do **not** provide user support, bug-fixing on demand, or feature development.
+
+If you detect a bug, please **actively participate in debugging it** (analysis, proposed fix, or pull request) **before reporting it**. Bug reports without investigation may be ignored.
+
+🚫 **No new features will be added.**  
+✅ **All types of contributions are welcome**, including bug fixes, refactoring, documentation improvements, and optimizations.
+
+By using or contributing to this project, you acknowledge and accept these conditions.
+
 ## Supported renderers (via `#tag` in header)
 
 | Tag | Effect |
@@ -30,6 +42,7 @@ It observes table changes in real time and transforms raw text values into style
 | **#badge** | Renders value as a blue pill badge |
 | **#emoji** | Converts words like “happy”, “cool”, “neutral” → 😃 😎 😐 |
 | **#trend** | Converts + / - / = into 🔼 🔽 ➡️ |
+| **#histo** | Converts number to █ |
 
 Just add the renderer as a hashtag tag in your table header:
 
@@ -81,12 +94,11 @@ You only need **one** of these:
 // @description 06/11/2025 16:32:22
 // ==/UserScript==
 
-
 (function () {
   'use strict';
 
   // ---------- Configuration ----------
-  const DEBUG = false;             // set true to see console logs
+  const DEBUG = true;             // set true to see console logs
   const POLL_FALLBACK_MS = 1500;   // fallback polling interval if observer misfires
   const DEBOUNCE_MS = 500;         // debounce for batch mutation handling
 
@@ -119,6 +131,10 @@ You only need **one** of these:
       const n = parseInt(v, 10);
       if (isNaN(n)) return v;
       return '★'.repeat(Math.max(0, Math.min(n, 5))) + '☆'.repeat(5 - Math.max(0, Math.min(n, 5)));
+    },
+    histo: v => {
+      const n = parseInt(v, 10);
+      return isNaN(n) ? v : '█'.repeat(n);
     },
     badge: v => `<span style="background:#2196f3;color:white;padding:2px 6px;border-radius:8px;font-size:0.9em;">${v}</span>`,
     emoji: v => {

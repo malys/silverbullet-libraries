@@ -111,7 +111,14 @@ def generate_readme():
         f"1. Navigate to your `Library Manager` inside Silverbullet\n"
         f"2. Add my repository: `https://github.com/{REPOSITORY}/blob/main/Repositories/{NAME}.md`\n"
         "3. Add any script my repository\n",
-        "## 🤝 Contributing",
+        "## ✅ Disclaimer",
+        "This code is provided **as-is**, **without any kind of support or warranty**.",
+        "I do **not** provide user support, bug-fixing on demand, or feature development.",
+        "If you detect a bug, please **actively participate in debugging it** (analysis, proposed fix, or pull request) **before reporting it**. Bug reports without investigation may be ignored.",
+        "🚫 **No new features will be added.**",
+        "✅ **All types of contributions are welcome**, including bug fixes, refactoring, documentation improvements, and optimizations.",
+        "By using or contributing to this project, you acknowledge and accept these conditions.\n",
+        "### 🤝 Contributing",
         "We welcome contributions! Here's how you can help:",
         "- Add new libraries or improve existing ones",
         "- Fix bugs or improve documentation",

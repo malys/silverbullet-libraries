@@ -16,6 +16,18 @@ With Marp Preview, you can:
 > **warning** Caution
 > **Depends on** [Utilities.md](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md). It will be installed automatically.
 
+## Disclaimer & Contributions
+
+This code is provided **as-is**, **without any kind of support or warranty**.  
+I do **not** provide user support, bug-fixing on demand, or feature development.
+
+If you detect a bug, please **actively participate in debugging it** (analysis, proposed fix, or pull request) **before reporting it**. Bug reports without investigation may be ignored.
+
+🚫 **No new features will be added.**  
+✅ **All types of contributions are welcome**, including bug fixes, refactoring, documentation improvements, and optimizations.
+
+By using or contributing to this project, you acknowledge and accept these conditions.
+
 
 ## Configuration
 
