@@ -1,6 +1,6 @@
 ---
 author: malys
-description: Enhanced Risk Audit for SilverBullet that analyzes scripts for potentially dangerous constructs and API calls.
+description:  Risk audit  (scripts analyzor)
 name: "Library/Malys/RiskAudit"
 tags: meta/library
 ---
@@ -494,3 +494,6 @@ command.define {
 ```
 
 
+## Community
+
+[Silverbullet forum](https://community.silverbullet.md/t/risk-audit/3562)

@@ -966,3 +966,11 @@ command.define { name="Table: Sort Column Descending", run=function()
    end)
 end}
 ```
+
+## Changelog
+
+* 2026-01-02 fix: call functions with many arguments 
+
+## Community
+
+[Silverbullet forum](https://community.silverbullet.md/t/feature-markdown-table-formula-with-formulajs/3208)

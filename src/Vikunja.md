@@ -115,3 +115,8 @@ ${template.each(
 * position
 * reactions
 * created_by
+
+
+## Community
+
+[Silverbullet forum](https://community.silverbullet.md/t/pull-in-vikunja-tasks/3324)

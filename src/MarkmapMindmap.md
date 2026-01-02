@@ -326,6 +326,11 @@ window.addEventListener("beforeprint", () => {
       <svg id="mindmap"></svg>
       </div>
 ```
-```css template
 
-```
+## Changelog
+
+* 2025-12-01 fix: html duplicate inserts
+
+## Community
+
+[Silverbullet forum]([https://community.silverbullet.md/t/space-lua-addon-with-missing-git-commands-history-diff-restore/3539](https://community.silverbullet.md/t/mindmap-with-markmap-js/1556))

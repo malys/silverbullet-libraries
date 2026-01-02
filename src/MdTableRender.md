@@ -27,6 +27,9 @@ By using or contributing to this project, you acknowledge and accept these condi
 | **#euro** | Formats number as “12 345 €” |
 | **#usd** | Formats number as “$12,345” |
 | **#percent** | Converts decimal to percentage (0.15 → “15 %”) |
+| **#km** | Formats number as “12 345 km” |
+| **#kg** | Formats number as “12 345 kg” |
+| **#watt** | Formats number as “12 345 W” |
 | **#int** | Parses and formats whole numbers with locale separators |
 | **#float** | Forces 2 decimal places (e.g. “3.14”) |
 | **#upper** | Forces uppercase |
@@ -106,6 +109,9 @@ You only need **one** of these:
  const formatters = {
     euro: v => isNaN(v) ? v : `${parseFloat(v).toLocaleString()} €`,
     usd: v => isNaN(v) ? v : `$${parseFloat(v).toLocaleString()}`,
+    kg: v => isNaN(v) ? v : `${parseFloat(v).toLocaleString()} kg`,
+    km: v => isNaN(v) ? v : `${parseFloat(v).toLocaleString()} km`,
+    watt: v => isNaN(v) ? v : `${parseFloat(v).toLocaleString()} W`,
     percent: v => isNaN(v) ? v : `${(parseFloat(v) * 100).toFixed(0)} %`,
     int: v => isNaN(v) ? v : parseInt(v, 10).toLocaleString(),
     float: v => isNaN(v) ? v : parseFloat(v).toFixed(2),
@@ -370,3 +376,11 @@ You only need **one** of these:
 
 })();
 ```
+
+## Changelog
+
+* 2026-01-02 feat: add kg, km, watt, histo
+
+## Community
+
+[Silverbullet forum](https://community.silverbullet.md/t/md-table-renderers/3545/15)

@@ -400,3 +400,7 @@ command.define {
 .diff-context { color: inherit; }
 
 ```
+
+## Community
+
+[Silverbullet forum](https://community.silverbullet.md/t/space-lua-addon-with-missing-git-commands-history-diff-restore/3539)

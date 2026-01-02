@@ -1,17 +1,17 @@
 ---
 author: malys
-description: universal palette (as VScode Palette), use '>' to execute commands
+description: DEPRECATED universal palette (as VScode Palette), use '>' to execute commands
 name: "Library/Malys/VSCodePalette"
 tags: meta/library
 ---
-# Universal Palette
+# ~Universal Palette~
 
 The VSCode Palette feature allows you to search and open content items (pages, commands, etc.) quickly. 
 You can customize the objects to populate, like page, command, etc. 
 The palette is a unique feature that provides a quick way to navigate your content.
 You can search directly page and header and use “>“ to execute commands.  
 
-```space-lua
+```lua
 -- VSCode-style palette with nil safety  
 local vscode = {}  
 vscode.enabledObjectToPopulate = {"page", "command", "header"}  

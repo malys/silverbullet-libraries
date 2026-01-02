@@ -1,6 +1,6 @@
 ---
 author: malys
-description: Taiga, open-source project management tool, integration.
+description: Taiga project management tool
 name: "Library/Malys/Taiga"
 tags: meta/library
 ---
@@ -108,3 +108,6 @@ end
 ```
 
 
+## Community
+
+[Silverbullet forum](https://community.silverbullet.md/t/feature-get-taiga-io-tasks/3334)
