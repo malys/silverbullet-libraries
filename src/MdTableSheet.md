@@ -18,7 +18,6 @@ If you detect a bug, please **actively participate in debugging it** (analysis, 
 
 By using or contributing to this project, you acknowledge and accept these conditions.
 
-
 ## Formulajs evaluator
 
 ![](https://community.silverbullet.md/uploads/default/original/2X/2/2331d5ffb379c3209dc7c0b1065283137f873d72.gif)
@@ -30,7 +29,6 @@ The \`F\` local function takes two arguments:
 - \`label\` (optional): A label to differentiate between the same formula in different tables.
 
 Here's an example usage: \${F("SUM(A1:A5)","1")}\`
-
 
 | Header A | Header B |
 | --- | --- |
