@@ -1,6 +1,6 @@
 ---
 author: malys
-description: Automatically formats Markdown table cells based on hashtag column tags in SilverBullet
+description: Automatically formats Markdown table cells based on hashtag column tags.
 tags: userscript
 name: "Library/Malys/MdTableRender"
 ---

@@ -10,6 +10,8 @@ tags: meta/library
 
 This SpaceLua script provides a set of tools designed to aid in the development and debugging of Lua code directly within the Silverbullet environment. It helps you identify errors, improve code quality, and maintain consistent formatting.  
 
+![](https://community.silverbullet.md/uploads/default/original/2X/3/3e619520b0810b5fcfdba5eb513e5f78b1d30f1f.gif)
+
 ## Features
 
 *   **Lua Linting:**  Integrates with `luacheck` to automatically analyze your code for potential errors, stylistic issues, and adherence to best practices. Issues are clearly displayed within Silverbullet.
@@ -68,7 +70,7 @@ end
     SolveMath= false,
     Indentation= '\t'
   })
-  local result=mls.removeFirstLines(result,6) 
+  local result=mls.removeFirstLines(result,5) 
    js.window.navigator.clipboard.writeText(result)
   return result
 end
@@ -392,4 +394,4 @@ event.listen({
 
 ## Community
 
-[Silverbullet forum](https://community.silverbullet.md/t/mindmap-with-markmap-js/1556/7)
+[Silverbullet forum](https://community.silverbullet.md/t/feature-tooling-to-debug-and-develop/3712)

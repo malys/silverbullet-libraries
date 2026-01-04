@@ -34,7 +34,7 @@ mls.cache.lru.CacheManager.has(1)
 -- Entries
 mls.cache.lru.CacheManager.entries()
 -- Keys
-mls.cache.lru.CacheManager.keys() }
+mls.cache.lru.CacheManager.keys()
 -- Values
 mls.cache.lru.CacheManager.values() 
 -- Delete
@@ -78,8 +78,6 @@ end
 
 
 ```
-${mls.debugger("position",3602)}
-
 ## Changelog
 
 * 2026-01-03  wrapper init

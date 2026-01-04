@@ -109,7 +109,6 @@ vikunja.template = function(task)
 end
 ```
 
-
 ## Fields
 
 * id

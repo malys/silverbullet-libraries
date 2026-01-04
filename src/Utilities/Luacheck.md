@@ -130,4 +130,4 @@ end
 * 2026-01-04 feat: linter call
 ## Community
 
-[Silverbullet forum](https://community.silverbullet.md/t/mindmap-with-markmap-js/1556/7)
+[Silverbullet forum](https://community.silverbullet.md/t/feature-tooling-to-debug-and-develop/3712)
