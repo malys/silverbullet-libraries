@@ -138,9 +138,9 @@ ${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=300,height=8
 -- ---------------------------
 
 local function log(...)
-  if LOG_ENABLE and utilities and utilities.debug then
-     if type(utilities.debug) == "function" then 
-       utilities.debug(table.concat({...}, " "))
+  if LOG_ENABLE and mls and mls.debug then
+     if type(mls.debug) == "function" then 
+       mls.debug(table.concat({...}, " "))
      end  
   end
 end

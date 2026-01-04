@@ -43,8 +43,6 @@ config.set("marp.source","xxxx")
 ## Code
 
  ```space-lua
-local LOG_ENABLE = false
-
 local is_panel_visible = false
 local current_panel_id = "rhs"
 -- Function to render Marp slides
@@ -53,23 +51,23 @@ local function render_marp_slides(mode)
     if source == nil then 
       source="Library/Malys/MarpSlides"
     end
-    if utilities == nil then 
+    if mls == nil or (mls ~=nil and mls.debug == nil) then 
       library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
       editor.flashNotification("'Utilities' has been installed", "Info")
     end
-    utilities.debug(mode)
+    mls.debug(mode)
     if (not is_panel_visible and mode) or (not mode and is_panel_visible) then
       -- Get the current page content
       local page_content = editor.getText()
-      --  utilities.debug("page_content: "..page_content)
+      --  mls.debug("page_content: "..page_content)
       local panel_html =  '<div id="render" style="flex: 1; overflow-y: auto"></div>'
       local contentBase64=encoding.base64Encode(page_content)
-      local content0= string.gsub( utilities.getCodeBlock(source,"template")," `"," \\`")
-      local content1= utilities.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
+      local content0= string.gsub( mls.getCodeBlock(source,"template")," `"," \\`")
+      local content1= mls.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
       local content2=string.gsub(content1,"@TEMPLATE@",encoding.base64Encode(content0))
       
-      local marp_js = utilities.getCodeBlock(source,"jsInject","@CONTENT@",content2)
-        utilities.debug(marp_js)
+      local marp_js = mls.getCodeBlock(source,"jsInject","@CONTENT@",content2)
+        mls.debug(marp_js)
       editor.showPanel(current_panel_id,2,  panel_html, marp_js)
       is_panel_visible = true
     else

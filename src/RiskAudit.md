@@ -43,12 +43,10 @@ _
 -- ===========================================================================
 -- == Debug wrapper
 -- ===========================================================================
-local LOG_ENABLE = false
-
 local function log(...)
-  if LOG_ENABLE and utilities and utilities.debug then
-     if type(utilities.debug) == "function" then 
-       utilities.debug(table.concat({...}, " "))
+  if LOG_ENABLE and mls and mls.debug then
+     if type(mls.debug) == "function" then 
+       mls.debug(table.concat({...}, " "))
      end  
   end
 end

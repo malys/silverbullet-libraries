@@ -23,7 +23,7 @@ It provides:
 > **warning** Warning
 > Depends on:
 >  `git` CLI
->  `utilities.debug` helper
+>  `mls.debug` helper
 
 ---
 
@@ -77,19 +77,17 @@ The module converts raw Git output to readable Markdown:
 ```space-lua
 -- ###########################################################################
 -- ## Git History Module (Fixed for paths with underscores)
--- ## Depends on: Utilities.md (utilities.debug), and environment helpers:
+-- ## Depends on: Utilities.md (mls.debug), and environment helpers:
 -- ##   string.trim, string.split, string.startsWith, shell.run, editor.*, virtualPage.*, command.*
 -- ###########################################################################
 
 -- ===========================================================================
 -- == Configuration
 -- ===========================================================================
-local LOG_ENABLE = false
-
 local function log(...)
-  if LOG_ENABLE and utilities and utilities.debug then
-     if type(utilities.debug) == "function" then 
-       utilities.debug(table.concat({...}, " "))
+  if LOG_ENABLE and mls and mls.debug then
+     if type(mls.debug) == "function" then 
+       mls.debug(table.concat({...}, " "))
      end  
   end
 end

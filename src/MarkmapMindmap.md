@@ -51,18 +51,18 @@ local current_panel_id = config.get("markmap.panelPosition") or "rhs"
 local function render(mode)  
     local source=config.get("markmap.source") or "Library/Malys/MarkmapMindmap"
     local panelSize=config.get("markmap.panelSize") or 4
-    if utilities == nil then 
+    if mls == nil or (mls ~=nil and mls.debug == nil) then 
       library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
       editor.flashNotification("'Utilities' has been installed", "Info")
     end
     if (not is_panel_visible and mode) or (not mode and is_panel_visible) then
       -- Get the current page content
       local page_content = editor.getText()
-      --  utilities.debug("page_content: "..page_content)
+      --  mls.debug("page_content: "..page_content)
       local contentBase64=encoding.base64Encode(page_content)
-      local content1= utilities.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
-      local js = utilities.getCodeBlock(source,"jsInject","@CONTENT@",content1)      
-      local panel_html= utilities.getCodeBlock(source,"template")
+      local content1= mls.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
+      local js = mls.getCodeBlock(source,"jsInject","@CONTENT@",content1)      
+      local panel_html= mls.getCodeBlock(source,"template")
       
       editor.showPanel(current_panel_id,panelSize,  panel_html, js)
       is_panel_visible = true

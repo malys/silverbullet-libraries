@@ -20,10 +20,11 @@ LOG_ENABLE=true
 * Add filter “[Client] [DEBUG]“
 ## Code
 ```space-lua
-utilities=utilities or {}
+-- priority: 11
+mls=mls or {}
 
 -- Convert meeting note title
-function utilities.getmeetingTitle()
+function mls.getmeetingTitle()
   local t=string.split(string.split(editor.getCurrentPage(),"/")[#string.split(editor.getCurrentPage(),"/")],"_")
   table.remove(t,1)
   t=table.concat(t, " ")
@@ -31,7 +32,7 @@ function utilities.getmeetingTitle()
 end
 
 -- Embed external resources
-function utilities.embedUrl(specOrUrl,w,h) 
+function mls.embedUrl(specOrUrl,w,h) 
   local width = w or "100%"
   local height = h or "400px"
   return widget.html(dom.iframe {
@@ -45,9 +46,10 @@ end
 ---------------------------------------------
 -- Pretty-print any Lua value (tables included)
 local function dump(value, depth)
+  --print("[DEBUG][TYPE]"..type(value))
   depth = depth or 0
-  if type(value) ~= "table" then
-    return tostring(value)
+  if type(value) ~= "table" or (type(value) == "string" and value ~= "[object Object]") then
+    return value
   end
 
   -- Prevent going too deep (avoid infinite recursion)
@@ -64,14 +66,13 @@ local function dump(value, depth)
   for k, v in pairs(value) do
     local key = tostring(k)
     local val
-
     if type(v) == "table" then
       val = dump(v, depth + 1)
     else
-      val = tostring(v)
+      val = v
     end
 
-    table.insert(parts, next_indent .. key .. " = " .. val .. ",")
+    table.insert(parts, next_indent .. tostring(key) .. " = " .. tostring(val) .. ",")
   end
 
   table.insert(parts, indent .. "}")
@@ -80,7 +81,7 @@ local function dump(value, depth)
 end
 
 
-function utilities.debug(message, prefix)
+function mls.debug(message, prefix)
   if not LOG_ENABLE then
     return message
   end
@@ -88,12 +89,11 @@ function utilities.debug(message, prefix)
 
   local result = "[DEBUG]"
   if prefix then
-    result = result .. "[" .. prefix .. "]"
+    result = result .. "[" .. tostring(prefix) .. "]"
   end
 
-  result = result .. " " .. log_message
-  js.log(result)
-
+  result = result .. " " .. tostring(log_message)
+  print(result)
   return result
 end
 
@@ -150,7 +150,7 @@ local findMyFence = function(node,blockId)
 end
 
 -- Get code source in md codeblock
-function utilities.getCodeBlock  (page,blockId,token,text)
+function mls.getCodeBlock  (page,blockId,token,text)
   local tree = markdown.parseMarkdown(space.readPage(page))
   --debug_log(tree)
   if tree then
@@ -168,7 +168,7 @@ function utilities.getCodeBlock  (page,blockId,token,text)
   return "Error"
 end
 
-function utilities.parseISODate(isoDate)
+function mls.parseISODate(isoDate)
     local pattern = "(%d+)%-(%d+)%-(%d+)%a(%d+)%:(%d+)%:([%d%.]+)([Z%+%-])(%d?%d?)%:?(%d?%d?)"
     local year, month, day, hour, minute, 
         seconds, offsetsign, offsethour, offsetmin = json_date:match(pattern)
