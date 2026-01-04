@@ -27,7 +27,7 @@ mls.cache.ttl.CacheManager.has(1)
 -- Entries
 mls.cache.ttl.CacheManager.entries()
 -- Keys
-mls.cache.ttl.CacheManager.keys()
+mls.cache.ttl.CacheManager.keys() }
 -- Values
 mls.cache.ttl.CacheManager.values() 
 -- Delete

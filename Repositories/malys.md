@@ -14,6 +14,16 @@ uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Breadcrumb.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Breadcrumb.md
 description: "Generate breadcrumbs for a page"
 ---
+name: "Lru"
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md
+description: "LRU cache leveraging @isaacs/lrucache"
+---
+name: "Ttl"
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md
+description: "TTL cache leveraging @isaacs/ttlcache"
+---
 name: "Cursorposition"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md
@@ -92,27 +102,37 @@ description: "Generate VCF of company's employees."
 name: "Replaceplaceholders"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md
-description: "Replace Placeholders feature allows you to easily replace placeholders in your markdown content with specific values"
+description: "Replace Placeholders with specific values"
 ---
 name: "Riskaudit"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md
-description: "Enhanced Risk Audit for SilverBullet that analyzes scripts for potentially dangerous constructs and API calls."
+description: "Risk audit  (scripts analyzor)"
 ---
 name: "Taiga"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md
-description: "Taiga, open-source project management tool, integration."
+description: "Taiga project management tool"
 ---
 name: "Theme Malys"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md
-description: "Dark theme thought for readibility and productivity."
+description: "Dark theme thought for readibility and productivity"
 ---
 name: "Utilities"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md
 description: "List of reusable functions."
+---
+name: "Debugger"
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Debugger.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Debugger.md
+description: "Tooling to debug (linter, postion, beautify)"
+---
+name: "Luacheck"
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md
+description: "Lua linter."
 ---
 name: "Vikunja"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md
@@ -122,6 +142,6 @@ description: "Vikunja, open-source project management tool, integration."
 name: "Vscodepalette"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md
-description: "universal palette (as VScode Palette), use '>' to execute commands"
+description: "DEPRECATED universal palette (as VScode Palette), use '>' to execute commands"
 ---
 ```
