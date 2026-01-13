@@ -47,8 +47,9 @@ By using or contributing to this project, you acknowledge and accept these condi
 
 ## Code
 ```space-lua
+-- priority: 15
 mls=mls or {}
-if mls == nil or (mls ~= nil and mls.debug == nil) or (mls ~= nil and mls.luacheck == nil) then
+if  library~=nil and (mls == nil or (mls ~= nil and mls.debug == nil) or (mls ~= nil and mls.luacheck == nil)) then
 	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
 	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md")
 	editor.flashNotification("'Depencies' has been installed", "Info")
@@ -81,7 +82,7 @@ end
 
 function mls.checkAction(debugCode)
   local result = mls.defaultCheck(debugCode)
-  if not result then
+  if result == nil then
     return widget.htmlBlock("<div style='color:#eee'>Luacheck failed to run</div>")
   end
 
@@ -149,7 +150,7 @@ function mls.checkAction(debugCode)
   end
 
   -- Raw output (collapsible)
-  if result.output and result.output ~= "" then
+  if result ~= nil and result.output and result.output ~= "" then
   table.insert(html, '<details><summary style="cursor:pointer;color:#bdbdbd;margin-bottom:6px;">Raw luacheck output</summary><pre style="background:#111;padding:10px;border-radius:6px;overflow-x:auto;font-family:monospace;font-size:12px;line-height:1.4;color:#cfcfcf;white-space:pre-wrap;border:1px solid #2a2a2a;">' .. result.output .. '</pre></details>')
   end
 

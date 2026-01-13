@@ -46,12 +46,12 @@ config.set("marp.source","xxxx")
 local is_panel_visible = false
 local current_panel_id = "rhs"
 -- Function to render Marp slides
-local function render_marp_slides(mode)  
+local function render_marp_slides(mode)
     local source=config.get("marp.source")
-    if source == nil then 
+    if source == nil then
       source="Library/Malys/MarpSlides"
     end
-    if mls == nil or (mls ~=nil and mls.debug == nil) then 
+    if library~=nil and (mls == nil or (mls ~=nil and mls.debug == nil)) then
       library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
       editor.flashNotification("'Utilities' has been installed", "Info")
     end
@@ -65,7 +65,6 @@ local function render_marp_slides(mode)
       local content0= string.gsub( mls.getCodeBlock(source,"template")," `"," \\`")
       local content1= mls.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
       local content2=string.gsub(content1,"@TEMPLATE@",encoding.base64Encode(content0))
-      
       local marp_js = mls.getCodeBlock(source,"jsInject","@CONTENT@",content2)
         mls.debug(marp_js)
       editor.showPanel(current_panel_id,2,  panel_html, marp_js)
@@ -93,10 +92,6 @@ event.listen({
       render_marp_slides(false)
     end
 })
-
-function test ()
-  return pageSource
-end 
 ```
 
 

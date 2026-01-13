@@ -40,7 +40,7 @@ mls.cache.ttl.CacheManager.size()
 
 
 ```space-lua
---priority 11
+-- priority: 15
 -- Global namespace
 mls = mls or {}
 mls.cache = mls.cache or {}

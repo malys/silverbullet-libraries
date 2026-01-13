@@ -40,41 +40,31 @@ _
 -- ##       scan:all
 -- ###########################################################################
 
--- ===========================================================================
--- == Debug wrapper
--- ===========================================================================
+-- ===================================================================
+-- == Debug
+-- ===================================================================
 local function log(...)
   if LOG_ENABLE and mls and mls.debug then
-     if type(mls.debug) == "function" then 
-       mls.debug(table.concat({...}, " "))
-     end  
+    mls.debug(table.concat({...}, " "))
   end
 end
 
 local function _wrap_with_debug(name, fn)
   return function(...)
-    log("enter " .. name) 
-    local res = fn(...)
-    log("exit " .. name)
-    return res
+    log("enter", name)
+    local r = fn(...)
+    log("exit", name)
+    return r
   end
 end
 
--- ===========================================================================
+-- ===================================================================
 -- == Utilities
--- ===========================================================================
-local trim = _wrap_with_debug("trim", function(s)
-  return string.trim(s or "")
-end)
+-- ===================================================================
 
-local tconcat = _wrap_with_debug("tconcat", function(tbl, sep)
-  sep = sep or "\n"
-  return table.concat(tbl or {}, sep)
-end)
-
-local function count_keys(tbl)
-  local n = 0
-  for _ in pairs(tbl) do n = n + 1 end
+local function count_keys(t)
+  local n=0
+  for _ in pairs(t or {}) do n=n+1 end
   return n
 end
 
@@ -83,411 +73,165 @@ local function get_wikilink(page, line)
   return ("[[%s@L%d]]"):format(page, line)
 end
 
--- ===========================================================================
--- == Scanner: find code blocks
--- ===========================================================================
+-- ===================================================================
+-- == Find space-lua blocks
+-- ===================================================================
+
 local find_space_lua_blocks = _wrap_with_debug("find_space_lua_blocks", function(text)
   local blocks = {}
-  if not text or text == "" then return blocks end
+  local in_block=false
+  local buf={}
+  local lines = string.split(text or "", "\n")
 
-  local in_block = false
-  local current = {}
-  local lines = string.split(text, "\n")
-  for i, line in ipairs(lines) do
-    if not in_block and string.startsWith(line, "```space-lua") then
-      in_block = true
-      current = {}
-    elseif in_block and string.startsWith(line, "```") then
-      in_block = false
-      table.insert(blocks, {
-        text = string.trim(table.concat(current, "\n")),
-        start_line = i - #current
+  for i,l in ipairs(lines) do
+    if not in_block and l:match("^```space%-lua") then
+      in_block=true
+      buf={}
+    elseif in_block and l:match("^```") then
+      in_block=false
+      table.insert(blocks,{
+        text=table.concat(buf,"\n"),
+        start_line=i-#buf
       })
     elseif in_block then
-      table.insert(current, line)
+      table.insert(buf,l)
     end
   end
   return blocks
 end)
 
--- ===========================================================================
--- == Rules (modular, maintainable)
--- ===========================================================================
+-- ===================================================================
+-- == Rules
+-- ===================================================================
+
 local api_prefixes = {
-  "asset","clientStore","codeWidget","command","config","datastore","editor","encoding",
-  "event","global","http","index","js","jsonschema","language","lua","markdown","math",
-  "mq","net","os","service","shell","slashCommand","space","spacelua","string","sync",
-  "system","table","template","yaml"
+  "asset","clientStore","command","config","datastore","editor","event",
+  "http","js","library","lua","markdown","mq","net","os","shell",
+  "space","spacelua","string","system","table","template","yaml"
 }
 
 local dangerous_tokens = {
-  "io%.open","os%.execute","os%.remove","os%.rename","os%.exit",
-  "loadstring","load%(","debug%.","package%.","require%(","js.%","shell.run%(",
-  "http.request%(",  "_G","rawset%(_G"
+  "io%.open","os%.execute","loadstring","debug%.","package%.",
+  "require%(","shell%.run","http%.request","_G","rawset%(_G"
 }
 
--- ===========================================================================
--- == Analysis: per-block
--- ===========================================================================
-local analyze_block = _wrap_with_debug("analyze_block", function(block)
-  local block_text = block.text or ""
-  local start_line = block.start_line or 1
-  local analysis = {
-    summary = "",
-    findings = {},
-    apis_found = {},
-    api_calls = {},
-    dangerous = {},
-    score = 0,
-    page = block.page
+-- ===================================================================
+-- == Analyze block
+-- ===================================================================
+
+local analyze_block = function(block)
+  local res={
+    score=0,
+    apis_found={},
+    api_calls={},
+    dangerous={},
+    findings={},
+    page=block.page
   }
 
-  if block_text == "" then
-    analysis.summary = "Empty code block"
-    return analysis
-  end
+  for i,line in ipairs(string.split(block.text,"\n")) do
+    local ln=block.start_line+i-1
 
-  local api_set = {}
-  for _, p in ipairs(api_prefixes) do api_set[p] = true end
-
-  for line_num, line in ipairs(string.split(block_text, "\n")) do
-    local ln = start_line + line_num - 1
-
-    ----------------------------------------------------------------------
-    -- Internal API
-    ----------------------------------------------------------------------
-    for prefix in pairs(api_set) do
-      for method in string.gmatch(line, prefix .. "%.(%w+)") do
-        analysis.apis_found[prefix] = true
-        analysis.api_calls[prefix] = analysis.api_calls[prefix] or {}
-        table.insert(
-          analysis.api_calls[prefix],
-          ("%s() %s"):format(method, get_wikilink(analysis.page, ln))
-        )
+    for _,p in ipairs(api_prefixes) do
+      for m in line:gmatch(p.."%.([%w_]+)") do
+        res.apis_found[p]=true
+        res.api_calls[p]=res.api_calls[p] or {}
+        table.insert(res.api_calls[p], m.." "..get_wikilink(res.page,ln))
       end
     end
 
-    ----------------------------------------------------------------------
-    -- Dangerous tokens
-    ----------------------------------------------------------------------
-    for _, tok in ipairs(dangerous_tokens) do
-      if string.find(line, tok) then
-        table.insert(
-          analysis.dangerous,
-          ("%s %s"):format(tok, get_wikilink(analysis.page, ln))
-        )
+    for _,d in ipairs(dangerous_tokens) do
+      if line:match(d) then
+        table.insert(res.dangerous, d.." "..get_wikilink(res.page,ln))
       end
     end
 
-    ----------------------------------------------------------------------
-    -- URL detection
-    ----------------------------------------------------------------------
-    for url in string.gmatch(line, "https?://[%w%._/%-%?&=]+") do
-      table.insert(
-        analysis.findings,
-        ("URL detected: %s %s"):format(url, get_wikilink(analysis.page, ln))
-      )
-      analysis.score = analysis.score + 5
-    end
-
-    ----------------------------------------------------------------------
-    -- Base64 detection
-    ----------------------------------------------------------------------
-    for b64 in string.gmatch(line, "([A-Za-z0-9+/=]+)") do
-      if #b64 >= 64 and #b64 % 4 == 0 then
-        table.insert(
-          analysis.findings,
-          ("Base64 blob detected %s"):format(get_wikilink(analysis.page, ln))
-        )
-        analysis.score = analysis.score + 10
-      end
-    end
-
-    ----------------------------------------------------------------------
-    -- Hex blob
-    ----------------------------------------------------------------------
-    for hx in string.gmatch(line, "([A-Fa-f0-9]+)") do
-      if #hx >= 32 and #hx % 2 == 0 then
-        table.insert(
-          analysis.findings,
-          ("Hex blob detected %s"):format(get_wikilink(analysis.page, ln))
-        )
-        analysis.score = analysis.score + 10
-      end
-    end
-
-    ----------------------------------------------------------------------
-    -- High entropy
-    ----------------------------------------------------------------------
-    local count_print = 0
-    for c in line:gmatch(".") do
-      if c:match("%S") then count_print = count_print + 1 end
-    end
-    if #line > 200 and count_print / #line > 0.8 then
-      table.insert(
-        analysis.findings,
-        ("High-entropy string %s"):format(get_wikilink(analysis.page, ln))
-      )
-      analysis.score = analysis.score + 15
+    for url in line:gmatch("https?://[%w%p]+") do
+      table.insert(res.findings,"URL "..url.." "..get_wikilink(res.page,ln))
+      res.score=res.score+5
     end
   end
 
-  ----------------------------------------------------------------------
-  -- Scoring
-  ----------------------------------------------------------------------
-  local api_count = count_keys(analysis.apis_found)
-  if api_count > 0 then analysis.score = analysis.score + (api_count * 5) end
-  if #analysis.dangerous > 0 then
-    analysis.score = analysis.score +  70
+  res.score = math.min(100, res.score + count_keys(res.apis_found)*5 + (#res.dangerous>0 and 70 or 0))
+  return res
+end
+
+-- ===================================================================
+-- == Report
+-- ===================================================================
+
+local function generate_report(page, blocks)
+  local md={"# Risk Audit","", "**Page:** "..page,""}
+  local max=0
+
+  for i,b in ipairs(blocks) do
+    local a=b.analysis
+    if a.score>max then max=a.score end
+    table.insert(md,("## Block %d — %d%%"):format(i,a.score))
+    table.insert(md,"```lua")
+    table.insert(md,b.text)
+    table.insert(md,"```")
   end
 
-  if analysis.score >100 then analysis.score = 100 end
+  table.insert(md,"----")
+  table.insert(md,("## Page Risk Score: **%d%%**"):format(max))
+  return table.concat(md,"\n"), max
+end
 
-  local severity = "Low"
-  if analysis.score > 90 then 
-    severity = "Critical" 
-  elseif analysis.score > 70 then
-    severity = "High" 
-  elseif analysis.score > 40 then 
-    severity = "Medium"
-  end
+-- ===================================================================
+-- == Cache
+-- ===================================================================
+local report_cache={}
 
-  analysis.summary = string.format(
-    "Score=%d (%s) APIs=%d Dangerous=%d Findings=%d",
-    analysis.score, severity, api_count, #analysis.dangerous, #analysis.findings
-  )
+-- ===================================================================
+-- == Scan Current Page 
+-- ===================================================================
 
-  return analysis
-end)
-
--- ===========================================================================
--- == Page scoring
--- ===========================================================================
-local compute_page_score = _wrap_with_debug("compute_page_score", function(analyses)
-  local result = 0
-  for _, a in ipairs(analyses) do
-    if a.score > result then
-      result = a.score
-    end
-  end
-  return math.floor(result)
-end)
-
-
--- ===========================================================================
--- == Report generation
--- ===========================================================================
-local generate_report = _wrap_with_debug("generate_report", function(page_name, blocks)
-  local md = {}
-
-  table.insert(md, "# Risk Audit")
-  table.insert(md, "")
-  table.insert(md, "**Page:** " .. (page_name or "(unknown)"))
-  table.insert(md, "")
-
-  if not blocks or #blocks == 0 then
-    table.insert(md, "_No space-lua code blocks found._")
-    return table.concat(md, "\n")
-  end
-
-  local analyses = {}
-
-  for i, blk in ipairs(blocks) do
-    local A = blk.analysis
-
-    table.insert(md, ("## Block %d — Score %d%%"):format(i, A.score))
-    table.insert(md, "```lua")
-
-    local shown = 0
-    for line in string.gmatch(blk.text, "[^\r\n]+") do
-      table.insert(md, line)
-      shown = shown + 1
-      if shown >= 12 then break end
-    end
-
-    if shown < #(string.split(blk.text, "\n")) then
-      table.insert(md, "... (truncated)")
-    end
-
-    table.insert(md, "```")
-    table.insert(md, "")
-
-    table.insert(md, "**Summary:** " .. A.summary)
-    table.insert(md, "")
-
-    if next(A.api_calls) then
-      table.insert(md, "**Internal API Calls:**")
-      for api, calls in pairs(A.api_calls) do
-        table.insert(md, ("- `%s`: %s"):format(api, table.concat(calls, ", ")))
-      end
-      table.insert(md, "")
-    end
-
-    if #A.dangerous > 0 then
-      table.insert(md, "**Dangerous Constructs:**")
-      for _, d in ipairs(A.dangerous) do
-        table.insert(md, "- " .. d)
-      end
-      table.insert(md, "")
-    end
-
-    if #A.findings > 0 then
-      table.insert(md, "**Suspicious Findings:**")
-      for _, f in ipairs(A.findings) do
-        table.insert(md, "- " .. f)
-      end
-      table.insert(md, "")
-    end
-
-    table.insert(analyses, A)
-  end
-
-  local page_score = compute_page_score(analyses)
-  local severity = "Low"
-  if page_score > 90 then severity = "Critical" 
-  elseif page_score > 70 then severity = "High" 
-  elseif page_score > 40 then severity ="Medium" end
-
-  table.insert(md, "----")
-  table.insert(md, ("## Page Risk Score: **%d%% (%s Risk)**"):format(page_score, severity))
-  table.insert(md, "")
-  table.insert(md, "_Legend:_")
-  table.insert(md, "- Critical: 90–100%")
-  table.insert(md, "- High: 70–89%")
-  table.insert(md, "- Medium: 40–69%")
-  table.insert(md, "- Low: 0–39%")
-  table.insert(md, "")
-  table.insert(md, "_Audit generated by enhanced Malys Risk Audit_")
-
-  return table.concat(md, "\n")
-end)
-
--- ===========================================================================
--- == Page cache
--- ===========================================================================
-local report_cache = {}
-
--- ===========================================================================
--- == Virtual pages
--- ===========================================================================
-virtualPage.define {
-  pattern = "scan:page:(.+)",
-  run = _wrap_with_debug("virtual_run_scan", function(ref)
-    local page = ref or ""
-    local rep = report_cache[page]
-    if not rep then return "Scan report not available for page: " .. page end
-    return rep
-  end)
-}
-
--- ===========================================================================
--- == Virtual Page: Children Summary
--- ===========================================================================
-virtualPage.define {
-  pattern = "scan:(.+):children",
-  run = _wrap_with_debug("virtual_run_children_summary", function(ref)
-    local page_name =ref
-    local summary = report_cache["children_summary:"..page_name] or {}
-    local md = { "# Risk Scan: Children of "..(page_name or ""), "" }
-
-    if #summary==0 then
-      table.insert(md,"_No child pages found or scanned._")
-    else
-      -- sort descending by score
-      table.sort(summary,function(a,b) return tonumber(a.score)>tonumber(b.score) end)
-      for _, s in ipairs(summary) do
-        table.insert(md,string.format("- %s : %d%%", s.page, s.score))
-      end
-    end
-    return table.concat(md,"\n")
-  end)
-}
-
-
--- ===========================================================================
--- == Command: scan current page
--- ===========================================================================
 command.define {
-  name = "Security: Scan Current Page",
-  run = _wrap_with_debug("command_scan_current_page", function()
-    local page_name = "(unknown)"
-    if type(editor) == "table" and type(editor.getCurrentPage) == "function" then
-      page_name = editor.getCurrentPage()
+  name="Security audit: Scan Current Page",
+  run=_wrap_with_debug("scan_current", function()
+    local page = editor.getCurrentPage()
+    if not page then return end
+
+    local text = space.readPage(page)
+    local attrs=space.getPageMeta(page)
+    local hash = share.contentHash(text)
+
+    if attrs.audit and attrs["share.hash"] == hash then
+      editor.navigate("scan:page:"..page)
+      return
     end
 
-    local content = ""
-    if type(editor) == "table" and type(editor.getText) == "function" then
-      content = editor.getText() or ""
-    end
-    local raw_blocks = find_space_lua_blocks(content)
-    local blocks = {}
-    for _, b in ipairs(raw_blocks) do
-      b.page = page_name
-      local a = analyze_block(b, content)
-      table.insert(blocks, {
-        text = b.text,
-        start_line = b.start_line,
-        analysis = a
-      })
+    local blocks={}
+    for _,b in ipairs(find_space_lua_blocks(body)) do
+      b.page=page
+      b.analysis=analyze_block(b)
+      table.insert(blocks,b)
     end
 
-    local report = generate_report(page_name, blocks)
-    report_cache[page_name] = report
-    if type(editor) == "table" and type(editor.navigate) == "function" then
-      editor.navigate("scan:page:" .. page_name)
-    elseif type(editor) == "table" and type(editor.flashNotification) == "function" then
-      editor.flashNotification("Scan complete for " .. page_name, "info")
+    local report, score = generate_report(page, blocks)
+    report_cache[page]=report
+    if type(score) ~= "number"then
+      score=0
     end
+
+    index.patchFrontmatter(text, {
+        { op = "set-key", path = "audit", value = score },
+        { op = "set-key", path = "share.hash", value = hash }
+    })
+    editor.navigate("scan:page:"..page)
   end)
 }
 
--- ===========================================================================
--- == Command: scan all children pages of current page
--- ===========================================================================
--- ===========================================================================
--- == Scan Children Pages of Current Page
--- ===========================================================================
-command.define {
-  name="Security: Scan Children Pages",
-  run=_wrap_with_debug("command_scan_children_pages", function()
-    if type(editor)~="table" or type(editor.getCurrentPage)~="function" then return end
-    local current_page = editor.getCurrentPage()
-    if not current_page or current_page=="" then return end
-    
-    -- get all child pages using index query
-    local children_pages = query[[
-      from index.tag "page"
-      where _.name:find("^" .. current_page .. "/")
-    ]]
-    local summary = {}
-    for _,child in ipairs(children_pages) do
-      local page_name = child.name
-      --content = space.readPage(page_name)
-      content= encoding.utf8Decode(space.readFile(page_name..".md"))
-      -- find blocks and analyze
-      local raw_blocks = find_space_lua_blocks(content)
-      local blocks = {}
-      for i, b in ipairs(raw_blocks) do
-        local a = analyze_block(b)
-        table.insert(blocks, { text=b.text, start_line=b.start_line, analysis=a })
-      end
-    
-      -- cache individual page report
-      report_cache[page_name] = generate_report(page_name, blocks)
-      -- store summary
-      local page_score = string.match(report_cache[page_name], "(%d+)%s*%%") or 0
-      table.insert(summary, { page=page_name, score=page_score })
-    end
-    -- store children summary in report cache
-    report_cache["children_summary:"..current_page] = summary
+-- ===================================================================
+-- == Virtual page
+-- ===================================================================
 
-    -- navigate to virtual page summary
-    if type(editor.navigate)=="function" then
-      editor.navigate("scan:"..current_page..":children")
-    elseif type(editor.flashNotification)=="function" then
-      editor.flashNotification("Scan complete for children of "..current_page,"info")
-    end
-  end)
+virtualPage.define {
+  pattern="scan:page:(.+)",
+  run=function(ref)
+    return report_cache[ref] or "_No audit available_"
+  end
 }
 ```
 

@@ -43,15 +43,15 @@ local function log(...)
 		end
 	end
 end
---local cond3 = (mls ~= nil and mls.cache ~= nil and mls.cache.ttl == nil)
---if mls == nil or (mls ~= nil and mls.debug == nil) or (mls ~= nil and mls.cache == nil) or cond3 then
---	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
---	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md")
---	editor.flashNotification("'Depencies' has been installed", "Info")
---end
+local cond3 = (mls ~= nil and mls.cache ~= nil and mls.cache.ttl == nil)
+if library~=nil and (mls == nil or (mls ~= nil and mls.debug == nil) or (mls ~= nil and mls.cache == nil) or cond3) then
+	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
+	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md")
+	editor.flashNotification("'Depencies' has been installed", "Info")
+end
 
 vikunja = {}
--- priority: 9
+
 config.define("vikunja", {
 	type = "object"
 })
@@ -66,16 +66,19 @@ else
 	vikunja.baseUrl = baseUrl
 end
 
+if mls.cache == nil then
+  	editor.flashNotification("Vikunja: Depencies are missing!", "error")
+end 
+
 vikunja.get = function (criteria)
-	log("GET")
 	local c = criteria
 	if c == nil then
 		c = "done=false"
 	end
 	local token = config.get("vikunja").token
 	local apiUrl = (vikunja.baseUrl .. "api/v1/tasks/all?filter=" .. c)
-	local result = mls.cache.ttl.CacheManager.get("VKJ_" .. c)
-	log(result)
+    
+    local result = mls.cache.ttl.CacheManager.get("VKJ_" .. c)
 	if result == nil then
 		local response = http.request(
       apiUrl, {

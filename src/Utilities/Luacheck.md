@@ -37,9 +37,10 @@ apk add luacheck
 
 ## Code
 ```space-lua
+-- priority: 15
 mls = mls or {}
 
-if mls == nil or (mls ~= nil and mls.debug == nil) then
+if library~=nil and (mls == nil or (mls ~= nil and mls.debug == nil)) then
 	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
 	editor.flashNotification("'Depencies' has been installed", "Info")
 end

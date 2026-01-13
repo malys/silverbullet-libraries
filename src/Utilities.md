@@ -20,7 +20,7 @@ LOG_ENABLE=true
 * Add filter “[Client] [DEBUG]“
 ## Code
 ```space-lua
--- priority: 11
+-- priority: 20
 mls=mls or {}
 
 -- Convert meeting note title

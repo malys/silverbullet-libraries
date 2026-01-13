@@ -51,7 +51,7 @@ local current_panel_id = config.get("markmap.panelPosition") or "rhs"
 local function render(mode)  
     local source=config.get("markmap.source") or "Library/Malys/MarkmapMindmap"
     local panelSize=config.get("markmap.panelSize") or 4
-    if mls == nil or (mls ~=nil and mls.debug == nil) then 
+    if library~=nil and (mls == nil or (mls ~=nil and mls.debug == nil)) then 
       library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
       editor.flashNotification("'Utilities' has been installed", "Info")
     end
@@ -108,7 +108,6 @@ script.type = "module";
 script.id = scriptId;
 script.textContent = `@CONTENT@`;
 document.documentElement.appendChild(script);
-
 ```
 ```js innerHTML  
 function b64DecodeUnicode(str) {
@@ -127,6 +126,8 @@ import { Toolbar } from "https://esm.sh/markmap-toolbar?bundle";
 const transformer = new Transformer();
 const { root } = transformer.transform(b64DecodeUnicode("@CONTENT@"));
 
+const svg = document.getElementById("mindmap");
+svg.innerHTML = "";
 window.mm = Markmap.create(
   "svg#mindmap",
   deriveOptions(null),
@@ -135,6 +136,7 @@ window.mm = Markmap.create(
 
 const existing = document.getElementsByClassName("mm-toolbar");
 if(existing.length==0){
+
   // 👉 Toolbar
   const toolbar = new Toolbar();
   toolbar.attach(window.mm);
@@ -329,6 +331,7 @@ window.addEventListener("beforeprint", () => {
 
 ## Changelog
 
+* 2026-01-13: fix: multiple SVG visible on refresh
 * 2025-12-01 fix: html duplicate inserts
 
 ## Community
