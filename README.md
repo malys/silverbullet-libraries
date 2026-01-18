@@ -6,7 +6,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 
 - [Bashcode](https://github.com/malys/silverbullet-libraries/blob/main/src/BashCode.md) - Quickly insert bash code. - (2026-01-13)
 - [Breadcrumb](https://github.com/malys/silverbullet-libraries/blob/main/src/Breadcrumb.md) - Generate breadcrumbs for a page - (2025-11-18)
-- [Lru](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md) - LRU cache leveraging @isaacs/lrucache - (2026-01-13)
+- [Lru](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md) - LRU cache leveraging @isaacs/lrucache - (2026-01-15)
 - [Ttl](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md) - TTL cache leveraging @isaacs/ttlcache - (2026-01-13)
 - [Configcode](https://github.com/malys/silverbullet-libraries/blob/main/src/ConfigCode.md) - Quickly insert config code. - (2026-01-13)
 - [Cursorposition](https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md) - Generate and copy links to specific cursor positions and headers in markdown documents - (2025-11-18)
