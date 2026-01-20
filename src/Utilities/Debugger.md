@@ -31,7 +31,7 @@ This SpaceLua script provides a set of tools designed to aid in the development 
     *   **Linting:**  Type `/debugger:check` and press Enter. The results will be displayed in the editor.
     *   **Formatting:** Type `/debugger:beautify` and press Enter. The formatted code will be inserted into the editor and copied to your clipboard.
     *   **Position Highlighting:** Type `/debugger:position` and press Enter. You will be prompted to enter a character position.  Enter the position and press Enter again to see the code highlighted in a panel.
-4.  **Using the Lint Panel:**  Run the command `Debugger: Toggle Lint Panel` to show a panel with linting errors.  The panel automatically reloads when the page is saved.
+4.  **Using the Lint Panel:**  Run the command `Linter: Toggle panel` to show a panel with linting errors.  The panel automatically reloads when the page is saved.
 
 ## Disclaimer & Contributions
 
@@ -71,13 +71,16 @@ end
     SolveMath= false,
     Indentation= '\t'
   })
-  local result=mls.removeFirstLines(result,5) 
+   result=mls.removeFirstLines(result,5) 
    js.window.navigator.clipboard.writeText(result)
   return result
 end
 
 function mls.defaultCheck(debugCode)
-  return mls.luacheck(debugCode, {allowDefined=true, unused=true, globals = {"_CTX", "mls","LOG_ENABLE","asset","clientStore","codeWidget","command","config","datastore","editor","encoding","event","global","http","index","js","jsonschema","language","lua","markdown","math","mq","net","os","service","shell","slashCommand","space","spacelua","string","sync","system","table","template","yaml","asset","clientStore","codeWidget","command","config","datastore","editor","encoding","event","global","http","index","js","jsonschema","language","lua","markdown","math","mq","net","os","service","shell","slashCommand","space","spacelua","string","sync","system","table","template","yaml"} })
+  local default_prefixes= {"_CTX", "mls","LOG_ENABLE","asset","clientStore","codeWidget","command","config","datastore","editor","encoding","event","global","http","index","js","jsonschema","language","lua","markdown","math","mq","net","os","service","shell","slashCommand","space","spacelua","string","sync","system","table","template","yaml","asset","clientStore","codeWidget","command","config","datastore","editor","encoding","event","global","http","index","js","jsonschema","language","lua","markdown","math","mq","net","os","service","shell","slashCommand","space","spacelua","string","sync","system","table","template","yaml"} 
+   local remote_prefixes=mls.getStdlibInternal()
+   local api_prefixes = table.unique(table.appendArray(default_prefixes,remote_prefixes))
+  return mls.luacheck(debugCode, {allowDefined=true, unused=true, globals =api_prefixes, ignore={"612","613","614"}})
 end 
 
 function mls.checkAction(debugCode)
@@ -369,7 +372,7 @@ end
 
 -- Define the command
 command.define({
-    name = "Debugger: Toggle Lint Panel",
+    name = "Linter: Toggle panel",
     description = "Show code with lint info on the right",
     run = function()
         render_code_lint_panel(false)

@@ -62,8 +62,11 @@ mls.luacheck = function(code, options)
   end
 
   local args = { "--no-color", "--formatter", "plain", tempFile }
-
-  -- Add options if provided  
+  -- Add options if provided
+  if options.ignore ~= nil and type(options.ignore) == "table" then 
+      table.insert(args, "-i")  
+      table.appendArray(args, table.map(options.ignore, tostring))
+  end  
   if options.strict then  
     table.insert(args, "--std")  
     table.insert(args, "lua51")  
@@ -71,23 +74,18 @@ mls.luacheck = function(code, options)
   if options.unused then  
     table.insert(args, "-u")  
   end 
-  
-  if options.globals then
+
+  if options.globals ~= nil and type(options.globals) == "table" then
     table.insert(args, "--globals")
-    for _, v in ipairs( options.globals ) do
-      table.insert(args,  v)
-    end
     -- Default global variables
-    local default={"_CTX", "mls","LOG_ENABLE","asset","clientStore","codewidget","command","config","datastore","editor","encoding","event","global","http","index","js","jsonschema","language","lua","library","markdown","math","mq","net","os","service","shell","slashcommand","space","spacelua","string","sync","system","table","template","widget","yaml"}
-    for _, v in ipairs( default ) do
-      table.insert(args,  v)
-    end
-  end
+    local default_prefixes=table.appendArray({"_CTX", "mls","LOG_ENABLE","asset","clientStore","codewidget","command","config","datastore","dom","editor","encoding","event","global","http","index","js","jsonschema","language","lua","library","markdown","math","mq","net","os","service","share","shell","slashcommand","space","spacelua","string","sync","system","table","template","virtualSpace","widget","yaml"},options.global)
+    table.appendArray(args,default_prefixes)
+   end
 
    if options.allowDefined then
     table.insert(args, "-d")
   end
-  
+  --js.window.navigator.clipboard.writeText(table.concat(args," "))
   local result = shell.run("luacheck", args)
   space.deleteFile(tempFile)
 
@@ -128,6 +126,7 @@ end
 
 ## Changelog
 
+* 2026-01-20 feat: support `ignore` argument
 * 2026-01-04 feat: linter call
 ## Community
 

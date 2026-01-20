@@ -43,17 +43,26 @@ _
 -- ===========================================================================
 -- == Debug wrapper
 -- ===========================================================================
+local cond3 = (mls ~= nil and mls.cache ~= nil and mls.cache.ttl == nil)
+if library~=nil and (mls == nil or (mls ~= nil and mls.debug == nil) or (mls ~= nil and mls.cache == nil) or cond3) then
+	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
+	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md")
+	editor.flashNotification("'Depencies' has been installed", "Info")
+end
+
 local function log(...)
-  if LOG_ENABLE and mls and mls.debug then
-     if type(mls.debug) == "function" then 
-       mls.debug(table.concat({...}, " "))
-     end  
-  end
+	if LOG_ENABLE and mls and mls.debug then
+		if type(mls.debug) == "function" then
+			mls.debug(table.concat({
+				...
+			}, " "))
+		end
+	end
 end
 
 local function _wrap_with_debug(name, fn)
   return function(...)
-    log("enter " .. name) 
+    log("enter " .. name)
     local res = fn(...)
     log("exit " .. name)
     return res
@@ -113,17 +122,52 @@ end)
 -- ===========================================================================
 -- == Rules (modular, maintainable)
 -- ===========================================================================
-local api_prefixes = {
+local default_prefixes = {
   "asset","clientStore","codeWidget","command","config","datastore","editor","encoding",
   "event","global","http","index","js","jsonschema","language","library","lua","markdown","math",
   "mq","net","os","service","shell","slashCommand","space","spacelua","string","sync",
   "system","table","template","yaml"
 }
+local remote_prefixes=mls.getStdlibInternal()
 
-local dangerous_tokens = {
-  "io%.open","os%.execute","os%.remove","os%.rename","os%.exit",
-  "loadstring","load%(","debug%.","package%.","require%(","library.%","js.%","shell.run%(",
-  "http.request%(",  "_G","rawset%(_G"
+local api_prefixes = table.unique(table.appendArray(default_prefixes,remote_prefixes))
+
+local dangerous_tokens = {  
+  -- File I/O and OS operations  
+  "io%.open",
+  "os%.execute",
+  "os%.remove", 
+  "os%.rename",
+  "os%.exit",
+  -- Dynamic code execution  
+  "loadstring",
+  "load%(",
+  "dofile%(",
+  -- Debug and introspection  
+  "getmetatable",
+  "setmetatable",
+  "rawset",
+  "rawget",
+  -- Global environment access  
+  "_G",
+  "rawset%(_G",
+  "rawget%(_G",
+  "_CTX",
+  -- Module and library loading  
+  "package%.",
+  "require%(",
+  "library%.",
+  -- JavaScript interop (SilverBullet specific)  
+  "js%.",
+  -- Network operations  
+  "http%.request%(",
+  "net%.",
+  -- Shell execution (SilverBullet specific)  
+  "shell%.run%(",
+  -- SilverBullet specific APIs    
+  "crypto%.",     -- Cryptographic operations  
+  "encoding%.",   -- Encoding/decoding  
+  
 }
 
 -- ===========================================================================
@@ -282,7 +326,7 @@ local generate_report = _wrap_with_debug("generate_report", function(page_name, 
 
   table.insert(md, "# Risk Audit")
   table.insert(md, "")
-  table.insert(md, "**Page:** " .. (page_name or "(unknown)"))
+  table.insert(md, "**Page:** [[" .. (page_name or "(unknown)").."]]")
   table.insert(md, "")
 
   if not blocks or #blocks == 0 then
@@ -362,10 +406,27 @@ local generate_report = _wrap_with_debug("generate_report", function(page_name, 
   return table.concat(md, "\n")
 end)
 
--- ===========================================================================
--- == Page cache
--- ===========================================================================
-local report_cache = {}
+local function generate_reports(page_name)
+    local content = encoding.utf8Decode(space.readFile(page_name..".md"))
+    local hash=share.contentHash(content)
+    local report= mls.cache.ttl.CacheManager.get(hash)
+    if report == nil then
+      local raw_blocks = find_space_lua_blocks(content)
+      local blocks = {}
+      for _, b in ipairs(raw_blocks) do
+        b.page = page_name
+        local a = analyze_block(b, content)
+        table.insert(blocks, {
+          text = b.text,
+          start_line = b.start_line,
+          analysis = a
+        })
+      end
+      report = generate_report(page_name, blocks)
+      mls.cache.ttl.CacheManager.set(hash,report)
+    end
+    return report
+end
 
 -- ===========================================================================
 -- == Virtual pages
@@ -374,7 +435,7 @@ virtualPage.define {
   pattern = "scan:page:(.+)",
   run = _wrap_with_debug("virtual_run_scan", function(ref)
     local page = ref or ""
-    local rep = report_cache[page]
+    local rep = mls.cache.ttl.CacheManager.get(share.contentHash(space.readPage(page)))
     if not rep then return "Scan report not available for page: " .. page end
     return rep
   end)
@@ -387,7 +448,7 @@ virtualPage.define {
   pattern = "scan:(.+):children",
   run = _wrap_with_debug("virtual_run_children_summary", function(ref)
     local page_name =ref
-    local summary = report_cache["children_summary:"..page_name] or {}
+    local summary = mls.cache.ttl.CacheManager.get("children_summary:"..page_name) or {}
     local md = { "# Risk Scan: Children of "..(page_name or ""), "" }
 
     if #summary==0 then
@@ -396,7 +457,7 @@ virtualPage.define {
       -- sort descending by score
       table.sort(summary,function(a,b) return tonumber(a.score)>tonumber(b.score) end)
       for _, s in ipairs(summary) do
-        table.insert(md,string.format("- [[%s]] : %d%%", s.page, s.score))
+        table.insert(md,string.format("- [%s](scan:page:%s) : %d%%", s.page, s.page, s.score))
       end
     end
     return table.concat(md,"\n")
@@ -414,25 +475,8 @@ command.define {
     if type(editor) == "table" and type(editor.getCurrentPage) == "function" then
       page_name = editor.getCurrentPage()
     end
-
-    local content = ""
-    if type(editor) == "table" and type(editor.getText) == "function" then
-      content = editor.getText() or ""
-    end
-    local raw_blocks = find_space_lua_blocks(content)
-    local blocks = {}
-    for _, b in ipairs(raw_blocks) do
-      b.page = page_name
-      local a = analyze_block(b, content)
-      table.insert(blocks, {
-        text = b.text,
-        start_line = b.start_line,
-        analysis = a
-      })
-    end
-
-    local report = generate_report(page_name, blocks)
-    report_cache[page_name] = report
+    generate_reports(page_name)
+    
     if type(editor) == "table" and type(editor.navigate) == "function" then
       editor.navigate("scan:page:" .. page_name)
     elseif type(editor) == "table" and type(editor.flashNotification) == "function" then
@@ -462,24 +506,13 @@ command.define {
     local summary = {}
     for _,child in ipairs(children_pages) do
       local page_name = child.name
-      --content = space.readPage(page_name)
-      content= encoding.utf8Decode(space.readFile(page_name..".md"))
-      -- find blocks and analyze
-      local raw_blocks = find_space_lua_blocks(content)
-      local blocks = {}
-      for i, b in ipairs(raw_blocks) do
-        local a = analyze_block(b)
-        table.insert(blocks, { text=b.text, start_line=b.start_line, analysis=a })
-      end
-    
-      -- cache individual page report
-      report_cache[page_name] = generate_report(page_name, blocks)
+       local report=generate_reports(page_name)
       -- store summary
-      local page_score = string.match(report_cache[page_name], "(%d+)%s*%%") or 0
+      local page_score = string.match(report, "(%d+)%s*%%") or 0
       table.insert(summary, { page=page_name, score=page_score })
     end
     -- store children summary in report cache
-    report_cache["children_summary:"..current_page] = summary
+    mls.cache.ttl.CacheManager.set("children_summary:"..current_page, summary)
 
     -- navigate to virtual page summary
     if type(editor.navigate)=="function" then
@@ -491,7 +524,14 @@ command.define {
 }
 ```
 
+## Changelog
+
+* 2026-01-20
+  * feat: improve link to page
+  * chore: improve performance implementing cache system
 
 ## Community
 
 [Silverbullet forum](https://community.silverbullet.md/t/risk-audit/3562)
+
+

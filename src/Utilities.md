@@ -142,7 +142,7 @@ local findMyFence = function(node,blockId)
           end
         end
         local result= findMyFence(child,blockId)
-        if resul ~=nil then
+        if result ~=nil then
           return result
         end
       --break --  for loop
@@ -182,6 +182,100 @@ function mls.parseISODate(isoDate)
     
     return timestamp + offset
 end
+
+ function mls.getStdlibInternal()
+  -- get list of internal api
+  local KEY="stdlib_internal"
+  local result=mls.cache.ttl.CacheManager.get(KEY)
+  if  result == nil then 
+    local url = "https://raw.githubusercontent.com/silverbulletmd/silverbullet/refs/heads/main/client/space_lua/stdlib.ts"  
+    local resp = net.proxyFetch(url)   
+    if resp.status ~= 200 then  
+      error("Failed to fetch file: " .. resp.status)  
+    end  
+    local content = resp.body  
+    local results = {}   
+    for line in string.split(content,"\n") do  
+      local key = string.match(string.trim(line), 'env%.set%("(.*)"')  
+      if key  then  
+        table.insert(results, key)  
+      end  
+    end  
+    result=table.sort(results)
+    mls.cache.ttl.CacheManager.set(KEY,result)
+  end  
+  return table.sort(result)
+end
+
+-----------------------------------------
+-- TABLE
+-----------------------------------------
+function table.appendArray(a, b)
+    if a~= nil and b ~= nil then
+      for i = 1, #b do
+          table.insert(a, b[i])
+      end
+    end
+    return a
+end
+
+function table.unique(array)
+    local seen = {}
+    local result = {}
+
+    for i = 1, #array do
+        local v = array[i]
+        if not seen[v] then
+            seen[v] = true
+            result[#result + 1] = v
+        end
+    end
+
+    return result
+end
+
+function table.uniqueKVBy(array, keyFn)
+    local seen = {}
+    local result = {}
+
+    for i = 1, #array do
+        local key = keyFn(array[i])
+        if not seen[key] then
+            seen[key] = true
+            result[#result + 1] = array[i]
+        end
+    end
+
+    return result
+end
+
+function  table.mergeKV(t1, t2)
+    for k, v in pairs(t2) do
+        if type(v) == "table" and type(t1[k]) == "table"  then
+            mergeTablesRecursive(t1[k], v)
+        else
+            t1[k] = v
+        end
+    end
+    return t1
+end
+
+function table.map(t, fn)
+  local result = {}
+  for i, v in ipairs(t) do
+    result[i] = fn(v, i)
+  end
+  return result
+end
 ```
 
+## Changelog
 
+* 2026-01-20:
+  * feat: add table functions
+    * map
+    * mergeKV
+    * uniqueKVBy
+    * unique
+    * appendArray
+  * feat: add `mls.getStdlibInternal` fucntion

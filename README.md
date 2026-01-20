@@ -25,7 +25,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Organization Employee](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md) - Organization employee template - (2025-11-20)
 - [Organization Vcfexport](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md) - Generate VCF of company's employees. - (2025-11-20)
 - [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md) - Replace Placeholders with specific values - (2026-01-02)
-- [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Risk audit  (scripts analyzor) - (2026-01-13)
+- [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Risk audit  (scripts analyzor) - (2026-01-20)
 - [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga project management tool - (2026-01-02)
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity - (2026-01-04)
 - [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2026-01-13)
