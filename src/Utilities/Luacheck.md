@@ -48,20 +48,8 @@ end
 -- Template to run luacheck on Lua code and format results
 mls.luacheck = function(code, options)
   options = options or {}
-
-  -- Create temporary file
-  local tempFile = "temp/luacheck_" .. math.random(10000, 99999) .. ".lua"
-
-  local meta = space.writeFile(tempFile, code)
-  if not meta then
-    return {
-      success = false,
-      output = "Failed to write temporary file",
-      issues = {}
-    }
-  end
-
-  local args = { "--no-color", "--formatter", "plain", tempFile }
+  local codeEncoded= encoding.base64Encode(code)
+  local args = { "--no-color", "--formatter", "plain" }
   -- Add options if provided
   if options.ignore ~= nil and type(options.ignore) == "table" then 
       table.insert(args, "-i")  
@@ -69,7 +57,7 @@ mls.luacheck = function(code, options)
   end  
   if options.strict then  
     table.insert(args, "--std")  
-    table.insert(args, "lua51")  
+    table.insert(args, "lua54")  --lua version embedded
   end  
   if options.unused then  
     table.insert(args, "-u")  
@@ -78,17 +66,17 @@ mls.luacheck = function(code, options)
   if options.globals ~= nil and type(options.globals) == "table" then
     table.insert(args, "--globals")
     -- Default global variables
-    local default_prefixes=table.appendArray({"_CTX", "mls","LOG_ENABLE","asset","clientStore","codewidget","command","config","datastore","dom","editor","encoding","event","global","http","index","js","jsonschema","language","lua","library","markdown","math","mq","net","os","service","share","shell","slashcommand","space","spacelua","string","sync","system","table","template","virtualSpace","widget","yaml"},options.global)
+    local default_prefixes=table.appendArray({"mls","LOG_ENABLE"},options.globals)
     table.appendArray(args,default_prefixes)
    end
 
    if options.allowDefined then
     table.insert(args, "-d")
   end
-  --js.window.navigator.clipboard.writeText(table.concat(args," "))
-  local result = shell.run("luacheck", args)
-  space.deleteFile(tempFile)
 
+  local cmdArgs= {"-c", "echo ' "..codeEncoded.." ' | base64 -d | luacheck - ".. table.concat(args," ")}
+  --js.window.navigator.clipboard.writeText(table.concat(cmdArgs))
+  local result = shell.run("sh",cmdArgs)   
   local output = {
     success = false,
     output = result.stdout or "",

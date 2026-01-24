@@ -40,7 +40,6 @@ ${template.each(
 
 ```space-lua
 TAIGA_TOKENS=nil
-LOG_ENABLE=false
 local baseUrl = "https://api.taiga.io/api/v1"
 
 -- Basic token mangement

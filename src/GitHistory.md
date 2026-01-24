@@ -23,7 +23,7 @@ It provides:
 > **warning** Warning
 > Depends on:
 >  `git` CLI
->  `mls.debug` helper
+>  `utilities.debug` helper
 
 ---
 
@@ -77,10 +77,10 @@ The module converts raw Git output to readable Markdown:
 ```space-lua
 -- ###########################################################################
 -- ## Git History Module (Fixed for paths with underscores)
--- ## Depends on: Utilities.md (mls.debug), and environment helpers:
+-- ## Depends on: Utilities.md (utilities.debug), and environment helpers:
 -- ##   string.trim, string.split, string.startsWith, shell.run, editor.*, virtualPage.*, command.*
 -- ###########################################################################
-
+mls=mls or {}
 -- ===========================================================================
 -- == Configuration
 -- ===========================================================================
@@ -212,18 +212,70 @@ end
 -- ===========================================================================
 -- == Git Status Renderer
 -- ===========================================================================
----
+function mls.gitstatus_render(raw)
+  if not raw or raw == "" then
+    return "### 🟢 Clean Working Tree\nNo changes."
+  end
+
+  local md = { "### 📌 Git Status\n" }
+
+  for line in raw:gmatch("[^\r\n]+") do
+    local code = line:sub(1, 2)
+    local path = string.trim(line:sub(3) or "")
+
+    if code == "??" then
+      table.insert(md, "🆕 Untracked: " .. path)
+    elseif code == " M" then
+      table.insert(md, "🟡 Modified (unstaged): " .. path)
+    elseif code == "M " then
+      table.insert(md, "🟠 Modified (staged): " .. path)
+    elseif code == " D" then
+      table.insert(md, "🔴 Deleted (unstaged): " .. path)
+    elseif code == "D " then
+      table.insert(md, "🛑 Deleted (staged): " .. path)
+    elseif code == "A " or code == " A" then
+      table.insert(md, "🟢 Added: " .. path)
+    elseif code == "R " or code == " R" then
+      table.insert(md, "🔁 Renamed: " .. path)
+    elseif code == "C " or code == " C" then
+      table.insert(md, "📄 Copied: " .. path)
+    else
+      table.insert(md, "🟦 " .. code .. " " .. path)
+    end
+  end
+
+  return table.concat(md, "\n")
+end
 ---
 -- Get and render git status.
 local function get_git_status()
   local raw = run_shell_command("git", { "status", "--porcelain" })
-  return gitstatus_render(string.trim(raw))
+  return mls.gitstatus_render(string.trim(raw))
 end
 
 -- ===========================================================================
 -- == Diff Tools
 -- ===========================================================================
-
+function mls.gitdiff_render(base64Text)
+  local diffText= encoding.utf8Decode(encoding.base64Decode(base64Text))
+  local lines = string.split(diffText, "\n")  
+  local html = '<pre class="git-diff">'  
+  for _, line in ipairs(lines) do  
+    if string.startsWith(line, "---") or string.startsWith(line, "+++") then  
+      html = html .. '<div class="diff-header">' .. line .. '</div>'  
+    elseif string.startsWith(line, "@@") then  
+      html = html .. '<div class="diff-hunk">' .. line .. '</div>'  
+    elseif string.startsWith(line, "-") then  
+      html = html .. '<div class="diff-delete">' .. line .. '</div>'  
+    elseif string.startsWith(line, "+") then  
+      html = html .. '<div class="diff-add">' .. line .. '</div>'  
+    else  
+      html = html .. '<div class="diff-context">' .. line .. '</div>'  
+    end  
+  end  
+  html = html..'</pre>'  
+  return widget.htmlBlock(html)
+end
 ---
 -- Compute diff between two commits for a given file path.
 -- @param hash_old string
@@ -239,7 +291,7 @@ local function get_diff_between_commits(hash_old, hash_new, file_path)
   local path=string.gsub(file_path,".md","")
   local old="[[git:"..path.."_"..hash_old.."|".. hash_old .."]]"
   local new="[[git:"..path.."_"..hash_new.."|".. hash_new .."]]"
-  return  "### 🔍[["..path.. "]] : diff between " .. old .. " and " .. new .."\n" .."${gitdiff_render(\"".. encoding.base64Encode(raw).."\")}"
+  return  "### 🔍[["..path.. "]] : diff between " .. old .. " and " .. new .."\n" .."${mls.gitdiff_render(\"".. encoding.base64Encode(raw).."\")}"
 end
 
 -- ===========================================================================
@@ -398,6 +450,11 @@ command.define {
 .diff-context { color: inherit; }
 
 ```
+
+## Changelog
+
+* 2026-01-23:
+  * fix:  restore delete code
 
 ## Community
 

@@ -133,11 +133,12 @@ local findMyFence = function(node,blockId)
       return nil
     end
     for _, child in ipairs(node.children) do
-        --debug_log(child)
+        --mls.debug(child)
         if child.type == "FencedCode" then
           local info = getText(getChild(child, "CodeInfo"))
-          --debug_log(info)
+          --mls.debug(info)
           if info  and info:find(blockId) then
+            mls.debug(info)
             return getChild(child, "CodeText")
           end
         end
@@ -152,10 +153,10 @@ end
 -- Get code source in md codeblock
 function mls.getCodeBlock  (page,blockId,token,text)
   local tree = markdown.parseMarkdown(space.readPage(page))
-  --debug_log(tree)
+  --mls.debug(tree)
   if tree then
     local fence = findMyFence(tree,blockId)
-    --debug_log(fence)
+    --mls.debug(fence)
     if fence then
       local result=fence.children[1].text
       if token == nil or text==nill then
@@ -184,7 +185,10 @@ function mls.parseISODate(isoDate)
 end
 
  function mls.getStdlibInternal()
-  -- get list of internal api
+  if _G ~=nil then
+    return table.keys(_G)
+  end 
+  -- get list of internal api TODO: remove
   local KEY="stdlib_internal"
   local result=mls.cache.ttl.CacheManager.get(KEY)
   if  result == nil then 
@@ -271,6 +275,8 @@ end
 
 ## Changelog
 
+* 2026-01-22:
+  * getStdlibInternal compatible with edge version https://community.silverbullet.md/t/risk-audit/3562/14
 * 2026-01-20:
   * feat: add table functions
     * map
@@ -279,3 +285,4 @@ end
     * unique
     * appendArray
   * feat: add `mls.getStdlibInternal` fucntion
+

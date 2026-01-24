@@ -122,6 +122,9 @@ html {
 .sb-bhs {
   height: var(--treeview-phone-height);
 }
+.cm-diagnosticText {
+  color: black;
+}
 ```
 
 ## Treeview
@@ -176,53 +179,5 @@ html {
 div.cm-scroller {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-}
-```
-
-## Codemirror
-
-````space-style
-<script>  
-// Add line numbers to all code blocks  
-document.addEventListener('DOMContentLoaded', () => {  
-  document.querySelectorAll('.sb-line-fenced-code .sb-code').forEach(codeEl => {  
-    const lines = codeEl.textContent.split('\n');  
-    codeEl.innerHTML = lines.map((line, i) =>   
-      `<div style="position: relative"><span style="position: absolute; left: -3em; width: 2.5em; text-align: right; color: var(--editor-meta-color); opacity: 0.5; font-size: 0.9em; user-select: none">${i+1}</span>${line}</div>`  
-    ).join('\n');  
-  });  
-});  
-</script>
-/* Line numbers for fenced code blocks */  
-.sb-line-fenced-code {  
-  position: relative;  
-  padding-left: 3.5em;  
-}  
-  
-.sb-line-fenced-code .sb-code {  
-  counter-reset: line;  
-  white-space: pre;  
-}  
-  
-.sb-line-fenced-code .sb-code > div {  
-  counter-increment: line;  
-  position: relative;  
-}  
-  
-.sb-line-fenced-code .sb-code > div::before {  
-  content: counter(line);  
-  position: absolute;  
-  left: -3em;  
-  width: 2.5em;  
-  text-align: right;  
-  color: var(--editor-meta-color);  
-  opacity: 0.5;  
-  font-size: 0.9em;  
-  user-select: none;  
-}  
-  
-/* Hide line numbers for inline code */  
-:not(.sb-line-fenced-code) > .sb-code::before {  
-  display: none !important;  
 }
 ```
