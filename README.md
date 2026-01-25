@@ -4,7 +4,6 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 
 ## 📦 Available Libraries
 
-- [Bashcode](https://github.com/malys/silverbullet-libraries/blob/main/src/BashCode.md) - Quickly insert bash code. - (2026-01-13)
 - [Breadcrumb](https://github.com/malys/silverbullet-libraries/blob/main/src/Breadcrumb.md) - Generate breadcrumbs for a page - (2025-11-18)
 - [Lru](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md) - LRU cache leveraging @isaacs/lrucache - (2026-01-15)
 - [Ttl](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md) - TTL cache leveraging @isaacs/ttlcache - (2026-01-13)
@@ -18,6 +17,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Llminstructions](https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md) - System prompt to pilot LLM in SB plugin coding. - (2026-01-02)
 - [Markmapmindmap](https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md) - MarkMap mindmap integration. - (2026-01-25)
 - [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - Marp slides integration. - (2026-01-25)
+- [Mdprettier](https://github.com/malys/silverbullet-libraries/blob/main/src/mdPrettier.md) - Beautify md file. - (2026-01-25)
 - [Mdtablerender](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md) - Automatically formats Markdown table cells based on hashtag column tags. - (2026-01-25)
 - [Mdtablesheet](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md) - Integrate FormulaJS in markdown table (table = sheet). - (2026-01-25)
 - [Organization Chart](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md) - Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart. - (2025-11-20)
@@ -29,11 +29,11 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga project management tool - (2026-01-24)
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity - (2026-01-24)
 - [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2026-01-25)
-- [Debugger](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Debugger.md) - Tooling to debug (linter, postion, beautify)
-- [Luacheck](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md)
-- [Utilitycode](https://github.com/malys/silverbullet-libraries/blob/main/src/UtilityCode.md)
-- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md)
-- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md)
+- [Debugger](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Debugger.md) - Tooling to debug (linter, postion, beautify) - (2026-01-25)
+- [Luacheck](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md) - Lua linter. - (2026-01-24)
+- [Utilitycode](https://github.com/malys/silverbullet-libraries/blob/main/src/UtilityCode.md) - Quickly insert utility code. - (2026-01-13)
+- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2026-01-13)
+- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - DEPRECATED universal palette (as VScode Palette), use '>' to execute commands - (2026-01-02)
 
 ## 🛠️ Installation
 1. Navigate to your `Library Manager` inside Silverbullet
