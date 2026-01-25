@@ -44,6 +44,7 @@ By using or contributing to this project, you acknowledge and accept these condi
 | **#evaluation** | Converts 0–5 into ★/☆ rating |
 | **#badge** | Renders value as a blue pill badge |
 | **#emoji** | Converts words like “happy”, “cool”, “neutral” → 😃 😎 😐 |
+| **#mood** | Converts evaluation of mood  to emoj 1:bad 5: very well|
 | **#trend** | Converts + / - / = into 🔼 🔽 ➡️ |
 | **#histo** | Converts number to █ |
 
@@ -58,55 +59,57 @@ Just add the renderer as a hashtag tag in your table header:
 
 ```
 ![](https://community.silverbullet.md/uploads/default/original/2X/e/e2598b9faf8fb223eb5b68b9d03b0729384c5351.png)
-
-## Installation
-A **userscript** is a small piece of JavaScript that runs **inside your browser**, on top of an existing website, and modifies how that site behaves or looks — **without requiring any changes to the site itself**.
-
-It works by installing the script into a **userscript manager extension**, which loads and executes it when you visit matching pages.
-
-### A userscript manager extension
-
-You only need **one** of these:
-
-| Extension | Browser | Notes |
-| --- | --- | --- |
-| **Violentmonkey** |  Firefox, Edge | Open-source, lightweight, very popular |
-| **Tampermonkey** | Chrome, Firefox, Edge | Most popular, closed-source core |
-| **OrangeMonkey** | Chrome, Edge | Lightweight alternative to Tampermonkey |
-| **Greasemonkey** | Firefox | Original userscript manager (older / slower) |
-
----
-
-### Installing the script (example: Chrome + OrangeMonkey)
-
-1.  Open Chrome
-2.  Install **OrangeMonkey** from the Chrome Web Store
-3.  Click the OrangeMonkey icon in your toolbar
-4.  Choose **"Create a new script"** or **"Add script from URL/file"**
-5.  Paste the entire script:
-
+![](https://community.silverbullet.md/uploads/default/original/2X/e/ec9b8a44f48b1854b94544da609e24fb1c9bf888.gif)
 ## Code
-```js
-// ==UserScript==
-// @name        Table renderer
-// @namespace   Violentmonkey Scripts
-// @match       TODO:silverbullet url/*
-// @grant       none
-// @version     1.0
-// @author      -
-// @description 06/11/2025 16:32:22
-// ==/UserScript==
+```space-lua
+-- Table Renderer (Formatter)
 
+local cfg = config.get("tableRenderer") or {}
+local enabled = cfg.enabled ~= false
+
+--------------------------------------------------
+-- CLEANUP
+--------------------------------------------------
+
+local function cleanupRenderer()
+  local scriptId = "sb-table-renderer-runtime"
+  local existing = js.window.document.getElementById(scriptId)
+
+  if existing then
+    local ev = js.window.document.createEvent("Event")
+    ev.initEvent("sb-table-renderer-unload", true, true)
+    js.window.dispatchEvent(ev)
+    existing.remove()
+    print("Table Renderer: Disabled")
+  else
+    print("Table Renderer: Already inactive")
+  end
+end
+
+--------------------------------------------------
+-- ENABLE
+--------------------------------------------------
+
+function enableTableRenderer()
+  local scriptId = "sb-table-renderer-runtime"
+  if js.window.document.getElementById(scriptId) then
+    print("Table Renderer: Already active")
+    return
+  end
+
+  local scriptEl = js.window.document.createElement("script")
+  scriptEl.id = scriptId
+
+  scriptEl.innerHTML = [[
 (function () {
   'use strict';
 
-  // ---------- Configuration ----------
-  const DEBUG = false;             // set true to see console logs
-  const POLL_FALLBACK_MS = 1500;   // fallback polling interval if observer misfires
-  const DEBOUNCE_MS = 500;         // debounce for batch mutation handling
+  const DEBUG = false;
+  const log = (...a) => DEBUG && console.log('[sb-table-renderer]', ...a);
 
-  // ---------- Formatters ----------
- const formatters = {
+  /* ---------------- FORMATTERS ---------------- */
+
+  const formatters = {
     euro: v => isNaN(v) ? v : `${parseFloat(v).toLocaleString()} €`,
     usd: v => isNaN(v) ? v : `$${parseFloat(v).toLocaleString()}`,
     kg: v => isNaN(v) ? v : `${parseFloat(v).toLocaleString()} kg`,
@@ -143,8 +146,79 @@ You only need **one** of these:
       return isNaN(n) ? v : '█'.repeat(n);
     },
     badge: v => `<span style="background:#2196f3;color:white;padding:2px 6px;border-radius:8px;font-size:0.9em;">${v}</span>`,
+    mood: v => {
+      const n = parseInt(v, 10);
+      const moodScaleSoft = ['😔', '🙁', '😐', '🙂', '😄'];
+      return moodScaleSoft[(n-1)%5]
+    },
     emoji: v => {
-      const map = { happy: '😃', sad: '😢', cool: '😎', angry: '😠', love: '❤️', neutral: '😐' };
+        const map = {
+        // basic emotions
+        happy: '😃',
+        sad: '😢',
+        angry: '😠',
+        love: '❤️',
+        neutral: '😐',
+        cool: '😎',
+        
+        
+        // positive / joyful
+        smile: '😊',
+        grin: '😁',
+        laugh: '😂',
+        excited: '🤩',
+        proud: '😌',
+        relieved: '😮‍💨',
+        thankful: '🙏',
+        party: '🥳',
+        confident: '😏',
+        
+        
+        // negative / difficult
+        cry: '😭',
+        disappointed: '😞',
+        worried: '😟',
+        anxious: '😰',
+        scared: '😱',
+        tired: '😴',
+        sick: '🤒',
+        bored: '😒',
+        frustrated: '😤',
+        confused: '😕',
+        
+        
+        // reactions
+        surprised: '😮',
+        shocked: '😲',
+        thinking: '🤔',
+        facepalm: '🤦',
+        shrug: '🤷',
+        eyeRoll: '🙄',
+        
+        
+        // social / playful
+        wink: '😉',
+        kiss: '😘',
+        hug: '🤗',
+        teasing: '😜',
+        silly: '🤪',
+        
+        
+        // approval / disapproval
+        ok: '👌',
+        thumbsUp: '👍',
+        thumbsDown: '👎',
+        clap: '👏',
+        respect: '🫡',
+        
+        
+        // status / misc
+        fire: '🔥',
+        star: '⭐',
+        check: '✅',
+        cross: '❌',
+        warning: '⚠️',
+        };
       const key = v.toString().toLowerCase();
       return map[key] || v;
     },
@@ -157,228 +231,117 @@ You only need **one** of these:
     },
   };
 
-  // ---------- Utilities ----------
-  function log(...args) { if (DEBUG) console.log('[sb-table]', ...args); }
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-  function escapeAttr(str) {
-    return String(str).replace(/"/g, '%22');
-  }
+  /* ---------------- CORE ---------------- */
 
-  // Create a DOM element for formatted output safely
-  function createFormattedNode(value, fmt) {
-    const fn = formatters[fmt];
-    if (!fn) return document.createTextNode(value);
-    const html = fn(value);
-    // If formatter returned plain text (no tags) we can put textContent,
-    // otherwise use innerHTML (we escaped where needed above)
-    const container = document.createElement('span');
-    // Heuristic: if result contains angle brackets assume it's HTML-safe from our escapes
-    if (/<[a-z][\s\S]*>/i.test(html)) container.innerHTML = html;
-    else container.textContent = html;
-    return container;
-  }
+  function extractFormats(table) {
+    const formats = [];
+    const header =
+      table.querySelector('thead tr') ||
+      table.querySelector('tr');
+    if (!header) return formats;
 
-  // Debounce helper
-  function debounce(fn, ms) {
-    let t = null;
-    return function (...args) {
-      clearTimeout(t);
-      t = setTimeout(() => fn.apply(this, args), ms);
-    };
-  }
-
-  // ---------- Core processing ----------
-  // applying flag prevents reacting to our own DOM writes
-  let applying = false;
-
-  function processTables(container) {
-    if (!container) return;
-    if (applying) return;
-    applying = true;
-    try {
-      log('processTables start');
-      const tables = container.querySelectorAll('table');
-      tables.forEach(table => {
-        // find header cells (thead preferred, fallback to first row)
-        let headerCells = table.querySelectorAll('thead tr:first-child th, thead tr:first-child td');
-        if (!headerCells || headerCells.length === 0) {
-          // fallback: first row of tbody or first tr in table
-          const firstRow = table.querySelector('tr');
-          headerCells = firstRow ? firstRow.querySelectorAll('th, td') : [];
+    [...header.cells].forEach((cell, idx) => {
+      formats[idx] = null;
+      const tags = cell.querySelectorAll('a.hashtag,[data-tag-name]');
+      for (const tag of tags) {
+        const name =
+          tag.dataset?.tagName ||
+          tag.textContent?.replace('#','');
+        if (formatters[name]) {
+          formats[idx] = name;
+          tag.style.display = 'none';
+          break;
         }
-        if (!headerCells || headerCells.length === 0) return;
+      }
+    });
+    return formats;
+  }
 
-        // build col formatter list
-        const colFormats = Array.from(headerCells).map((cell) => {
-          // look for hashtag link by class or data attribute
-          const tagLinks = cell.querySelectorAll('a.hashtag, a.sb-hashtag, [data-tag-name]');
-          for(let i=0;i<tagLinks.length;i++){
-            let tagLink=tagLinks[i]
-            if (Object.keys(formatters).includes(tagLink.dataset.tagName)) {
-              const name = (tagLink.dataset && tagLink.dataset.tagName) ? tagLink.dataset.tagName
-                        : (tagLink.getAttribute ? tagLink.getAttribute('data-tag-name') : null);
-              if (name) {
-                // hide the hashtag visually but keep it in DOM (so editor can still find it)
-                tagLink.style.display = 'none';
-                return String(name).trim().toLowerCase();
-              }
-            }
-         }
-        return null;
-        });
+  function processTable(table) {
+    if (table.dataset.sbFormatted) return;
+    const formats = extractFormats(table);
+    const rows = table.tBodies[0]?.rows || [];
 
-        // apply to body rows (tbody preferred)
-        const bodyRows = table.querySelectorAll('tbody tr');
-        const rows = bodyRows.length ? bodyRows : table.querySelectorAll('tr');
-        rows.forEach(row => {
-          const cells = row.querySelectorAll('td, th'); // format cells regardless of tag
-          cells.forEach((cell, idx) => {
-            const fmt = colFormats[idx];
-            if (!fmt || !formatters[fmt]) return;
-            const raw = cell.textContent.trim();
+    [...rows].forEach(row => {
+      [...row.cells].forEach((cell, idx) => {
+        const fmt = formats[idx];
+        if (!fmt) return;
 
-            // If the cell already contains a formatted node produced by us, we may replace it
-            // But avoid replacing while user is actively typing inside the same cell (contentEditable)
-            // If the cell or an ancestor is currently focused, skip (user editing)
-            const active = document.activeElement;
-            if (active && (cell === active || cell.contains(active))) {
-              log('skip formatting because user is editing', cell, raw);
-              return;
-            }
-
-            // Generate formatted node and replace contents
-            const formattedNode = createFormattedNode(raw, fmt);
-            // Quick check: if cell already equals formattedNode.textContent (idempotent), skip
-            const candidateText = (formattedNode.textContent || '').trim();
-            if (candidateText === raw && !/<[a-z][\s\S]*>/i.test(formattedNode.innerHTML)) {
-              // Nothing to change (formatter didn't alter text)
-              return;
-            }
-
-            // Replace content safely
-            cell.innerHTML = '';            // wipe
-            cell.appendChild(formattedNode);
-            // mark as processed (for debugging/inspection)
-            cell.setAttribute('data-sbformatted', fmt);
-          });
-        });
+        const raw = cell.textContent.trim();
+        const out = formatters[fmt](raw);
+        if (out !== raw) {
+          cell.textContent = out;
+          cell.dataset.sbformatted = fmt;
+        }
       });
-      log('processTables done');
-    } catch (err) {
-      console.error('sb-table: processing error', err);
-    } finally {
-      // tiny timeout to ensure observer won't see our writes as immediate external mutations
-      setTimeout(() => { applying = false; }, 20);
-    }
-  }
-
-  const debouncedProcess = debounce(processTables, DEBOUNCE_MS);
-
-  // ---------- Setup: wait for #sb-editor ----------
-  function waitForEditorAndStart() {
-    const editor = document.getElementById('sb-editor');
-    if (!editor) {
-      log('#sb-editor not found, retrying...');
-      setTimeout(waitForEditorAndStart, 300);
-      return;
-    }
-    startWatching(editor);
-  }
-
-  // ---------- Start watching container ----------
-  let observer = null;
-  let fallbackInterval = null;
-  let lastRun = 0;
-
-  function startWatching(editor) {
-    // initial run once editor appears (give editor a moment)
-    setTimeout(() => debouncedProcess(editor), 400);
-
-    // listen to input events (contenteditable emits input)
-    editor.addEventListener('input', () => {
-      log('input event -> schedule process');
-      debouncedProcess(editor);
-    }, { passive: true });
-
-    // also listen to keyup/paste to catch edge cases
-    editor.addEventListener('keyup', () => debouncedProcess(editor));
-    editor.addEventListener('paste', () => setTimeout(() => debouncedProcess(editor), 80));
-
-    // MutationObserver config - broad to catch replacements/attribute changes
-    const config = { childList: true, subtree: true, characterData: true, attributes: true };
-
-    // Create observer
-    observer = new MutationObserver((mutations) => {
-      if (applying) return;
-      // Quick heuristic: if many mutations, debounce
-      const now = Date.now();
-      // Avoid calling too often in rapid mutation bursts
-      if (now - lastRun < (DEBOUNCE_MS / 2)) {
-        debouncedProcess(editor);
-      } else {
-        debouncedProcess(editor);
-        lastRun = now;
-      }
     });
 
-    try {
-      observer.observe(editor, config);
-      log('MutationObserver attached to #sb-editor');
-    } catch (err) {
-      console.warn('sb-table: MutationObserver attach failed, falling back to polling', err);
-    }
-
-    // Fallback polling in case the environment continually replaces the editor root
-    fallbackInterval = setInterval(() => {
-      try {
-        // ensure observer still connected, else try to reattach
-        if (observer && observer.takeRecords) {
-          // run periodic processing in case something missed
-          debouncedProcess(editor);
-        } else {
-          debouncedProcess(editor);
-        }
-      } catch (e) {
-        console.warn('sb-table: poll fallback err', e);
-      }
-    }, POLL_FALLBACK_MS);
-
-    // As a safety, also observe document.body so we can detect the editor being replaced
-    const bodyObserver = new MutationObserver(() => {
-      const currentEditor = document.getElementById('sb-editor');
-      if (currentEditor && currentEditor !== editor) {
-        log('editor root replaced; reattaching to new #sb-editor');
-        // cleanup old observer and restart on new editor
-        try { if (observer) observer.disconnect(); } catch {}
-        try { if (fallbackInterval) clearInterval(fallbackInterval); } catch {}
-        startWatching(currentEditor);
-      }
-    });
-    bodyObserver.observe(document.body, { childList: true, subtree: true });
-
-    // Try one extra processing after a little while to catch delayed renders
-    setTimeout(() => debouncedProcess(editor), 1200);
+    table.dataset.sbFormatted = 'true';
   }
 
-  // Kickoff
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', waitForEditorAndStart);
-  } else {
-    waitForEditorAndStart();
+  function scan() {
+    document
+      .querySelectorAll('#sb-editor table')
+      .forEach(processTable);
   }
+
+  /* ---------------- OBSERVER ---------------- */
+
+  const observer = new MutationObserver(scan);
+  observer.observe(document.body, { childList:true, subtree:true });
+
+  scan();
+
+  /* ---------------- CLEANUP ---------------- */
+
+  window.addEventListener('sb-table-renderer-unload', function cln() {
+    observer.disconnect();
+    document
+      .querySelectorAll('[data-sbformatted]')
+      .forEach(c => {
+        c.removeAttribute('data-sbformatted');
+      });
+    document
+      .querySelectorAll('table[data-sb-formatted]')
+      .forEach(t => delete t.dataset.sbFormatted);
+    window.removeEventListener('sb-table-renderer-unload', cln);
+  });
 
 })();
+  ]]
+
+  js.window.document.body.appendChild(scriptEl)
+end
+
+--------------------------------------------------
+-- COMMANDS
+--------------------------------------------------
+
+command.define {
+  name = "Table: Enable Renderer",
+  run = function() enableTableRenderer() end
+}
+
+command.define {
+  name = "Table: Disable Renderer",
+  run = function() cleanupRenderer() end
+}
+
+--------------------------------------------------
+-- AUTOSTART
+--------------------------------------------------
+if enabled then
+  enableTableRenderer()
+else
+  cleanupRenderer()
+end
 ```
 
 ## Changelog
 
+* 2026-01-24:
+  * feat: convert to space-lua
+  * feat: add renderers (mood, emoj)
 * 2026-01-02 feat: add kg, km, watt, histo
 
 ## Community

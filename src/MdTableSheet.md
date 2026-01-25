@@ -89,6 +89,12 @@ Here's an example chart:
 
 ${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=300,height=80})}
 
+## Table inserts
+
+*   **Table: Insert line below** \- Inserts a new line below the current cursor position in a table format, matching the number of pipes ("|") in the current line. (Shortcut: `Alt--`)
+*   **Table: Insert column** \- Inserts a new column into the table at the position of the nearest pipe ("|") to the cursor, affecting the current line and subsequent table rows. (Shortcut: `Alt-+`)
+*   
+![](https://community.silverbullet.md/uploads/default/original/2X/e/ec9b8a44f48b1854b94544da609e24fb1c9bf888.gif)
 
 ## Code source
 
@@ -136,6 +142,8 @@ ${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=300,height=8
 -- IMPORTANT: use string.split(s, sep) instead of s:split() to avoid JS/Lua interop issues
 -- make code syntax simple, **safe** and easy debugable (during the pediod of development functions are public and at the end, switch to local function by default)
 -- ---------------------------
+mls = mls or {}
+mls.table = mls.table or {}
 
 local function log(...)
   if LOG_ENABLE and mls and mls.debug then
@@ -796,6 +804,118 @@ local function getHtml(xValues, yValues, chartType,serieLabel, w, h)
   log("getHtml: end")
   return html
 end
+
+-- =========================
+-- Commands 
+-- =========================
+function mls.table.insertLineBelow()  
+  local function countPipesInCurrentLine()  
+      local lineInfo = editor.getCurrentLine()  
+      local lineText = lineInfo.text  
+      local count = 0  
+        
+      -- Count all occurrences of "|" in the line  
+      for _ in lineText:gmatch("|") do  
+        count = count + 1  
+      end  
+        
+      return count  
+  end
+  
+  local pipeCount = countPipesInCurrentLine()  
+  local cursor = editor.getCursor()  
+  local coordonates=mls.positionToLineColumn(editor.getText(),cursor)
+  local text = editor.getText()  
+    
+  -- Find current line number from cursor position  
+  local lines = text:split("\n")  
+  table.insert(lines, coordonates.line + 1,string.rep("|    ", pipeCount) )    
+  editor.setText(table.concat(lines, "\n"))  
+end
+
+command.define {  
+  name = "Table: Insert line below",  
+  key = "Alt--",  
+  run = function()  
+    mls.table.insertLineBelow()
+  end  
+}
+
+function mls.table.insertColumn()  
+  local function insertDoublePipeAtPosition(lineText, position,fill)  
+    local ch=string.split(lineText,"")
+    table.insert(ch,position,"|"..fill)
+    return table.concat(ch,"")
+  end  
+
+  local function  getListOfPipe(lineText)
+    local posPipes = {}  
+    for i = 1, string.len(lineText) do  
+      if string.sub(lineText, i, i) == "|" then  
+        table.insert(posPipes, i)  
+      end  
+    end  
+    return posPipes
+  end
+  
+  local text=editor.getText()
+  local lines=  string.split(text,"\n")
+  local cursorPos = editor.getCursor()  
+  local coordonates=mls.positionToLineColumn(text,cursorPos)
+  local lineText = lines[coordonates.line]
+
+  local posPipes=getListOfPipe(lineText)
+
+  -- Find nearest pipe to cursor position  
+  local nearestPipe = 1  
+  local minDistance = math.abs(coordonates.column - posPipes[1])  
+    
+  for i, pipePos in ipairs(posPipes) do  
+    local distance = math.abs(coordonates.column - pipePos)  
+    if distance < minDistance then  
+      minDistance = distance  
+      nearestPipe = i  
+    end  
+  end  
+  -- Get all lines and find current line number  
+  local currentLineNum =coordonates.line  
+
+  local result={}
+  local process=true
+  -- Process lines below current line  
+  for i = 1, #lines do  
+    local line =lines[i]
+    if  i>=currentLineNum and string.startsWith(line,"|") and process==true then  
+      -- Insert double pipe at target position  
+      local posL=getListOfPipe(line)[nearestPipe] 
+      local fill="        "
+      if i==currentLineNum + 1 then
+        fill="--------"
+      end  
+      result[i] = insertDoublePipeAtPosition(line,posL, fill)  
+    else
+     result[i]=line
+     if  i>currentLineNum then
+       process=false
+     end 
+    end  
+  end  
+  -- Update the document  
+  editor.setText(table.concat(result, "\n"))  
+end
+
+command.define {  
+  name = "Table: Insert column",  
+  key = "Alt-+",  
+  run = function()  
+   mls.table.insertColumn()
+  end  
+}  
+
+
+-- =========================
+-- Main functions 
+-- =========================
 
 ---
 -- Main HTML widget function:

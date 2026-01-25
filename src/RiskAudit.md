@@ -103,7 +103,6 @@ end
 -- == Scanner: find code blocks
 -- ===========================================================================
 local find_space_lua_blocks = _wrap_with_debug("find_space_lua_blocks", function(text)
-   print(text)
 	local blocks = {}
 	if not text or text == "" then
 		return blocks

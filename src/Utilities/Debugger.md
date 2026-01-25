@@ -21,7 +21,8 @@ This SpaceLua script provides a set of tools designed to aid in the development 
     *   `/debugger:check` - Runs Lua linting on the current code block.
     *   `/debugger:beautify` - Formats the current code block and copies it to the clipboard.
     *   `/debugger:position` - Prompts you for a character position and highlights the corresponding code in a panel.
-*   **Dedicated Lint Panel:**  A toggleable panel on the right-hand side of the editor continuously displays linting information, providing real-time feedback as you write code. This panel automatically updates when you save your page.
+*   **Linter: Toggle panel**: Shows code with lint information in a panel on the right side of the editor.
+*   **Beautify: to clipboard**:  Triggers a beautification process (likely formatting the code). Logs "beautify" using the `mls.debugger` function.
 
 ## How to Use:
 

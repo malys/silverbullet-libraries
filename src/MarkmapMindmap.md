@@ -44,7 +44,7 @@ config.set("markmap.source ","xxxx")
 
 ## Code
 
- ```space-lua
+```space-lua
 local is_panel_visible = false
 local current_panel_id = config.get("markmap.panelPosition") or "rhs"
 -- Function to render Marp slides

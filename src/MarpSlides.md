@@ -42,7 +42,7 @@ config.set("marp.source","xxxx")
 
 ## Code
 
- ```space-lua
+```space-lua
 local is_panel_visible = false
 local current_panel_id = "rhs"
 -- Function to render Marp slides
