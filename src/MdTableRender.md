@@ -5,62 +5,76 @@ tags: userscript
 name: "Library/Malys/MdTableRender"
 ---
 # Md table column rendering
-This script enhances Markdown tables inside SilverBullet by applying dynamic formatting rules to columns marked with hashtag-style format tags (e.g. `#euro`, `#percent`, `#stars`).
-It observes table changes in real time and transforms raw text values into styled, formatted elements — such as currency, percentages, booleans, dates, badges, emojis, trends, and star ratings — without altering the original Markdown source. It is designed to be non-intrusive, editable-friendly, and resilient thanks to mutation observers, debouncing, and a polling fallback.
+
+This script enhances Markdown tables inside SilverBullet by applying dynamic
+formatting rules to columns marked with hashtag-style format tags (e.g. `#euro`,
+`#percent`, `#stars`). It observes table changes in real time and transforms raw
+text values into styled, formatted elements — such as currency, percentages,
+booleans, dates, badges, emojis, trends, and star ratings — without altering the
+original Markdown source. It is designed to be non-intrusive, editable-friendly,
+and resilient thanks to mutation observers, debouncing, and a polling fallback.
 
 ## Disclaimer & Contributions
 
 This code is provided **as-is**, **without any kind of support or warranty**.  
 I do **not** provide user support, bug-fixing on demand, or feature development.
 
-If you detect a bug, please **actively participate in debugging it** (analysis, proposed fix, or pull request) **before reporting it**. Bug reports without investigation may be ignored.
+If you detect a bug, please **actively participate in debugging it** (analysis,
+proposed fix, or pull request) **before reporting it**. Bug reports without
+investigation may be ignored.
 
 🚫 **No new features will be added.**  
-✅ **All types of contributions are welcome**, including bug fixes, refactoring, documentation improvements, and optimizations.
+✅ **All types of contributions are welcome**, including bug fixes, refactoring,
+documentation improvements, and optimizations.
 
-By using or contributing to this project, you acknowledge and accept these conditions.
+By using or contributing to this project, you acknowledge and accept these
+conditions.
 
 ## Supported renderers (via `#tag` in header)
 
-| Tag | Effect |
-|-----|--------|
-| **#euro** | Formats number as “12 345 €” |
-| **#usd** | Formats number as “$12,345” |
-| **#percent** | Converts decimal to percentage (0.15 → “15 %”) |
-| **#km** | Formats number as “12 345 km” |
-| **#kg** | Formats number as “12 345 kg” |
-| **#watt** | Formats number as “12 345 W” |
-| **#int** | Parses and formats whole numbers with locale separators |
-| **#float** | Forces 2 decimal places (e.g. “3.14”) |
-| **#upper** | Forces uppercase |
-| **#lower** | Forces lowercase |
-| **#bold** | Wraps value in `<strong>` |
-| **#italic** | Wraps value in `<em>` |
-| **#link** | Turns URL into clickable link |
-| **#date** | Formats dates (YYYY-MM-DD or ISO) |
-| **#datetime** | Formats full timestamp |
-| **#logical** | Converts truthy → `✅` / falsy → `❌` |
-| **#stars** | Converts number to up to 10 ⭐ stars |
-| **#evaluation** | Converts 0–5 into ★/☆ rating |
-| **#badge** | Renders value as a blue pill badge |
-| **#emoji** | Converts words like “happy”, “cool”, “neutral” → 😃 😎 😐 |
-| **#mood** | Converts evaluation of mood  to emoj 1:bad 5: very well|
-| **#trend** | Converts + / - / = into 🔼 🔽 ➡️ |
-| **#histo** | Converts number to █ |
+| Tag             | Effect                                                    |
+| --------------- | --------------------------------------------------------- |
+| **#euro**       | Formats number as “12 345 €”                              |
+| **#usd**        | Formats number as “$12,345”                               |
+| **#percent**    | Converts decimal to percentage (0.15 → “15 %”)            |
+| **#gauge**      | Graphical percentage representation ███░                  |
+| **#posneg**     | Colored gauge -2 🟥🟥,0 ⬜, +1 🟩                         |
+| **#km**         | Formats number as “12 345 km”                             |
+| **#kg**         | Formats number as “12 345 kg”                             |
+| **#watt**       | Formats number as “12 345 W”                              |
+| **#int**        | Parses and formats whole numbers with locale separators   |
+| **#float**      | Forces 2 decimal places (e.g. “3.14”)                     |
+| **#upper**      | Forces uppercase                                          |
+| **#lower**      | Forces lowercase                                          |
+| **#bold**       | Wraps value in `<strong>`                                 |
+| **#italic**     | Wraps value in `<em>`                                     |
+| **#link**       | Turns URL into clickable link                             |
+| **#date**       | Formats dates (YYYY-MM-DD or ISO)                         |
+| **#datetime**   | Formats full timestamp                                    |
+| **#logical**    | Converts truthy → `✅` / falsy → `❌`                     |
+| **#stars**      | Converts number to up to 10 ⭐ stars                      |
+| **#evaluation** | Converts 0–5 into ★/☆ rating                              |
+| **#badge**      | Renders value as a blue pill badge                        |
+| **#emoji**      | Converts words like “happy”, “cool”, “neutral” → 😃 😎 😐 |
+| **#mood**       | Converts evaluation of mood to emoj 1:bad 5: very well    |
+| **#trend**      | Converts + / - / = into 🔼 🔽 ➡️                          |
+| **#histo**      | Converts number to █                                      |
 
 Just add the renderer as a hashtag tag in your table header:
 
 ```md
-| Product   #wine    | Euro #euro| Percent #percent | Logical #logical | Stars #stars| Evaluation #evaluation | Updated            | Mood #emoji  | Trend #trend |
-|-------------|------|---------|---------|-------|------------|---------------------|--------|-------|
-| Widget      | 12.99| 0.15    | 0       | 3     | 4          | 2025-11-06T14:30:00Z | happy  | +     |
-| Gadget      | 8.50 | 0.23    | false      | 5     | 2          | 2024-12-25T10:00:00Z | neutral| -     |
-| Thingamajig | 5.75 | 0.05    | true    | 4     | 5          | 2023-05-10T08:15:00Z | cool   | =     |
-
+| Product #wine | Euro #euro | Percent #percent | Logical #logical | Stars #stars | Evaluation #evaluation | Updated              | Mood #emoji | Trend #trend |
+| ------------- | ---------- | ---------------- | ---------------- | ------------ | ---------------------- | -------------------- | ----------- | ------------ |
+| Widget        | 12.99      | 0.15             | 0                | 3            | 4                      | 2025-11-06T14:30:00Z | happy       | +            |
+| Gadget        | 8.50       | 0.23             | false            | 5            | 2                      | 2024-12-25T10:00:00Z | neutral     | -            |
+| Thingamajig   | 5.75       | 0.05             | true             | 4            | 5                      | 2023-05-10T08:15:00Z | cool        | =            |
 ```
+
 ![](https://community.silverbullet.md/uploads/default/original/2X/e/e2598b9faf8fb223eb5b68b9d03b0729384c5351.png)
 ![](https://community.silverbullet.md/uploads/default/original/2X/e/ec9b8a44f48b1854b94544da609e24fb1c9bf888.gif)
+
 ## Code
+
 ```space-lua
 -- Table Renderer (Formatter)
 
@@ -126,7 +140,7 @@ function enableTableRenderer()
     date: v => formatDate(v),
     datetime: v => formatDateTime(v),
     logical: v => {
-      if(v !=='✅' &&  v !=='❌'){
+      if (v !== '✅' && v !== '❌') {
         const val = v.toString().toLowerCase().trim();
         return (val === '1' || val === 'true' || val === 'yes' || val === 'ok') ? '✅' : '❌';
       }
@@ -149,10 +163,10 @@ function enableTableRenderer()
     mood: v => {
       const n = parseInt(v, 10);
       const moodScaleSoft = ['😔', '🙁', '😐', '🙂', '😄'];
-      return moodScaleSoft[(n-1)%5]
+      return moodScaleSoft[(n - 1) % 5]
     },
     emoji: v => {
-        const map = {
+      const map = {
         // basic emotions
         happy: '😃',
         sad: '😢',
@@ -160,8 +174,8 @@ function enableTableRenderer()
         love: '❤️',
         neutral: '😐',
         cool: '😎',
-        
-        
+
+
         // positive / joyful
         smile: '😊',
         grin: '😁',
@@ -172,8 +186,8 @@ function enableTableRenderer()
         thankful: '🙏',
         party: '🥳',
         confident: '😏',
-        
-        
+
+
         // negative / difficult
         cry: '😭',
         disappointed: '😞',
@@ -185,8 +199,8 @@ function enableTableRenderer()
         bored: '😒',
         frustrated: '😤',
         confused: '😕',
-        
-        
+
+
         // reactions
         surprised: '😮',
         shocked: '😲',
@@ -194,31 +208,31 @@ function enableTableRenderer()
         facepalm: '🤦',
         shrug: '🤷',
         eyeRoll: '🙄',
-        
-        
+
+
         // social / playful
         wink: '😉',
         kiss: '😘',
         hug: '🤗',
         teasing: '😜',
         silly: '🤪',
-        
-        
+
+
         // approval / disapproval
         ok: '👌',
         thumbsUp: '👍',
         thumbsDown: '👎',
         clap: '👏',
         respect: '🫡',
-        
-        
+
+
         // status / misc
         fire: '🔥',
         star: '⭐',
         check: '✅',
         cross: '❌',
         warning: '⚠️',
-        };
+      };
       const key = v.toString().toLowerCase();
       return map[key] || v;
     },
@@ -228,6 +242,32 @@ function enableTableRenderer()
       if (val === '-') return '🔽';
       if (val === '=') return '➡️';
       return val;
+    },
+    gauge: v => {
+      const a = 0;
+      const b = 100;
+      const val = parseInt(v, 10);
+      if (isNaN(val)) {
+        return v;
+      }
+      const clampedValue = Math.max(a, Math.min(val, b));
+      const percentage = (clampedValue - a) / (b - a);
+      const filled = Math.floor(percentage * 10);
+      const empty = 10 - filled;
+      return `[${'█'.repeat(filled)}${'░'.repeat(empty)}]`;
+    },
+    posneg: v => {
+      if (isNaN(v)) {
+        return v; // Return original value if not a number
+      }
+      const val = parseInt(v, 10);
+      if (val < 0) {
+        return "🟥".repeat(Math.abs(val));
+      } else if (val > 0) {
+        return "🟩".repeat(Math.abs(val));
+      } else {
+        return "⬜"; // Neutral
+      }
     },
   };
 
@@ -246,7 +286,7 @@ function enableTableRenderer()
       for (const tag of tags) {
         const name =
           tag.dataset?.tagName ||
-          tag.textContent?.replace('#','');
+          tag.textContent?.replace('#', '');
         if (formatters[name]) {
           formats[idx] = name;
           tag.style.display = 'none';
@@ -288,7 +328,7 @@ function enableTableRenderer()
   /* ---------------- OBSERVER ---------------- */
 
   const observer = new MutationObserver(scan);
-  observer.observe(document.body, { childList:true, subtree:true });
+  observer.observe(document.body, { childList: true, subtree: true });
 
   scan();
 
@@ -307,7 +347,7 @@ function enableTableRenderer()
     window.removeEventListener('sb-table-renderer-unload', cln);
   });
 
-})();
+})()
   ]]
 
   js.window.document.body.appendChild(scriptEl)
@@ -339,10 +379,10 @@ end
 
 ## Changelog
 
-* 2026-01-24:
-  * feat: convert to space-lua
-  * feat: add renderers (mood, emoj)
-* 2026-01-02 feat: add kg, km, watt, histo
+- 2026-01-24:
+    - feat: convert to space-lua
+    - feat: add renderers (mood, emoj)
+- 2026-01-02 feat: add kg, km, watt, histo
 
 ## Community
 

@@ -21,19 +21,19 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Mdtablerender](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md) - Automatically formats Markdown table cells based on hashtag column tags. - (2026-01-25)
 - [Mdtablesheet](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md) - Integrate FormulaJS in markdown table (table = sheet). - (2026-01-25)
 - [Organization Chart](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md) - Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart. - (2025-11-20)
-- [Organization Company](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md) - Organization Company card template.
-- [Organization Employee](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md)
-- [Organization Vcfexport](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md)
-- [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md)
+- [Organization Company](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md) - Organization Company card template. - (2025-11-20)
+- [Organization Employee](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md) - Organization employee template - (2025-11-20)
+- [Organization Vcfexport](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md) - Generate VCF of company's employees. - (2025-11-20)
+- [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md) - Replace Placeholders with specific values - (2026-01-02)
 - [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Risk audit  (scripts analyzor) - (2026-01-25)
 - [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga project management tool - (2026-01-24)
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity - (2026-01-24)
 - [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2026-01-25)
-- [Debugger](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Debugger.md) - Tooling to debug (linter, postion, beautify) - (2026-01-25)
-- [Luacheck](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md) - Lua linter. - (2026-01-24)
-- [Utilitycode](https://github.com/malys/silverbullet-libraries/blob/main/src/UtilityCode.md) - Quickly insert utility code. - (2026-01-13)
-- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2026-01-13)
-- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - DEPRECATED universal palette (as VScode Palette), use '>' to execute commands - (2026-01-02)
+- [Debugger](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Debugger.md) - Tooling to debug (linter, postion, beautify)
+- [Luacheck](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md)
+- [Utilitycode](https://github.com/malys/silverbullet-libraries/blob/main/src/UtilityCode.md)
+- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md)
+- [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md)
 
 ## 🛠️ Installation
 1. Navigate to your `Library Manager` inside Silverbullet

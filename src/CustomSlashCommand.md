@@ -41,3 +41,76 @@ slashcommand.define {
   end
 }
 ```
+
+# Mood
+
+```space-lua
+slashCommand.define {  
+  name = "mood",  
+  description = "Insert daily health tracking",  
+  run = function()  
+    -- Collect inputs using dropdown dialogs  
+    local night = editor.filterBox("Night", {  
+      {name = "1 ⭐", value = "1"},  
+      {name = "2 ⭐⭐", value = "2"},   
+      {name = "3 ⭐⭐⭐", value = "3"},  
+      {name = "4 ⭐⭐⭐⭐", value = "4"},  
+      {name = "5 ⭐⭐⭐⭐⭐", value = "5"}  
+    })  
+      
+    local mMood = editor.filterBox("Morning mood", {  
+      {name = "1 😞", value = "1"},  
+      {name = "2 😐", value = "2"},  
+      {name = "3 🙂", value = "3"},   
+      {name = "4 😊", value = "4"},  
+      {name = "5 🤗", value = "5"}  
+    })  
+      
+    local eMood = editor.filterBox("Night mood", {  
+      {name = "1 😞", value = "1"},  
+      {name = "2 😐", value = "2"},  
+      {name = "3 🙂", value = "3"},  
+      {name = "4 😊", value = "4"},   
+      {name = "5 🤗", value = "5"}  
+    })  
+      
+    local recover = editor.filterBox("Recover", {  
+      {name = "-2 ⭐", value = "1"},  
+      {name = "-1 ⭐⭐", value = "2"},  
+      {name = "= ⭐⭐⭐", value = "3"},  
+      {name = "+1 ⭐⭐⭐⭐", value = "4"},  
+      {name = "+2 ⭐⭐⭐⭐⭐", value = "5"}  
+    })  
+      
+    local crash = editor.confirm("Crash today?")  
+    local comments = editor.prompt("Comment:")  
+      
+    -- Build template with collected values  
+    local template = string.format("| %s | %s    | %s           | %s                | %s                 | %s                   | %s              | %s                          |\n",  
+      os.date("%Y-%m-%d"),  
+      os.date("%a", os.time()):sub(1,2):upper(),  
+      night and night.value or "3",  
+      mMood and mMood.value or "3",  
+      eMood and eMood.value or "3",   
+      recover and recover.value or "3",  
+      crash and "0" or "1",  
+      comments or ""  
+    )  
+    editor.insertAtCursor(template)  
+  end  
+}
+```
+## Bash code
+
+```space-lua
+slashcommand.define {
+  name = "bash",
+  description="bash code",
+  run = function()
+tpl=[[```bash
+#|^|
+```]]
+  editor.insertAtCursor(tpl, false, true)
+  end
+}
+```
