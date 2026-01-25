@@ -34,10 +34,10 @@ uri: https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPositio
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md
 description: "Generate and copy links to specific cursor positions and headers in markdown documents"
 ---
-name: "Embededitor"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/EmbedEditor.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/EmbedEditor.md
-description: "Insert Iframe with editors."
+name: "Customslashcommand"
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/CustomSlashCommand.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/CustomSlashCommand.md
+description: "custom slash commands."
 ---
 name: "Externaltransclusion"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md
