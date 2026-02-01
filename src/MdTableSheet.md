@@ -912,6 +912,86 @@ command.define {
   end  
 }  
 
+local function extractTagsAndTitle(str)
+    local tags = {}
+    local words = {}
+    local tab=string.split(str, " ")
+    for _,w in ipairs(tab) do
+        local word=string.trim(w)
+        if word:sub(1,1) == "#" and #word > 1 then
+            -- remove leading # using gsub
+            local tag = string.gsub(word, "^#", "")
+            table.insert(tags, tag)
+        else
+            table.insert(words, word)
+        end
+    end
+    local title = table.concat(words, " ")
+    return { tags = tags, title = title }
+end
+
+local function getTableColumnHeader()
+  local text = editor.getText()
+  local lines = string.split(text, "\n")
+  local cursorPos = editor.getCursor()
+  local coordonates = mls.positionToLineColumn(text, cursorPos)
+  local lineIndex = coordonates.line
+  local charColumn = coordonates.column
+  local currentLine = lines[lineIndex]
+
+  -- 1. Character column -> table column
+  local tableColumn = 0
+  for i = 1, charColumn do
+    if string.sub(currentLine, i, i) == "|" then
+      tableColumn = tableColumn + 1
+    end
+  end
+  tableColumn = math.max(tableColumn, 1)
+
+  -- 2. Find header line
+  local headerLineIndex = nil
+  for i = lineIndex - 1, 1, -1 do
+    local line = string.trim(lines[i])
+    local nextLine = string.trim(lines[i + 1] or "")
+    local startT,endT=string.find(nextLine, "-%-%-")
+    if string.startsWith(line, "|")
+       and string.startsWith(nextLine, "|")
+       and startT ~= nil and endT ~= nil  then
+      headerLineIndex = i
+      break
+    end
+  end
+  if not headerLineIndex then
+    return nil
+  end
+
+  -- 3. Extract header cells
+  local headerLine = lines[headerLineIndex]
+  local rawCells = string.split(headerLine, "|")
+  return rawCells[tableColumn+1]
+end
+
+function mls.table.insertValue()
+  local header=getTableColumnHeader()  
+  local data=extractTagsAndTitle(header)
+
+  if #data.tags>0 and mls.table.render then 
+    local result=mls.table.render(data.title, data.tags)
+    if result ~= nil then
+     editor.insertAtCursor(result)
+     return 
+    end
+  end
+  editor.flashNotification("No renderer defined","error")
+end
+
+command.define {  
+  name = "Table: Insert  value",  
+  key = "Alt-/",  
+  run = function()  
+    mls.table.insertValue()
+  end  
+}
 
 -- =========================
 -- Main functions 
@@ -1089,7 +1169,9 @@ end}
 
 ## Changelog
 
-* 2026-01-02 fix: call functions with many arguments 
+* 2026-02-01:
+  * feat: command (alt+/) to insert formated data
+*  2026-01-02 fix: call functions with many arguments 
 
 ## Community
 

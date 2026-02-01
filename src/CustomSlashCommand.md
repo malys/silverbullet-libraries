@@ -50,38 +50,11 @@ slashCommand.define {
   description = "Insert daily health tracking",  
   run = function()  
     -- Collect inputs using dropdown dialogs  
-    local night = editor.filterBox("Night", {  
-      {name = "1 ⭐", value = "1"},  
-      {name = "2 ⭐⭐", value = "2"},   
-      {name = "3 ⭐⭐⭐", value = "3"},  
-      {name = "4 ⭐⭐⭐⭐", value = "4"},  
-      {name = "5 ⭐⭐⭐⭐⭐", value = "5"}  
-    })  
-      
-    local mMood = editor.filterBox("Morning mood", {  
-      {name = "1 😞", value = "1"},  
-      {name = "2 😐", value = "2"},  
-      {name = "3 🙂", value = "3"},   
-      {name = "4 😊", value = "4"},  
-      {name = "5 🤗", value = "5"}  
-    })  
-      
-    local eMood = editor.filterBox("Night mood", {  
-      {name = "1 😞", value = "1"},  
-      {name = "2 😐", value = "2"},  
-      {name = "3 🙂", value = "3"},  
-      {name = "4 😊", value = "4"},   
-      {name = "5 🤗", value = "5"}  
-    })  
-      
-    local recover = editor.filterBox("Recover", {  
-      {name = "-2 ⭐", value = "1"},  
-      {name = "-1 ⭐⭐", value = "2"},  
-      {name = "= ⭐⭐⭐", value = "3"},  
-      {name = "+1 ⭐⭐⭐⭐", value = "4"},  
-      {name = "+2 ⭐⭐⭐⭐⭐", value = "5"}  
-    })  
-      
+    local night =mls.table.render("Night","evaluation")  
+    local mMood = mls.table.render("Morning mood", "mood")  
+    local eMood = mls.table.render("Night mood","mood")  
+    local recover = mls.table.render("Recover","posneg")    
+
     local crash = editor.confirm("Crash today?")  
     local comments = editor.prompt("Comment:")  
       
