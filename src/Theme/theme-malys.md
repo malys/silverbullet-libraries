@@ -26,10 +26,14 @@ Dark theme thought for readability and productivity.
 
 ```space-style
 html {
-  --ui-font: firacode-nf, sans-serif !important;
-  --editor-font: firacode-nf  , sans-serif !important;
-  --editor-width: 99.9% !important;
-  line-height: 1 !important;
+  --ui-font: firacode-nf, monospace !important;
+  --editor-font: firacode-nf, monospace !important;
+  --editor-width: 100% !important;
+
+  line-height: 1.4 !important;
+
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0;
 }
 
 .markmap {
