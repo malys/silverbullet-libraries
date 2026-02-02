@@ -20,7 +20,7 @@ run = "sleep 7 && git pull&& git add . && git commit -m 'update' && git push"
 
 # Generate both README and index in one command
 [tasks.gen-all]
-run = "python scripts/generate_files.py --readme --index"
+run = "sleep 3 && python scripts/generate_files.py --readme --index"
 
 # Run sync, generate all files, and commit changes
 [tasks.publish]
