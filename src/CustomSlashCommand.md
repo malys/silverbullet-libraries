@@ -65,7 +65,7 @@ slashCommand.define {
       night and night.value or "3",  
       mMood and mMood.value or "3",  
       eMood and eMood.value or "3",   
-      recover and recover.value or "3",  
+      recover and recover.value or "0",  
       crash and "0" or "1",  
       comments or ""  
     )  

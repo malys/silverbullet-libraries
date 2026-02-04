@@ -913,6 +913,7 @@ command.define {
 }  
 
 local function extractTagsAndTitle(str)
+    str = str or ""
     local tags = {}
     local words = {}
     local tab=string.split(str, " ")

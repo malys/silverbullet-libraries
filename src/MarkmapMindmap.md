@@ -45,52 +45,64 @@ config.set("markmap.source ","xxxx")
 ## Code
 
 ```space-lua
-local is_panel_visible = false
-local current_panel_id = config.get("markmap.panelPosition") or "rhs"
--- Function to render Marp slides
-local function render(mode)  
-    local source=config.get("markmap.source") or "Library/Malys/MarkmapMindmap"
-    local panelSize=config.get("markmap.panelSize") or 4
-    if library~=nil and (mls == nil or (mls ~=nil and mls.debug == nil)) then 
-      library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
-      editor.flashNotification("'Utilities' has been installed", "Info")
-    end
-    if (not is_panel_visible and mode) or (not mode and is_panel_visible) then
-      -- Get the current page content
-      local page_content = editor.getText()
-      --  mls.debug("page_content: "..page_content)
-      local contentBase64=encoding.base64Encode(page_content)
-      local content1= mls.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
-      local js = mls.getCodeBlock(source,"jsInject","@CONTENT@",content1)      
-      local panel_html= mls.getCodeBlock(source,"template")
-      
-      editor.showPanel(current_panel_id,panelSize,  panel_html, js)
-      is_panel_visible = true
-    else
-        -- Hide the panel if it's visible
-        editor.hidePanel(current_panel_id)
-        is_panel_visible = false
-    end
+local source=config.get("markmap.source") or "Library/Malys/MarkmapMindmap"
+local panelSize=config.get("markmap.panelSize") or 4
+
+if library~=nil and (mls == nil or (mls ~=nil and mls.debug == nil)) then 
+  library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
+  editor.flashNotification("'Utilities' has been installed", "Info")
 end
+
+local function isVisible()
+  local current_panel_id = config.get("markmap.panelPosition") or "rhs"
+  local iframe = js.window.document.querySelector(".sb-panel."..current_panel_id..".is-expanded iframe")  
+  if iframe and iframe.contentDocument then  
+    local el = iframe.contentDocument.getElementById("mindmap")  
+    if el then  
+      return true
+    end
+    return false
+  end
+end
+
+local function show()
+  local page_content = editor.getText()
+  local contentBase64=encoding.base64Encode(page_content)
+  local content1= mls.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
+  local js = mls.getCodeBlock(source,"jsInject","@CONTENT@",content1)      
+  local panel_html= mls.getCodeBlock(source,"template")
+  local current_panel_id = config.get("markmap.panelPosition") or "rhs"
+  editor.showPanel(current_panel_id,panelSize,  panel_html, js)
+end
+
+local function hide()
+  local current_panel_id = config.get("markmap.panelPosition") or "rhs"
+  editor.hidePanel(current_panel_id) 
+end
+
+local update = function(mode)  
+  if ((not isVisible() and mode) or (not mode and isVisible())) then
+    show()
+  else
+    hide()
+  end
+end  
 
 -- Define the command
 command.define({
     name = "Markmap: Toggle preview",
     description = "Toggle Marp slides render in a panel",
     run = function(e)
-      render(true)
+      update(true)
     end
 })
-
--- Listen for page modifications
 event.listen({
     name = "editor:pageSaved",
     run = function(e)
-      render(false)
+      update(false)
     end
 })
 ```
-
 
 ## JS templates
 ```js jsInject
@@ -127,10 +139,16 @@ const transformer = new Transformer();
 const { root } = transformer.transform(b64DecodeUnicode("@CONTENT@"));
 
 const svg = document.getElementById("mindmap");
+const base = deriveOptions(null) || {};
+const options = {
+  ...base,
+  duration: 0,
+  autoFit: false
+};
 svg.innerHTML = "";
 window.mm = Markmap.create(
   "svg#mindmap",
-  deriveOptions(null),
+  options,
   root
 );
 
@@ -337,3 +355,4 @@ window.addEventListener("beforeprint", () => {
 ## Community
 
 [Silverbullet forum]([https://community.silverbullet.md/t/space-lua-addon-with-missing-git-commands-history-diff-restore/3539](https://community.silverbullet.md/t/mindmap-with-markmap-js/1556))
+

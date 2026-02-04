@@ -5,7 +5,7 @@ name: "Library/Malys/MarpSlides"
 tags: meta/library
 ---
 # Marp slides
- 
+
 This library provides a way to preview your [Marp](https://marp.app/) slides in a panel while you are editing your space.
 
 With Marp Preview, you can:
@@ -43,57 +43,66 @@ config.set("marp.source","xxxx")
 ## Code
 
 ```space-lua
-local is_panel_visible = false
-local current_panel_id = "rhs"
--- Function to render Marp slides
-local function render_marp_slides(mode)
-    local source=config.get("marp.source")
-    if source == nil then
-      source="Library/Malys/MarpSlides"
-    end
-    if library~=nil and (mls == nil or (mls ~=nil and mls.debug == nil)) then
-      library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
-      editor.flashNotification("'Utilities' has been installed", "Info")
-    end
-    mls.debug(mode)
-    if (not is_panel_visible and mode) or (not mode and is_panel_visible) then
-      -- Get the current page content
-      local page_content = editor.getText()
-      --  mls.debug("page_content: "..page_content)
-      local panel_html =  '<div id="render" style="flex: 1; overflow-y: auto"></div>'
-      local contentBase64=encoding.base64Encode(page_content)
-      local content0= string.gsub( mls.getCodeBlock(source,"template")," `"," \\`")
-      local content1= mls.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
-      local content2=string.gsub(content1,"@TEMPLATE@",encoding.base64Encode(content0))
-      local marp_js = mls.getCodeBlock(source,"jsInject","@CONTENT@",content2)
-        mls.debug(marp_js)
-      editor.showPanel(current_panel_id,2,  panel_html, marp_js)
-      is_panel_visible = true
-    else
-        -- Hide the panel if it's visible
-        editor.hidePanel(current_panel_id)
-        is_panel_visible = false
-    end
+local source=config.get("markslides.source") or "Library/Malys/MarpSlides"
+local panelSize=config.get("markmap.panelSize") or 2
+
+if library~=nil and (mls == nil or (mls ~=nil and mls.debug == nil)) then 
+  library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
+  editor.flashNotification("'Utilities' has been installed", "Info")
 end
 
--- Define the command
+local function isVisible()
+  local current_panel_id = config.get("markslides.panelPosition") or "rhs"
+  local iframe = js.window.document.querySelector(".sb-panel."..current_panel_id..".is-expanded iframe")  
+  if iframe and iframe.contentDocument then  
+    local el = iframe.contentDocument.getElementById("render_marp_slides")    
+    if el then  
+      return true
+    end
+  end
+  return false
+end
+
+local function show()
+  local page_content = editor.getText()
+  local panel_html =  '<div id="render_marp_slides" style="flex: 1; overflow-y: auto"></div>'
+  local contentBase64=encoding.base64Encode(page_content)
+  local content0= string.gsub( mls.getCodeBlock(source,"template")," `"," \\`")
+  local content1= mls.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
+  local content2=string.gsub(content1,"@TEMPLATE@",encoding.base64Encode(content0))
+  local js = mls.getCodeBlock(source,"jsInject","@CONTENT@",content2)
+  local current_panel_id = config.get("markmap.panelPosition") or "rhs"
+  editor.showPanel(current_panel_id,2,  panel_html, js)
+end
+
+local function hide()
+  local current_panel_id = config.get("marpslides.panelPosition") or "rhs"
+  editor.hidePanel(current_panel_id) 
+end
+
+local update = function(mode)  
+  if (not isVisible() and mode) or (not mode and isVisible()) then
+    show()
+  else
+    hide()
+  end
+end  
+
+-- Define the command 
 command.define({
     name = "Marp: Toggle preview",
     description = "Toggle Marp slides render in a panel",
     run = function(e)
-      render_marp_slides(true)
+      update(true)
     end
 })
-
--- Listen for page modifications
 event.listen({
     name = "editor:pageSaved",
     run = function(e)
-      render_marp_slides(false)
+      update(false)
     end
 })
 ```
-
 
 ## Marp JS templates
 
@@ -153,7 +162,7 @@ setTimeout(() => {
     setTimeout(() => URL.revokeObjectURL(downloadUrl), 3000);
   });
 } ,1000) 
-render.innerHTML = \`<button  id="marp-export">Export</button>\${html}<style>\${css}</style>\`;     
+render_marp_slides.innerHTML = \`<button  id="marp-export">Export</button>\${html}<style>\${css}</style>\`;     
 ```
 
 

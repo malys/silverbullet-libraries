@@ -603,7 +603,7 @@ mls.table.renderer = {
 			},
 			{
 				name = "0 ⬜",
-				value = "2"
+				value = "0"
 			},
 			{
 				name = "1 🟩",

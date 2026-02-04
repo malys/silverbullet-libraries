@@ -76,9 +76,9 @@ vikunja.get = function (criteria)
 		c = "done=false"
 	end
 	local token = config.get("vikunja").token
-	local apiUrl = (vikunja.baseUrl .. "api/v1/tasks/all?filter=" .. c)
+	local apiUrl = (vikunja.baseUrl .. "api/v1/tasks?filter=" .. c)
     
-    local result = mls.cache.ttl.CacheManager.get("VKJ_" .. c)
+    local result =mls.cache.ttl.CacheManager.get("VKJ_" .. c)
 	if result == nil then
 		local response = http.request(
       apiUrl, {
@@ -144,7 +144,9 @@ end
 * reactions
 * created_by
 
+## Changelog
 
+* 2026-02-04: compatibility with 1.0.0
 ## Community
 
 [Silverbullet forum](https://community.silverbullet.md/t/pull-in-vikunja-tasks/3324)
