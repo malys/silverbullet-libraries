@@ -81,12 +81,15 @@ local function hide()
 end
 
 local update = function(mode)  
-  if ((not isVisible() and mode) or (not mode and isVisible())) then
+  local isVisibleT=isVisible()
+  if (not isVisibleT and mode) or (not mode and isVisibleT) then
     show()
   else
-    hide()
+    if isVisibleT then 
+      hide()
+    end  
   end
-end  
+end   
 
 -- Define the command
 command.define({
@@ -171,7 +174,6 @@ window.addEventListener("beforeprint", () => {
   window.mm?.fit();
 });
 ```
-
 
 ## HTML template
 
@@ -349,6 +351,7 @@ window.addEventListener("beforeprint", () => {
 
 ## Changelog
 
+* 2026-02-04: fix: panel management
 * 2026-01-13: fix: multiple SVG visible on refresh
 * 2025-12-01 fix: html duplicate inserts
 

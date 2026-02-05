@@ -81,10 +81,13 @@ local function hide()
 end
 
 local update = function(mode)  
-  if (not isVisible() and mode) or (not mode and isVisible()) then
+  local isVisibleT=isVisible()
+  if (not isVisibleT and mode) or (not mode and isVisibleT) then
     show()
   else
-    hide()
+    if isVisibleT then 
+      hide()
+    end  
   end
 end  
 
@@ -188,6 +191,7 @@ render_marp_slides.innerHTML = \`<button  id="marp-export">Export</button>\${htm
 
 ## Changelog
 
+* 2026-02-04: fix: panel management
 * 2025-11-01 feat: add export
 
 ## Community
