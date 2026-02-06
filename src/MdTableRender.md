@@ -217,11 +217,11 @@ mls.table.renderer = {
 		completion = {
 			{
 				name = "❌",
-				value = "false"
+				value = "0"
 			},
 			{
 				name = "✅",
-				value = "true"
+				value = "1"
 			},
 		},
 		visual = [[
@@ -269,7 +269,7 @@ mls.table.renderer = {
            + '🤍'.repeat(5 - Math.max(0, Math.min(n, 5)));
     ]],
 		validation = function(v)
-			return isBetween(v, 1, 5)
+			return isBetween(v, 0, 5)
 		end
 	},
 	histo = {
@@ -729,6 +729,7 @@ mls.table.renderer = {
 -- Dispatcher
 ------------------------------------------------
 mls.table.render = function(label, rendererN)
+    local value=""
 	local rendererName = rendererN
 	if (type(rendererN) == "table") then
 		for _, tag in ipairs(rendererN) do
@@ -737,26 +738,31 @@ mls.table.render = function(label, rendererN)
 			end
 		end
 	end
-	if label and rendererName and mls.table.renderer[rendererName] then
-		local renderer = mls.table.renderer[rendererName]
-		local input
-		if renderer.completion and # renderer.completion > 0 then
-			input = editor.filterBox(label, renderer.completion)
-		else
-			input = editor.prompt(label)
+  
+    if not label and not rendererName then 
+      editor.flashNotification("Missing renderer: " .. tostring(rendererName), "error")
+	elseif label then
+        local input=""
+        rendererName= rendererName or ""
+        local renderer = mls.table.renderer[rendererName]
+        if renderer then
+    		if renderer.completion and # renderer.completion > 0 then
+    			input = editor.filterBox(label, renderer.completion)
+    		else
+              input = editor.prompt(label)	
+            end
+        else
+          input = editor.prompt(label)	
 		end
-		local value = input
+		value = input
 		if input and input.value then
 			value = input.value
 		end
-		if renderer.validation(value) then
-			return value
-		else
-			editor.flashNotification("Input not valid: " .. tostring(input), "error")
-		end
-	else
-		editor.flashNotification("Missing renderer: " .. tostring(rendererName), "error")
+		if renderer and renderer.validation and not renderer.validation(value) then
+			editor.flashNotification("Input not valid: " .. tostring(label).."/"..value, "error")
+		end    
 	end
+    return value
 end
 
 ------------------------------------------------
@@ -912,6 +918,10 @@ end
 ```
 
 ## Changelog
+- 2026-02-06:
+  - fix: evaluation renderer [0-5] instead [1-5]
+  - fix: render function
+  - fix: “logical” return [0,1]
 - 2026-02-01
   - feat: define renderers in lua
   - feat: add validation mechanism
@@ -924,4 +934,3 @@ end
 ## Community
 
 [Silverbullet forum](https://community.silverbullet.md/t/md-table-renderers/3545/15)
-

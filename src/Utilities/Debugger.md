@@ -377,13 +377,21 @@ slashcommand.define{
 		editor.insertAtCursor('${mls.debugger("position",' .. result .. ')}\n', false, true)
 	end
 }
--- Lint panel
-local is_panel_visible = false
-local current_panel_id = "rhs"
 
--- Function to render code with lint info
-local function render_code_lint_panel(force)
-    -- Get editor text
+local function isVisible()
+  local current_panel_id ="rhs"
+  local iframe = js.window.document.querySelector(".sb-panel."..current_panel_id..".is-expanded iframe")  
+  if iframe and iframe.contentDocument then  
+    local el = iframe.contentDocument.getElementById("linter-view")    
+    if el then  
+      return true
+    end
+  end
+  return false
+end
+
+local function show()
+    local current_panel_id ="rhs"
 	local code = mls.getDebugCode()
 	if code ~= "Not found" and code ~= nil then
 		local lines = string.split(code, "\n")
@@ -413,29 +421,50 @@ local function render_code_lint_panel(force)
 			cleanLine = cleanLine:gsub("'", "&#39;");
 			table.insert(html_lines, string.format('<span style="color:#ccc"><span style="color:#888">%3d │ </span>%s</span>', i, cleanLine))
 		end
-		local panel_html = string.format('<pre style="font-family: monospace; font-size: 14px; color: #ccc;  padding: 12px;margin: 0; overflow-x: auto; line-height: 1.4em;">%s</pre>', table.concat(html_lines, "\n"))
-
-		if not is_panel_visible or force then
-			editor.showPanel(current_panel_id, 2, panel_html, "")
-			is_panel_visible = true
-		else
-			editor.hidePanel(current_panel_id)
-			is_panel_visible = false
-          
-		end
+		local panel_html = string.format('<pre id="linter-view" style="font-family: monospace; font-size: 14px; color: #ccc;  padding: 12px;margin: 0; overflow-x: auto; line-height: 1.4em;">%s</pre>', table.concat(html_lines, "\n"))
+        editor.showPanel(current_panel_id,2, panel_html, "")
 	else
 		editor.flashNotification("Code not found", "error")
-	end      
+	end 
 end
+
+local function hide()
+  local current_panel_id ="rhs"
+  editor.hidePanel(current_panel_id) 
+end
+
+local update = function(mode)  
+  local isVisibleT=isVisible()
+  if (not isVisibleT and mode) or (not mode and isVisibleT) then
+    show()
+  else
+    if isVisibleT then 
+      hide()
+    end  
+  end
+end 
 
 -- Define the command
 command.define({
 	name = "Linter: Toggle panel",
 	description = "Show code with lint info on the right",
 	run = function()
-		render_code_lint_panel(false)
+		update(true)
 	end
 })
+event.listen({
+	name = "editor:pageSaved",
+	run = function()
+		update(false)
+	end
+})
+event.listen({
+	name = "editor:pageLoaded",
+	run = function()
+		update(false)
+	end
+})
+
 
 command.define({
 	name = "Beautify: to clipboard",
@@ -444,30 +473,13 @@ command.define({
 		mls.debugger("beautify")
 	end
 })
-
--- Optional: Update panel on save
-event.listen({
-	name = "editor:pageSaved",
-	run = function()
-		if is_panel_visible then
-			render_code_lint_panel(true)
-		end
-	end
-})
-
-event.listen({
-	name = "editor:pageLoaded",
-	run = function()
-		if is_panel_visible then
-			render_code_lint_panel(true)
-		end
-	end
-})
 ```
 
 
 ## Changelog
 
+* 2026-02-06:
+  * chore: apply panel mechanism
 * 2026-01-23
   * feat: not write temp file anymore => performance increased
   * feat: trigger on `pageLoaded`

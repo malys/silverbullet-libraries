@@ -53,26 +53,28 @@ slashCommand.define {
     local night =mls.table.render("Night","evaluation")  
     local mMood = mls.table.render("Morning mood", "mood")  
     local eMood = mls.table.render("Night mood","mood")  
-    local recover = mls.table.render("Recover","posneg")    
-
-    local crash = editor.confirm("Crash today?")  
-    local comments = editor.prompt("Comment:")  
+    local recover = mls.table.render("Recover","posneg")
+    local pacing =  mls.table.render("Pacing","logical")  
+    local crash =  mls.table.render("Crash","logical")  
+    local comments =mls.table.render("Comment")  
       
     -- Build template with collected values  
-    local template = string.format("| %s | %s    | %s           | %s                | %s                 | %s                   | %s              | %s                          |\n",  
+    local template = string.format("| %s | %s    | %s           | %s                | %s                 | %s                   | %s             | %s              | %s                          |\n",  
       os.date("%Y-%m-%d"),  
       os.date("%a", os.time()):sub(1,2):upper(),  
-      night and night.value or "3",  
-      mMood and mMood.value or "3",  
-      eMood and eMood.value or "3",   
-      recover and recover.value or "0",  
-      crash and "0" or "1",  
+      night or "3",  
+      mMood or "3",  
+      eMood  or "3",   
+      recover or "0",  
+      pacing or "1",  
+      crash or "1",  
       comments or ""  
     )  
     editor.insertAtCursor(template)  
   end  
 }
 ```
+
 ## Bash code
 
 ```space-lua

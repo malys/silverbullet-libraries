@@ -40,6 +40,7 @@ mls.cache.ttl.CacheManager.size()
 
 
 ```space-lua
+-- luacheck: globals cache jsCache
 -- priority: 15
 -- Global namespace
 mls = mls or {}
@@ -72,17 +73,17 @@ function mls.cache.ttl.new(opts)
   end
 
   -- set
-  function cache.set(key, value, opts)
+  function cache.set(key, value, opti)
     log("set")
-    opts = opts or {}
-    return jsCache.set(key, value, opts)
+    opti = opti or {}
+    return jsCache.set(key, value, opti)
   end
 
   -- get
-  function cache.get(key, opts)
+  function cache.get(key, opti)
     log("get")
-    opts = opts or {}
-    local result= js.tolua(jsCache.get(key, opts))
+    opti = opti or {}
+    local result= js.tolua(jsCache.get(key, opti))
     log(result)
     return result
   end
@@ -165,6 +166,8 @@ mls.cache.ttl.CacheManager=mls.cache.ttl.new({ ttl = 10* 60* 1000, max = 100})
 
 ## Changelog
 
+* 2026-02-06:
+  * fix: linter issue
 * 2026-01-03  wrapper init
 
 ## Community

@@ -60,7 +60,8 @@ mls.cache.lru.CacheManager.load(snapshot)
 
 
 ```space-lua
---priority: 15
+-- luacheck: globals cache jsCache
+-- priority: 15
 -- Global namespace
 mls = mls or {}
 mls.cache = mls.cache or {}
@@ -94,17 +95,17 @@ function mls.cache.lru.new(options)
 	end
 
   -- set
-	function cache.set(key, value, options)
+	function cache.set(key, value, opti)
 		log("set")
-    	local opts = options or {}
-		return jsCache.set(key, value, opts)
+		local optis = opti or {}
+		return jsCache.set(key, value, optis)
 	end
 
   -- get
-	function cache.get(key, options)
+	function cache.get(key, opti)
 		log("get")
-    	local opts = options or {}
-		return js.tolua(jsCache.get(key, opts))
+		local optis = options or {}
+		return js.tolua(jsCache.get(key, optis))
 	end
 
   -- has
@@ -172,82 +173,82 @@ function mls.cache.lru.new(options)
 		end
 		return out
 	end
-	return cache
-end
+
 
   -- peek (no recency update)
-function cache.peek(key)
-	log("peek")
-	return js.tolua(jsCache.peek(key))
-end
+	function cache.peek(key)
+		log("peek")
+		return js.tolua(jsCache.peek(key))
+	end
 
   -- pop (remove least-recently-used)
-function cache.pop()
-	log("pop")
-	return js.tolua(jsCache.pop())
-end
+	function cache.pop()
+		log("pop")
+		return js.tolua(jsCache.pop())
+	end
 
   -- fetch (async-aware JS method, sync wrapper)
-function cache.fetch(key, options)
-	log("fetch")
-	local opts = options or {}
-	return js.tolua(jsCache.fetch(key, js.tojs(opts)))
-end
+	function cache.fetch(key, opti)
+		log("fetch")
+		local optis = opti or {}
+		return js.tolua(jsCache.fetch(key, js.tojs(optis)))
+	end
 
   -- forEach (oldest → newest)
-function cache.forEach(fn)
-	log("forEach")
-	jsCache.forEach(js.new(js.Function, function(value, key)
-		fn(key, js.tolua(value))
-	end))
-end
+	function cache.forEach(fn)
+		log("forEach")
+		jsCache.forEach(js.new(js.Function, function(value, key)
+			fn(key, js.tolua(value))
+		end))
+	end
 
   -- rforEach (newest → oldest)
-function cache.rforEach(fn)
-	log("rforEach")
-	jsCache.rforEach(js.new(js.Function, function(value, key)
-		fn(key, js.tolua(value))
-	end))
-end
+	function cache.rforEach(fn)
+		log("rforEach")
+		jsCache.rforEach(js.new(js.Function, function(value, key)
+			fn(key, js.tolua(value))
+		end))
+	end
 
   -- purge stale entries
-function cache.purgeStale()
-	log("purgeStale")
-	return jsCache.purgeStale()
-end
+	function cache.purgeStale()
+		log("purgeStale")
+		return jsCache.purgeStale()
+	end
 
   -- info about a key
-function cache.info(key)
-	log("info")
-	return js.tolua(jsCache.info(key))
-end
+	function cache.info(key)
+		log("info")
+		return js.tolua(jsCache.info(key))
+	end
 
   -- dump cache (serialization)
-function cache.dump()
-	log("dump")
-	return js.tolua(jsCache.dump())
-end
+	function cache.dump()
+		log("dump")
+		return js.tolua(jsCache.dump())
+	end
 
   -- load cache dump
-function cache.load(entries)
-	log("load")
-	return jsCache.load(js.tojs(entries))
-end
+	function cache.load(entries)
+		log("load")
+		return jsCache.load(js.tojs(entries))
+	end
 
   -- resize cache
-function cache.resize(max)
-	log("resize")
-	return jsCache.resize(max)
-end
+	function cache.resize(max)
+		log("resize")
+		return jsCache.resize(max)
+	end
 
   -- readonly properties
-function cache.max()
-	return js.tolua(jsCache.max)
+	function cache.max()
+		return js.tolua(jsCache.max)
+	end
+	function cache.calculatedSize()
+		return js.tolua(jsCache.calculatedSize)
+	end
+	return cache
 end
-function cache.calculatedSize()
-	return js.tolua(jsCache.calculatedSize)
-end
-
 
 -- Default LRU cache to max 1000
 mls.cache.lru.CacheManager = mls.cache.lru.new({
@@ -257,8 +258,13 @@ mls.cache.lru.CacheManager = mls.cache.lru.new({
 
 ## Changelog
 
+* 2026-02-06:
+  * fix: copy/paste error
+* 2026-02-06:
+  * fix: linter issue
 * 2026-01-03  wrapper init
 
 ## Community
 
 [Silverbullet forum]([https://community.silverbullet.md/t/space-lua-addon-with-missing-git-commands-history-diff-restore/3539](https://community.silverbullet.md/t/mindmap-with-markmap-js/1556))
+
