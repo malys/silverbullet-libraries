@@ -16,6 +16,14 @@ slashcommand.define {
   editor.insertAtCursor(tpl, false, true)
   end
 }
+slashcommand.define {
+  name = "luacheck: globals",
+  description= "insert lua editor",
+  run = function()
+  tpl=[[-- luacheck: globals |^|]]
+  editor.insertAtCursor(tpl, false, true)
+  end
+}
 ```
 ## Plantuml
 ```space-lua

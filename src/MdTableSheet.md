@@ -73,9 +73,40 @@ The `G` local function takes four arguments:
 - `pageName` (optional): The name of the page where the chart should be displayed. If not provided, the current page will be used.
 - `XRange`: The range of cells to use for the X-axis.
 - `YRange`: The range of cells to use for the Y-axis.
-- `options` (optional): An object containing additional options for the chart.
+- `options` (optional): An object containing additional options for the chart. (width, height,serieLabel, options: [chartjs options](https://quickchart.io/documentation))
 
-Here's an example usage: \${G("MyChart", "Page 1", "A1:A5", "B1:B5", { type= "line", w= 400, h= 600, serieLabel= "Series 1" })}
+Here's an example usage: \${G("MyChart", "Page 1", "A1:A5", "B1:B5", { type= "line", w= 400, h= 600, serieLabel= "Series 1", options={
+    spanGaps= false,
+    elements= {
+      line= {
+        tension= 0.000001
+      }
+    }, 
+    scale={
+     gridLines={
+       color= "lightgrey",
+       lineWidth= 0.1
+     },
+     angleLines={
+       color= "lightgrey",
+       lineWidth= 0.1
+     },
+     pointLabels={
+        display= true,
+        fontSize= 10,
+        fontStyle= "normal",
+        fontColor= "lightgrey"
+     },
+      ticks = {
+        showLabelBackdrop=false,
+        padding=10,
+        fontColor= "lightgrey",
+        display = true,
+        min= 0,  
+        max= 10,
+      }
+    }
+  })}
 
 Here's an example chart:
 
@@ -86,9 +117,15 @@ Here's an example chart:
 | 5   | 6   |
 | 7   | 8   |
 | 9   | 10  |
+| 9   | 10  |
 
 ${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=300,height=80})}
-
+${G("2","","A1:A3",{"B4:B6","B1:B3"},{type="line", serieLabel={"A","B"},width=300,height=80})}
+### Supported features
+* single charts
+* series
+* customization with chartjs options
+  
 ## Table inserts
 
 *   **Table: Insert line below** \- Inserts a new line below the current cursor position in a table format, matching the number of pipes ("|") in the current line. (Shortcut: `Alt--`)
@@ -100,6 +137,7 @@ ${G("2","","A1:A3","B1:B3",{type="line", serieLabel="Example",width=300,height=8
 
 
 ```space-lua
+-- luacheck: globals G F 
 -- ---------------------------
 -- SilverBullet Markdown Table + Formulajs evaluator
 -- Use: F(formulajs,label)
@@ -695,7 +733,7 @@ local function validate_series(xValues, yValues)
       message = "yValues must not be empty"
     elseif xLen ~= yLen then
       ok = false
-      message = "xValues and yValues must have the same length"
+      message = "xValues and yValues must have the same length!"
     end
   end
 
@@ -703,8 +741,28 @@ local function validate_series(xValues, yValues)
   return ok, message
 end
 
+local function build_chart_dataset(data, label)
+  return {
+    label = label,
+    data = data,
+    fill = false
+  }
+end
+  
 -- Build the Chart.js config as a Lua table (later converted with js.stringify)
-local function build_chart_config(xValues, yValues, chartType,serieLabel)
+local function build_chart_config(xValues, yValues, chartType,serieLabels,option)
+  local options= option or {
+    responsive=true,
+    legend= {
+        position="right"
+    }
+  }
+  
+  local datasets={}
+  for i,l  in ipairs(serieLabels) do
+    table.insert(datasets,build_chart_dataset(yValues[i],l))
+  end
+  
   log("build_chart_config: start")
 
   local t = chartType
@@ -716,19 +774,9 @@ local function build_chart_config(xValues, yValues, chartType,serieLabel)
     type = t,
     data = {
       labels = xValues,
-      datasets = {
-        {
-          label = serieLabel,
-          data = yValues,
-        },
-      },
+      datasets = datasets
     },
-    options= {
-    responsive=true,
-    legend= {
-      position="right"
-    },
-  }
+    options= options
   }
 
   log("build_chart_config: end")
@@ -774,16 +822,23 @@ end
 -- @param h number
 -- @return string
 ---
-local function getHtml(xValues, yValues, chartType,serieLabel, w, h)
+local function getHtml(xValues, yValues, chartType,serieLabels, w, h, options)
   log("getHtml: start")
 
-  local ok, validationMessage = validate_series(xValues, yValues)
-  if not ok then
-    log("G: invalid data -> returning error html")
-    return validationMessage
+  if #serieLabels~= #yValues and #serieLabels~= #xValues and  #yValues~= #xValues then
+    log("G: number of series not the same")
+    return "Number of series are not the same!"
   end
 
-  local configTable = build_chart_config(xValues, yValues, chartType,serieLabel)
+  for i,x in ipairs(yValues) do
+    local ok, validationMessage = validate_series(xValues, yValues[i])
+    if not ok then
+      log("G: invalid data -> returning error html")
+      return validationMessage
+    end
+  end
+  
+  local configTable = build_chart_config(xValues, yValues, chartType,serieLabels,options)
   local configJson = js.window.encodeURIComponent(js.stringify(js.tojs(configTable)))
   log(configJson)
   local width = w 
@@ -1009,7 +1064,11 @@ command.define {
 ---
 function G(label, pageName, XRange, YRange, options)
   log("G: start")
-
+  local YRanges=YRange
+  if type(YRange) == "string" then
+    YRanges={YRange}
+  end  
+ 
   if not pageName or pageName == "" then
     pageName = editor.getCurrentPage()
   end
@@ -1033,143 +1092,52 @@ function G(label, pageName, XRange, YRange, options)
    return "Missing table"
   end
 
-
   local cellMap = toCellMap(tbl)
-  local xValues = expandSingleRange(XRange, cellMap)
-  local yValues = expandSingleRange(YRange, cellMap)
+  local xValues = XRange
+  if type(XRange) == "string" then
+    xValues = expandSingleRange(XRange, cellMap)
+  end
+  local yValues = table.map(YRanges, function(x)
+    return expandSingleRange(x, cellMap)
+  end) 
 
   local chartType="line"
   local w=400
   local h=600
-  local serieLabel="Series 1"
+  local serieLabels={}
+  for i = 1, #yValues do
+    table.insert(serieLabels, "Series "..tostring(i))
+  end
+  
+  local chartOptions
   if type(options) == "table" then
     chartType = options.chartType or options.type or chartType
     w = options.w or options.width or w
     h = options.h or options.height or h
-    serieLabel = options.serieLabel or serieLabel
+    if options.serieLabel then
+      if type(options.serieLabel) == "table"then
+        serieLabels=options.serieLabel
+      else
+        local seriesL=expandSingleRange(options.serieLabel, cellMap)
+        if #seriesL >0  then
+          serieLabels=seriesL
+        end
+      end
+    end
+    chartOptions = options.options
   end
 
-  local html = getHtml(xValues, yValues, chartType,serieLabel, w, h)
+  local html = getHtml(xValues, yValues, chartType,serieLabels, w, h,chartOptions)
   return widget.htmlBlock(html)
 end
 ```
 
 
-## Disabled features
-```lua
--- =========================
--- Commands (all use correct syntax)
--- =========================
-command.define { name="Table: Move Cell Left",   run=function() moveCell(-1,0) end }
-command.define { name="Table: Move Cell Right", run=function() moveCell(1,0) end }
-command.define { name="Table: Move Cell Up",      run=function() moveCell(0,-1) end }
-command.define { name="Table: Move Cell Down",   run=function() moveCell(0,1) end }
-
-command.define { name="Table: Add Column Right", run=function()
-   withTableEdit(function(lines,s,e) for i=s,e do table.insert(splitRow(lines[i]), "") lines[i]=joinRow(splitRow(lines[i])) end end) -- Use table.insert
-end}
-
-command.define { name="Table: Add Row Bottom", run=function()
-   withTableEdit(function(lines,s,e)
-      local cells = splitRow(lines[e])
-      local newRow = {}
-      for _=1,#cells do table.insert(newRow,"") end -- Use table.insert
-      table.insert(lines,e+1,joinRow(newRow)) -- Use table.insert
-   end)
-end}
-
-command.define { name="Table: Remove Row", run=function()
-   withTableEdit(function(lines,s,e) local cur=editor.getCursor().line; if cur>=s and cur<=e then table.remove(lines,cur) end end) -- Use table.remove
-end}
-
-command.define { name="Table: Remove Column", run=function()
-   withTableEdit(function(lines,s,e)
-      local cur = editor.getCursor()
-      local row = splitRow(lines[cur.line])
-      local colIndex = 1
-      local acc = 0
-      for i, cell in ipairs(row) do acc=acc+string.len(cell)+3 if acc>=cur.ch then colIndex=i break end end -- Use string.len
-      for i=s,e do local cells=splitRow(lines[i]); table.remove(cells,colIndex); lines[i]=joinRow(cells) end -- Use table.remove
-   end)
-end}
-
-command.define { name="Table: Move Row Up", run=function()
-   withTableEdit(function(lines,s,e)
-      local cur=editor.getCursor().line
-      if cur>s then lines[cur],lines[cur-1]=lines[cur-1],lines[cur] end
-   end)
-end}
-
-command.define { name="Table: Move Row Down", run=function()
-   withTableEdit(function(lines,s,e)
-      local cur=editor.getCursor().line
-      if cur<e then lines[cur],lines[cur+1]=lines[cur+1],lines[cur] end
-   end)
-end}
-
-command.define { name="Table: Move Column Left", run=function()
-   withTableEdit(function(lines,s,e)
-      local cur=editor.getCursor().line
-      local row=splitRow(lines[cur])
-      local colIndex=1
-      local acc=0
-      for i,cell in ipairs(row) do acc=acc+string.len(cell)+3 if acc>=editor.getCursor().ch then colIndex=i break end end -- Use string.len
-      if colIndex>1 then for i=s,e do local cells=splitRow(lines[i]); cells[colIndex],cells[colIndex-1]=cells[colIndex-1],cells[colIndex]; lines[i]=joinRow(cells) end end
-   end)
-end}
-
-command.define { name="Table: Move Column Right", run=function()
-   withTableEdit(function(lines,s,e)
-      local cur=editor.getCursor().line
-      local row=splitRow(lines[cur])
-      local colIndex=1
-      local acc=0
-      for i,cell in ipairs(row) do acc=acc+string.len(cell)+3 if acc>=editor.getCursor().ch then colIndex=i break end end -- Use string.len
-      for i=s,e do local cells=splitRow(lines[i]); if colIndex<#cells then cells[colIndex],cells[colIndex+1]=cells[colIndex+1],cells[colIndex] end; lines[i]=joinRow(cells) end
-   end)
-end}
-
-command.define { name="Table: Transpose Rows and Columns", run=function()
-   withTableEdit(function(lines,s,e)
-      local data={}
-      for i=s,e do table.insert(data,splitRow(lines[i])) end -- Use table.insert
-      local transposed={}
-      for c=1,#data[1] do local newRow={} for r=1,#data do table.insert(newRow,data[r][c] or "") end; table.insert(transposed,joinRow(newRow)) end -- Use table.insert
-      for i=0,(e-s) do lines[s+i]=transposed[i+1] or "" end
-   end)
-end}
-
-command.define { name="Table: Sort Column Ascending", run=function()
-   withTableEdit(function(lines,s,e)
-      local header=table.remove(lines,s) -- Use table.remove
-      local rows={}
-      for i=s,e-1 do table.insert(rows,splitRow(lines[i])) end -- Use table.insert
-      local curRow=splitRow(lines[editor.getCursor().line])
-      local colIndex=1; local acc=0
-      for i,cell in ipairs(curRow) do acc=acc+string.len(cell)+3 if acc>=editor.getCursor().ch then colIndex=i break end end -- Use string.len
-      table.sort(rows,function(a,b) return (a[colIndex] or "")<(b[colIndex] or "") end)
-      for i=0,#rows-1 do lines[s+i]=joinRow(rows[i+1]) end
-      table.insert(lines,s,header) -- Use table.insert
-   end)
-end}
-
-command.define { name="Table: Sort Column Descending", run=function()
-   withTableEdit(function(lines,s,e)
-      local header=table.remove(lines,s) -- Use table.remove
-      local rows={}
-      for i=s,e-1 do table.insert(rows,splitRow(lines[i])) end -- Use table.insert
-      local curRow=splitRow(lines[editor.getCursor().line])
-      local colIndex=1; local acc=0
-      for i,cell in ipairs(curRow) do acc=acc+string.len(cell)+3 if acc>=editor.getCursor().ch then colIndex=i break end end -- Use string.len
-      table.sort(rows,function(a,b) return (a[colIndex] or "")>(b[colIndex] or "") end)
-      for i=0,#rows-1 do lines[s+i]=joinRow(rows[i+1]) end
-      table.insert(lines,s,header) -- Use table.insert
-   end)
-end}
-```
-
 ## Changelog
 
+* 2026-02-08:
+  * feat: support of multiple series
+  * feat: support chartjs options
 * 2026-02-01:
   * feat: command (alt+/) to insert formated data
 *  2026-01-02 fix: call functions with many arguments 

@@ -37,6 +37,7 @@ conditions.
 | **#euro**       | Formats number as “12 345 €”                              |
 | **#usd**        | Formats number as “$12,345”                               |
 | **#percent**    | Converts decimal to percentage (0.15 → “15 %”)            |
+| **#percent10**  | Converts [0-10] to percentage (1 → “10 %”)                |
 | **#gauge**      | Graphical percentage representation ███░                  |
 | **#posneg**     | Colored gauge -2 🟥🟥,0 ⬜, +1 🟩                         |
 | **#km**         | Formats number as “12 345 km”                             |
@@ -72,11 +73,12 @@ Just add the renderer as a hashtag tag in your table header:
 
 ![](https://community.silverbullet.md/uploads/default/original/2X/e/e2598b9faf8fb223eb5b68b9d03b0729384c5351.png)
 ![](https://community.silverbullet.md/uploads/default/original/2X/e/ec9b8a44f48b1854b94544da609e24fb1c9bf888.gif)
+
 ## How to
 
 ### Add new renderer
 
-```lua 
+```lua
 mls = mls or {}
 mls.table = mls.table or {}
 mls.table.renderer = mls.table.renderer or {}
@@ -91,7 +93,7 @@ mls.table.renderer["euro"] = {
 				name = "two",
 				value = "2"
 			},
-		}, 
+		},
 		visual = [[isNaN(v) ? v : `${parseFloat(v).toLocaleString()} TEST`]],
 		validation = function(v){
           --...
@@ -99,6 +101,7 @@ mls.table.renderer["euro"] = {
         }
 }
 ```
+
 ## Code
 
 ```space-lua
@@ -173,6 +176,10 @@ mls.table.renderer = {
 	},
 	percent = {
 		visual = [[isNaN(v) ? v : `${(parseFloat(v) * 100).toFixed(0)} %`]],
+		validation = isNumber
+	},
+	percent10 = {
+		visual = [[isNaN(v) ? v : `${(parseFloat(v) * 10).toFixed(0)} %`]],
 		validation = isNumber
 	},
 	int = {
@@ -562,14 +569,14 @@ mls.table.renderer = {
         facepalm: '🤦',
         shrug: '🤷',
         eyeRoll: '🙄',
-    
+
         // social / playful
         wink: '😉',
         kiss: '😘',
         hug: '🤗',
         teasing: '😜',
         silly: '🤪',
-    
+
         // approval / disapproval
         ok: '👌',
         thumbsUp: '👍',
@@ -738,8 +745,8 @@ mls.table.render = function(label, rendererN)
 			end
 		end
 	end
-  
-    if not label and not rendererName then 
+
+    if not label and not rendererName then
       editor.flashNotification("Missing renderer: " .. tostring(rendererName), "error")
 	elseif label then
         local input=""
@@ -749,10 +756,10 @@ mls.table.render = function(label, rendererN)
     		if renderer.completion and # renderer.completion > 0 then
     			input = editor.filterBox(label, renderer.completion)
     		else
-              input = editor.prompt(label)	
+              input = editor.prompt(label)
             end
         else
-          input = editor.prompt(label)	
+          input = editor.prompt(label)
 		end
 		value = input
 		if input and input.value then
@@ -760,7 +767,7 @@ mls.table.render = function(label, rendererN)
 		end
 		if renderer and renderer.validation and not renderer.validation(value) then
 			editor.flashNotification("Input not valid: " .. tostring(label).."/"..value, "error")
-		end    
+		end
 	end
     return value
 end
@@ -918,14 +925,15 @@ end
 ```
 
 ## Changelog
+
 - 2026-02-06:
-  - fix: evaluation renderer [0-5] instead [1-5]
-  - fix: render function
-  - fix: “logical” return [0,1]
+    - fix: evaluation renderer [0-5] instead [1-5]
+    - fix: render function
+    - fix: “logical” return [0,1]
 - 2026-02-01
-  - feat: define renderers in lua
-  - feat: add validation mechanism
-  - feat: add completion mechanism
+    - feat: define renderers in lua
+    - feat: add validation mechanism
+    - feat: add completion mechanism
 - 2026-01-24:
     - feat: convert to space-lua
     - feat: add renderers (mood, emoj)
