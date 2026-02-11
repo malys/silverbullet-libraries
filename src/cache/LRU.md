@@ -1,6 +1,7 @@
 ---
 author: malys
 description:  LRU cache leveraging @isaacs/lrucache
+pageDecoration.prefix: "🛠️ "
 name: "Library/Malys/LRU"
 tags: meta/library
 ---

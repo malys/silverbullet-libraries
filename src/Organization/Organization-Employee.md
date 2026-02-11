@@ -1,4 +1,5 @@
 ---
+pageDecoration.prefix: "🆘 "
 command:  "Employee: New"
 confirmName: true
 openIfExists: true

@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Taiga project management tool
+pageDecoration.prefix: "🛎️ "
 name: "Library/Malys/Taiga"
 tags: meta/library
 ---

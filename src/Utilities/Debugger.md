@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Tooling to debug (linter, postion, beautify)
+pageDecoration.prefix: "🪲 "
 name: "Library/Malys/Debugger"
 tags: meta/library
 ---

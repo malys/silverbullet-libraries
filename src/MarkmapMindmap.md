@@ -1,6 +1,7 @@
 ---
 author: malys
 description:  MarkMap mindmap integration.
+pageDecoration.prefix: "🛎️ "
 name: "Library/Malys/MarkmapMindmap"
 tags: meta/library
 ---

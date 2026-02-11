@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Generate wall of children page tags 
+pageDecoration.prefix: "🛠️ "
 name: "Library/Malys/FastTagExplorer"
 tags: meta/library
 ---

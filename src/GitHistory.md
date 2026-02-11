@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Implement Git commands (log, diff, revert)
+pageDecoration.prefix: "🛠️ "
 name: "Library/Malys/GitHistory"
 tags: meta/library
 ---

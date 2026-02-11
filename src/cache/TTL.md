@@ -1,6 +1,7 @@
 ---
 author: malys
 description:  TTL cache leveraging @isaacs/ttlcache
+pageDecoration.prefix: "🛠️ "
 name: "Library/Malys/TTL"
 tags: meta/library
 ---

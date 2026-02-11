@@ -1,6 +1,7 @@
 ---
 author: malys
 description: DEPRECATED universal palette (as VScode Palette), use '>' to execute commands
+pageDecoration.prefix: "💀 "
 name: "Library/Malys/VSCodePalette"
 tags: meta/library
 ---

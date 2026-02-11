@@ -1,6 +1,7 @@
 ---
 author: malys
 description: List of reusable functions.
+pageDecoration.prefix: "🛠️ "
 name: "Library/Malys/Utilities"
 tags: meta/library
 ---

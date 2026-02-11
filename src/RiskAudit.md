@@ -1,6 +1,7 @@
 ---
 author: malys
 description:  Risk audit  (scripts analyzor)
+pageDecoration.prefix: "👮 "
 name: "Library/Malys/RiskAudit"
 tags: meta/library
 ---

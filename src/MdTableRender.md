@@ -2,6 +2,7 @@
 author: malys
 description: Automatically formats Markdown table cells based on hashtag column tags.
 tags: userscript
+pageDecoration.prefix: "👁️ "
 name: "Library/Malys/MdTableRender"
 ---
 # Md table column rendering

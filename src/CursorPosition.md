@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Generate and copy links to specific cursor positions and headers in markdown documents
+pageDecoration.prefix: "🛠️ "
 name: "Library/Malys/CursorPosition"
 tags: meta/library
 ---

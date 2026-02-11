@@ -1,4 +1,5 @@
 ---
+pageDecoration.prefix: "🆘 "
 command:  "Company: New"
 confirmName: true
 openIfExists: true

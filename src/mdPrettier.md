@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Beautify md file.
+pageDecoration.prefix: "🛎️ "
 name: "Library/Malys/mdPrettier"
 tags: meta/library
 ---

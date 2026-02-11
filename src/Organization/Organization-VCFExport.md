@@ -1,7 +1,7 @@
 ---
 author: malys
 description: Generate VCF of company's employees.
-
+pageDecoration.prefix: "🆘 "
 name: "Library/Malys/Organization-VCFExport"
 tags: meta/library
 ---

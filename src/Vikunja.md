@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Vikunja, open-source project management tool, integration.
+pageDecoration.prefix: "🛎️ "
 name: "Library/Malys/Vikunja"
 tags: meta/library
 ---

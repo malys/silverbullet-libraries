@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Lua linter.
+pageDecoration.prefix: "🪲 "
 name: "Library/Malys/Luacheck"
 tags: meta/library
 ---

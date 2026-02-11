@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Display most commun shortcuts.
+pageDecoration.prefix: "🆘 "
 name: "Library/Malys/HelpShortcuts"
 tags: meta/library
 ---

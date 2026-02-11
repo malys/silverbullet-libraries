@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Transclude data form external resource.
+pageDecoration.prefix: "🛠️ "
 name: "Library/Malys/ExternalTransclusion"
 tags: meta/library
 ---

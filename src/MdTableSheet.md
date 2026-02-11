@@ -1,6 +1,7 @@
 ---
 author: malys
 description:  Integrate FormulaJS in markdown table (table = sheet).
+pageDecoration.prefix: "🛎️ "
 name: "Library/Malys/MdTableSheet"
 tags: meta/library
 ---

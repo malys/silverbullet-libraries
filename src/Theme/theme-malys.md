@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Dark theme thought for readibility and productivity
+pageDecoration.prefix: "👁️ "
 name: "Library/Malys/theme-malys"
 tags: meta/library
 ---

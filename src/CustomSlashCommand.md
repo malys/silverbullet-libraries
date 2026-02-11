@@ -1,6 +1,7 @@
 ---
 author: malys
 description: custom slash commands.
+pageDecoration.prefix: "🆘 "
 name: "Library/Malys/CustomSlashCommand"
 tags: meta/library
 ---
@@ -91,6 +92,38 @@ slashcommand.define {
   description="bash code",
   run = function()
 tpl=[[```bash
+#|^|
+```]]
+  editor.insertAtCursor(tpl, false, true)
+  end
+}
+```
+
+## Utility code template
+
+```space-lua
+slashcommand.define {
+  name = "utility",
+  description="utility code",
+  run = function()
+tpl=[[```space-lua
+--priority: 15     
+--|^|
+```]]
+  editor.insertAtCursor(tpl, false, true)
+  end
+}
+```
+
+## Config code template
+
+```space-lua
+slashcommand.define {
+  name = "config",
+  description="config code",
+  run = function()
+tpl=[[```space-lua
+--priority: 19        
 #|^|
 ```]]
   editor.insertAtCursor(tpl, false, true)

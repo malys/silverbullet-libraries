@@ -1,6 +1,7 @@
 ---
 author: malys
 description: System prompt to pilot LLM in SB plugin coding.
+pageDecoration.prefix: "🆘 "
 name: "Library/Malys/LLMInstructions"
 tags: meta/library
 ---

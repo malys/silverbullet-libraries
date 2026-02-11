@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Generate breadcrumbs for a page
+pageDecoration.prefix: "👁️ "
 name: "Library/Malys/Breadcrumb"
 tags: meta/library
 ---

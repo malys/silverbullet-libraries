@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Organization autocompletion on person @ and company #.
+pageDecoration.prefix: "🆘 "
 name: "Library/Malys/Organization-completion"
 tags: meta/library
 ---

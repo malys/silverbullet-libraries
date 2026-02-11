@@ -1,6 +1,7 @@
 ---
 author: malys
 description: Marp slides integration.
+pageDecoration.prefix: "🛎️ "
 name: "Library/Malys/MarpSlides"
 tags: meta/library
 ---
