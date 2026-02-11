@@ -19,11 +19,6 @@ uri: https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md
 description: "TTL cache leveraging @isaacs/ttlcache"
 ---
-name: "Configcode"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/ConfigCode.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/ConfigCode.md
-description: "Quickly insert config code."
----
 name: "Cursorposition"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md
@@ -143,11 +138,6 @@ name: "Luacheck"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md
 description: "Lua linter."
----
-name: "Utilitycode"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/UtilityCode.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/UtilityCode.md
-description: "Quickly insert utility code."
 ---
 name: "Vikunja"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md

@@ -56,6 +56,40 @@ def get_description(file_path):
         print(f"Warning: Could not read {file_path}: {e}")
     return None
 
+def get_page_decoration_prefix(file_path):
+    """Extract the pageDecoration.prefix from a markdown file's frontmatter."""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            frontmatter_match = re.search(r'^---\n(.*?)\n---', content, re.DOTALL)
+            if frontmatter_match:
+                frontmatter = frontmatter_match.group(1)
+                # Look for pageDecoration.prefix - handle both quoted and unquoted
+                prefix_match = re.search(r'^pageDecoration\.prefix:\s*["\']?(.*?)["\']?\s*$', frontmatter, re.MULTILINE)
+                if prefix_match:
+                    prefix = prefix_match.group(1).strip()
+                    # Ensure prefix ends with space if it's an emoji
+                    if prefix and not prefix.endswith(' ') and any(ord(c) > 127 for c in prefix):
+                        prefix += " "
+                    return prefix
+    except Exception as e:
+        print(f"Warning: Could not read pageDecoration.prefix from {file_path}: {e}")
+    return None
+
+def get_category_name(prefix):
+    """Map pageDecoration.prefix to category name."""
+    category_map = {
+        "🛠️ ": "Tools",
+        "🆘 ": "Helpers", 
+        "🛎️ ": "Services",
+        "👁️ ": "Navigation & Display",
+        "🪲 ": "Debugging",
+        "👮 ": "Security & Audit",
+        "💀 ": "Deprecated",
+        "🦩": "Repository"
+    }
+    return category_map.get(prefix, "Other")
+
 def get_last_commit_date(file_path):
     """Get the last commit date of a file in a human-readable format."""
     try:
@@ -70,7 +104,7 @@ def get_last_commit_date(file_path):
     return None
 
 def generate_readme():
-    """Generate README.md file with library information."""
+    """Generate README.md file with library information categorized by pageDecoration.prefix."""
     # Remove existing README.md if it exists
     readme_path = Path('README.md')
     if readme_path.exists():
@@ -83,6 +117,45 @@ def generate_readme():
     lib_files = get_markdown_files(SOURCE_PATH, ['README.md'])
     lib_files.sort(key=lambda x: str(x).lower())
     
+    # Categorize libraries by their pageDecoration.prefix
+    categories = {}
+    
+    for file in lib_files:
+        rel_path = file.relative_to(f'./{SOURCE_PATH}')
+        if 'template' in str(rel_path).lower():
+            continue
+            
+        prefix = get_page_decoration_prefix(file)
+        category_name = get_category_name(prefix)
+        
+        if category_name not in categories:
+            categories[category_name] = {
+                'prefix': prefix,
+                'libraries': []
+            }
+        
+        display_name = ' '.join(word.capitalize() for word in rel_path.stem.split('-'))
+        url = f"https://github.com/{REPOSITORY}/blob/main/{SOURCE_PATH}{rel_path.as_posix().replace('\\', '/')}"
+        description = get_description(file)
+        last_commit = get_last_commit_date(file)
+        date_suffix = f" - ({last_commit})" if last_commit else ""
+        
+        library_info = {
+            'name': display_name,
+            'url': url,
+            'description': description,
+            'date_suffix': date_suffix
+        }
+        
+        categories[category_name]['libraries'].append(library_info)
+    
+    # Sort categories by custom order
+    category_order = ["Tools", "Helpers", "Services", "Navigation & Display", "Debugging", "Security & Audit", "Deprecated", "Repository", "Other"]
+    sorted_categories = []
+    for cat_name in category_order:
+        if cat_name in categories:
+            sorted_categories.append((cat_name, categories[cat_name]))
+    
     content = [
         "# 🚀 SilverBullet Libraries",
         f"\nA curated collection of plugins, templates, and utilities for [SilverBullet](https://silverbullet.md/).\n",
@@ -90,21 +163,20 @@ def generate_readme():
         ""
     ]
     
-    for file in lib_files:
-        rel_path = file.relative_to(f'./{SOURCE_PATH}')
-        if 'template' in str(rel_path).lower():
-            continue
-            
-        display_name = ' '.join(word.capitalize() for word in rel_path.stem.split('-'))
-        url = f"https://github.com/{REPOSITORY}/blob/main/{SOURCE_PATH}{rel_path.as_posix().replace('\\', '/')}"
-        description = get_description(file)
-        last_commit = get_last_commit_date(file)
-        date_suffix = f" - ({last_commit})" if last_commit else ""
+    # Generate categorized content
+    for category_name, category_data in sorted_categories:
+        prefix = category_data['prefix']
+        libraries = category_data['libraries']
         
-        if description:
-            content.append(f"- [{display_name}]({url}) - {description}{date_suffix}")
-        else:
-            content.append(f"- [{display_name}]({url}){date_suffix}")
+        content.append(f"### {prefix} {category_name}")
+        
+        for lib in libraries:
+            if lib['description']:
+                content.append(f"- [{lib['name']}]({lib['url']}) - {lib['description']}{lib['date_suffix']}")
+            else:
+                content.append(f"- [{lib['name']}]({lib['url']}){lib['date_suffix']}")
+        
+        content.append("")  # Empty line after each category
 
     content.extend([
         "\n## 🛠️ Installation",
