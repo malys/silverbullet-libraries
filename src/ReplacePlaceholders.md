@@ -4,7 +4,7 @@ replace:
   d: demonstration
 author: malys
 description: Replace Placeholders with specific values
-pageDecoration.prefix: "🛠️ "
+pageDecoration.prefix: "🆘 "
 name: "Library/Malys/ReplacePlaceholders"
 tags: meta/library
 ---
