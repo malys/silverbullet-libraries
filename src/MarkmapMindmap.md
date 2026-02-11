@@ -47,6 +47,8 @@ config.set("markmap.source ","xxxx")
 ```space-lua
 local source=config.get("markmap.source") or "Library/Malys/MarkmapMindmap"
 local panelSize=config.get("markmap.panelSize") or 4
+local listenerAdded=false
+local wrappedHandler = nil  
 
 if library~=nil and (mls == nil or (mls ~=nil and mls.debug == nil)) then 
   library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
@@ -81,15 +83,31 @@ local function hide()
 end
 
 local update = function(mode)  
-  local isVisibleT=isVisible()
-  if (not isVisibleT and mode) or (not mode and isVisibleT) then
-    show()
-  else
-    if isVisibleT then 
-      hide()
+  local isVisibleT = isVisible()  
+  if (not isVisibleT and mode) or (not mode and isVisibleT) then  
+    show()  
+    if not listenerAdded then  
+      wrappedHandler = js.tojs(luaHandler)
+      js.window.addEventListener("mls-mm:pageSaved", wrappedHandler)  
+      listenerAdded = true  
     end  
-  end
+  else  
+    if isVisibleT then  
+      hide()  
+    end  
+    if listenerAdded and wrappedHandler then  
+      js.window.removeEventListener("mls-mm:pageSaved", wrappedHandler)  -- use the same wrapper  
+      wrappedHandler = nil  
+      listenerAdded = false  
+    end  
+  end  
 end   
+
+local function luaHandler(event)  
+  local data = js.tolua(event.detail)  
+  update(data.mode)
+end 
+
 
 -- Define the command
 command.define({
@@ -99,12 +117,14 @@ command.define({
       update(true)
     end
 })
-event.listen({
-    name = "editor:pageSaved",
-    run = function(e)
-      update(false)
-    end
-})
+event.listen {  
+  name = "editor:pageSaved",  
+  run = function(e)  
+    local jsData = js.tojs({ pageName = e.data, source = "SpaceLua", mode=false })  
+    local evt = js.new(js.window.CustomEvent, "mls-mm:pageSaved", { detail = jsData })  
+    js.window.dispatchEvent(evt)  
+  end  
+}  
 ```
 
 ## JS templates
@@ -351,6 +371,8 @@ window.addEventListener("beforeprint", () => {
 
 ## Changelog
 
+* 2026-02-11:
+  * fix: lightweight event management
 * 2026-02-04: fix: panel management
 * 2026-01-13: fix: multiple SVG visible on refresh
 * 2025-12-01 fix: html duplicate inserts

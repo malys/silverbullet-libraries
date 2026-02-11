@@ -48,12 +48,10 @@ By using or contributing to this project, you acknowledge and accept these condi
 
 ## Code
 ```space-lua
-
-
-
-
 -- priority: 15
 mls = mls or {}
+local listenerAdded=false
+local wrappedHandler = nil  
 if library ~= nil and (mls == nil or (mls ~= nil and mls.debug == nil) or (mls ~= nil and mls.luacheck == nil)) then
 	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
 	library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md")
@@ -434,14 +432,31 @@ local function hide()
 end
 
 local update = function(mode)  
-  local isVisibleT=isVisible()
-  if (not isVisibleT and mode) or (not mode and isVisibleT) then
-    show()
-  else
-    if isVisibleT then 
-      hide()
+  local isVisibleT = isVisible()  
+  if (not isVisibleT and mode) or (not mode and isVisibleT) then  
+    show()  
+    if not listenerAdded then  
+      wrappedHandler = js.tojs(luaHandler)
+      js.window.addEventListener("mls-dbg:pageSaved", wrappedHandler)  
+      js.window.addEventListener("mls-dbg:pageLoaded", wrappedHandler)  
+      listenerAdded = true  
     end  
-  end
+  else  
+    if isVisibleT then  
+      hide()  
+    end  
+    if listenerAdded and wrappedHandler then  
+      js.window.removeEventListener("mls-dbg:pageSaved", wrappedHandler)  -- use the same wrapper  
+      js.window.removeEventListener("mls-dbg:pageLoaded", wrappedHandler)  
+      wrappedHandler = nil  
+      listenerAdded = false  
+    end  
+  end  
+end 
+
+local function luaHandler(event)  
+  local data = js.tolua(event.detail)  
+  update(data.mode)
 end 
 
 -- Define the command
@@ -452,19 +467,26 @@ command.define({
 		update(true)
 	end
 })
-event.listen({
-	name = "editor:pageSaved",
-	run = function()
-		update(false)
-	end
-})
-event.listen({
-	name = "editor:pageLoaded",
-	run = function()
-		update(false)
-	end
-})
 
+event.listen {  
+  name = "editor:pageSaved",  
+  run = function(e)  
+    local jsData = js.tojs({ pageName = e.data, source = "SpaceLua", mode=false })  
+    local evt = js.new(js.window.CustomEvent, "mls-dbg:pageSaved", { detail = jsData })  
+    js.window.dispatchEvent(evt)  
+  end  
+}  
+
+event.listen {  
+  name = "editor:pageLoaded",  
+  run = function(e)  
+    local jsData = js.tojs({ pageName = e.data, source = "SpaceLua", mode=false })  
+    local evt = js.new(js.window.CustomEvent, "mls-dbg:pageLoaded", { detail = jsData })  
+    js.window.dispatchEvent(evt)  
+  end  
+}  
+```
+```
 
 command.define({
 	name = "Beautify: to clipboard",

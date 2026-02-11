@@ -45,6 +45,8 @@ config.set("marp.source","xxxx")
 ```space-lua
 local source=config.get("markslides.source") or "Library/Malys/MarpSlides"
 local panelSize=config.get("markmap.panelSize") or 2
+local listenerAdded=false
+local wrappedHandler = nil  
 
 if library~=nil and (mls == nil or (mls ~=nil and mls.debug == nil)) then 
   library.install("https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md")
@@ -79,17 +81,32 @@ local function hide()
   local current_panel_id = config.get("marpslides.panelPosition") or "rhs"
   editor.hidePanel(current_panel_id) 
 end
-
+  
 local update = function(mode)  
-  local isVisibleT=isVisible()
-  if (not isVisibleT and mode) or (not mode and isVisibleT) then
-    show()
-  else
-    if isVisibleT then 
-      hide()
+  local isVisibleT = isVisible()  
+  if (not isVisibleT and mode) or (not mode and isVisibleT) then  
+    show()  
+    if not listenerAdded then  
+      wrappedHandler = js.tojs(luaHandler)
+      js.window.addEventListener("mls-ms:pageSaved", wrappedHandler)  
+      listenerAdded = true  
     end  
-  end
-end  
+  else  
+    if isVisibleT then  
+      hide()  
+    end  
+    if listenerAdded and wrappedHandler then  
+      js.window.removeEventListener("mls-ms:pageSaved", wrappedHandler)  -- use the same wrapper  
+      wrappedHandler = nil  
+      listenerAdded = false  
+    end  
+  end  
+end 
+
+local function luaHandler(event)  
+  local data = js.tolua(event.detail)  
+  update(data.mode)
+end 
 
 -- Define the command 
 command.define({
@@ -99,14 +116,16 @@ command.define({
       update(true)
     end
 })
-event.listen({
-    name = "editor:pageSaved",
-    run = function(e)
-      update(false)
-    end
-})
-```
 
+event.listen {  
+  name = "editor:pageSaved",  
+  run = function(e)  
+    local jsData = js.tojs({ pageName = e.data, source = "SpaceLua", mode=false })  
+    local evt = js.new(js.window.CustomEvent, "mls-ms:pageSaved", { detail = jsData })  
+    js.window.dispatchEvent(evt)  
+  end  
+}  
+```
 ## Marp JS templates
 
 
@@ -191,6 +210,8 @@ render_marp_slides.innerHTML = \`<button  id="marp-export">Export</button>\${htm
 
 ## Changelog
 
+* 2026-02-11:
+  * fix: lightweight event management
 * 2026-02-04: fix: panel management
 * 2025-11-01 feat: add export
 

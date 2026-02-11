@@ -404,6 +404,8 @@ function table.toMd(data)
 
     return table.concat(md, "\n")
 end
+---- Events
+
 ```
 
 ## Changelog
@@ -417,5 +419,4 @@ end
     * uniqueKVBy
     * unique
     * appendArray
-  * feat: add `mls.getStdlibInternal` fucntion
-
+  * feat: add `mls.getStdlibInternal` function

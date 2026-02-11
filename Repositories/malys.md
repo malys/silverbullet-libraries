@@ -94,6 +94,11 @@ uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md
 description: "Organization Company card template."
 ---
+name: "Organization Completion"
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-completion.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-completion.md
+description: "Organization autocompletion on person @ and company #."
+---
 name: "Organization Employee"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md
