@@ -7,62 +7,54 @@ name: "Library/Malys/MdTableRender"
 ---
 # Md table column rendering
 
-This script enhances Markdown tables inside SilverBullet by applying dynamic
-formatting rules to columns marked with hashtag-style format tags (e.g. `#euro`,
-`#percent`, `#stars`). It observes table changes in real time and transforms raw
-text values into styled, formatted elements — such as currency, percentages,
-booleans, dates, badges, emojis, trends, and star ratings — without altering the
-original Markdown source. It is designed to be non-intrusive, editable-friendly,
-and resilient thanks to mutation observers, debouncing, and a polling fallback.
+This script enhances Markdown tables inside SilverBullet by applying dynamic formatting rules to columns marked with hashtag-style format tags (e.g. `#euro`,
+`#percent`, `#stars`). It observes table changes in real time and transforms raw text values into styled, formatted elements — such as currency, percentages,
+booleans, dates, badges, emojis, trends, and star ratings — without altering the original Markdown source. It is designed to be non-intrusive, editable-friendly, and resilient thanks to mutation observers, debouncing, and a polling fallback.
 
 ## Disclaimer & Contributions
 
 This code is provided **as-is**, **without any kind of support or warranty**.  
 I do **not** provide user support, bug-fixing on demand, or feature development.
 
-If you detect a bug, please **actively participate in debugging it** (analysis,
-proposed fix, or pull request) **before reporting it**. Bug reports without
-investigation may be ignored.
+If you detect a bug, please **actively participate in debugging it** (analysis,proposed fix, or pull request) **before reporting it**. Bug reports without investigation may be ignored.
 
 🚫 **No new features will be added.**  
-✅ **All types of contributions are welcome**, including bug fixes, refactoring,
-documentation improvements, and optimizations.
+✅ **All types of contributions are welcome**, including bug fixes, refactoring,documentation improvements, and optimizations.
 
-By using or contributing to this project, you acknowledge and accept these
-conditions.
+By using or contributing to this project, you acknowledge and accept these conditions.
 
-## Supported renderers (via `#tag` in header)
+## Supported renders (via `#tag` in header)
 
-| Tag             | Effect                                                    |
-| --------------- | --------------------------------------------------------- |
-| **#euro**       | Formats number as “12 345 €”                              |
-| **#usd**        | Formats number as “$12,345”                               |
-| **#percent**    | Converts decimal to percentage (0.15 → “15 %”)            |
-| **#percent10**  | Converts [0-10] to percentage (1 → “10 %”)                |
-| **#gauge**      | Graphical percentage representation ███░                  |
-| **#posneg**     | Colored gauge -2 🟥🟥,0 ⬜, +1 🟩                         |
-| **#km**         | Formats number as “12 345 km”                             |
-| **#kg**         | Formats number as “12 345 kg”                             |
-| **#watt**       | Formats number as “12 345 W”                              |
-| **#int**        | Parses and formats whole numbers with locale separators   |
-| **#float**      | Forces 2 decimal places (e.g. “3.14”)                     |
-| **#upper**      | Forces uppercase                                          |
-| **#lower**      | Forces lowercase                                          |
-| **#bold**       | Wraps value in `<strong>`                                 |
-| **#italic**     | Wraps value in `<em>`                                     |
-| **#link**       | Turns URL into clickable link                             |
-| **#date**       | Formats dates (YYYY-MM-DD or ISO)                         |
-| **#datetime**   | Formats full timestamp                                    |
-| **#logical**    | Converts truthy → `✅` / falsy → `❌`                     |
-| **#stars**      | Converts number to up to 10 ⭐ stars                      |
-| **#evaluation** | Converts 0–5 into ★/☆ rating                              |
-| **#badge**      | Renders value as a blue pill badge                        |
-| **#emoji**      | Converts words like “happy”, “cool”, “neutral” → 😃 😎 😐 |
-| **#mood**       | Converts evaluation of mood to emoj 1:bad 5: very well    |
-| **#trend**      | Converts + / - / = into 🔼 🔽 ➡️                          |
-| **#histo**      | Converts number to █                                      |
+| Tag #silver | Effect #wrap10|
+| --- | --- |
+| **#badge** | Renders value as a blue pill badge |
+| **#bold** | Wraps value in `<strong>` |
+| **#dateshortd** | Formats dates (YYYY-MM) |
+| **#dateshorty** | Formats dates (MM-DD) |
+| **#datetime** | Formats full timestamp |
+| **#emoji** | Converts words like “happy”, “cool”, “neutral” → 😃 😎 😐 |
+| **#evaluation** | Converts 0–5 into ❤️/🤍 rating |
+| **#float** | Forces 2 decimal places (e.g. “3.14”) |
+| **#gauge** | Graphical percentage representation ███░ |
+| **#histo** | Converts number to █ |
+| **#int** | Parses and formats whole numbers with locale separators |
+| **#italic** | Wraps value in `<em>` |
+| **#kg** | Formats number as “12 345 kg” |
+| **#km** | Formats number as “12 345 km” |
+| **#link** | Turns URL into clickable link |
+| **#logical** | Converts truthy → `✅` / falsy → `❌` |
+| **#lower** | Forces lowercase |
+| **#mood** | Converts evaluation of mood to emoji 1:bad 5: very well |
+| **#percentXX** | Converts decimal to percentage (0.15 → “15 %”) or **#percent10** Converts \[0-10\] to percentage (1 → “10 %”) |
+| **#posneg** | Colored gauge -2 🟥🟥, 0 ⬜, +1 🟩 |
+| **#stars** | Converts number to up to 10 ⭐ stars |
+| **#trend** | Converts + / - / = into 🔼 🔽 ➡️ |
+| **#upper** | Forces uppercase |
+| **#usd** | Formats number as “$12,345” |
+| **#watt** | Formats number as “12 345 W” |
+| **#euro** | Formats number as “12 345 €” |
 
-Just add the renderer as a hashtag tag in your table header:
+Just add the render as a hashtag tag in your table header:
 
 ```md
 | Product #wine | Euro #euro | Percent #percent | Logical #logical | Stars #stars | Evaluation #evaluation | Updated              | Mood #emoji | Trend #trend |
@@ -70,6 +62,16 @@ Just add the renderer as a hashtag tag in your table header:
 | Widget        | 12.99      | 0.15             | 0                | 3            | 4                      | 2025-11-06T14:30:00Z | happy       | +            |
 | Gadget        | 8.50       | 0.23             | false            | 5            | 2                      | 2024-12-25T10:00:00Z | neutral     | -            |
 | Thingamajig   | 5.75       | 0.05             | true             | 4            | 5                      | 2023-05-10T08:15:00Z | cool        | =            |
+```
+
+or in a query:
+
+```lua
+${query[[from index.tag "page"
+    select {
+      ["Page #upper"] =  ref,
+      Modified = lastModified }
+    order by lastModified desc limit 5]] or "No empty pages."}
 ```
 
 ![](https://community.silverbullet.md/uploads/default/original/2X/e/e2598b9faf8fb223eb5b68b9d03b0729384c5351.png)
@@ -151,6 +153,11 @@ local function isInt(v)
 	return v ~= nil and math.floor(v) == v
 end
 
+local function isDate(v)
+    if type(v) ~= "string" then return false end
+    return v:match("^%d%d%d%d%-%d%d%-%d%d$") ~= nil
+end
+
 ------------------------------------------------
 -- Renderers (JS visual + Lua validation)
 ------------------------------------------------
@@ -175,14 +182,18 @@ mls.table.renderer = {
 		visual = [[isNaN(v) ? v : `${parseFloat(v).toLocaleString()} W`]],
 		validation = isNumber
 	},
-	percent = {
-		visual = [[isNaN(v) ? v : `${(parseFloat(v) * 100).toFixed(0)} %`]],
-		validation = isNumber
-	},
-	percent10 = {
-		visual = [[isNaN(v) ? v : `${(parseFloat(v) * 10).toFixed(0)} %`]],
-		validation = isNumber
-	},
+    percent = {
+        visual = [[
+            if (isNaN(v)) return v;
+    
+            // extract number from tag name, e.g. "percent10" -> 10
+            const m = tag.match(/^percent(\d+)?$/);
+            const factor = m && m[1] ? parseFloat(m[1]) : 100;
+    
+            return `${(parseFloat(v) * factor).toFixed(0)} %`;
+        ]],
+        validation = isNumber
+    },
 	int = {
 		visual = [[isNaN(v) ? v : parseInt(v, 10).toLocaleString()]],
 		validation = isInt
@@ -191,7 +202,23 @@ mls.table.renderer = {
 		visual = [[isNaN(v) ? v : parseFloat(v).toFixed(2)]],
 		validation = isNumber
 	},
-	upper = {
+    dateshorty = {
+        visual = [[
+            if (!v) return v;
+            const m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            return m ? `${m[2]}-${m[3]}` : v;
+        ]],
+        validation =isDate
+    },
+    dateshortd = {
+        visual = [[
+            if (!v) return v;
+            const m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            return m ? `${m[1]}-${m[2]}` : v;
+        ]],
+        validation = isDate
+    },
+  	upper = {
 		visual = [[v.toString().toUpperCase()]],
 		validation = function(v)
 			return v ~= nil
@@ -784,7 +811,7 @@ local function exportJSFormatters(renderers)
 			local js = def.visual
       -- single line or block
 			if string.match(js, "\n") then
-				table.insert(lines, "  " .. name .. ": v => {")
+				table.insert(lines, "  " .. name .. ": (v,tag) => {")
 				table.insert(lines, js)
 				table.insert(lines, "  },")
 			else
@@ -816,64 +843,87 @@ function mls.table.enableTableRenderer()
   const log = (...a) => DEBUG && console.log('[sb-table-renderer]', ...a);
 
   /* ---------------- FORMATTERS ---------------- */
+  // formatters injected here
 ]] .. exportJSFormatters(mls.table.renderer) .. [[
+
   /* ---------------- CORE ---------------- */
 
+  // Extract formats once per table
   function extractFormats(table) {
     const formats = [];
-    const header =
-      table.querySelector('thead tr') ||
-      table.querySelector('tr');
-    if (!header) return formats;
+    const headerRow = table.querySelector('thead tr') || table.querySelector('tr');
+    if (!headerRow) return formats;
 
-    [...header.cells].forEach((cell, idx) => {
+    const headerCells = headerRow.cells;
+    for (let idx = 0; idx < headerCells.length; idx++) {
       formats[idx] = null;
+      const cell = headerCells[idx];
       const tags = cell.querySelectorAll('a.hashtag,[data-tag-name]');
-      for (const tag of tags) {
-        const name =
-          tag.dataset?.tagName ||
-          tag.textContent?.replace('#', '');
-        if (formatters[name]) {
-          formats[idx] = name;
-          tag.style.display = 'none';
+      for (let t = 0; t < tags.length; t++) {
+        const tagEl = tags[t];
+        const name = tagEl.dataset?.tagName || tagEl.textContent.replace('#', '');
+        const base = name.replace(/\d+$/, '');
+        if (formatters[base]) {
+          formats[idx] = name;   // keep full tag: wrap20
+          tagEl.style.display = 'none';
           break;
         }
       }
-    });
+    }
+
     return formats;
   }
 
+  // Process table cells
   function processTable(table) {
     if (table.dataset.sbFormatted) return;
+
     const formats = extractFormats(table);
-    const rows = table.tBodies[0]?.rows || [];
+    const tbody = table.tBodies[0];
+    if (!tbody) return;
 
-    [...rows].forEach(row => {
-      [...row.cells].forEach((cell, idx) => {
-        const fmt = formats[idx];
-        if (!fmt) return;
+    const rows = tbody.rows;
+    for (let r = 0; r < rows.length; r++) {
+      const cells = rows[r].cells;
+      for (let c = 0; c < cells.length; c++) {
+        const fmt = formats[c];
+        if (!fmt) continue;
 
+        const cell = cells[c];
         const raw = cell.textContent.trim();
-        const out = formatters[fmt](raw);
+
+        // cache base -> formatter
+        const base = fmt.replace(/\d+$/, '');
+        const formatter = formatters[base];
+        if (!formatter) continue;
+
+        const out = formatter(raw, fmt);
         if (out !== raw) {
           cell.textContent = out;
           cell.dataset.sbformatted = fmt;
         }
-      });
-    });
+      }
+    }
 
     table.dataset.sbFormatted = 'true';
   }
 
+  // Scan for tables that need formatting
   function scan() {
-    document
-      .querySelectorAll('#sb-editor table')
-      .forEach(processTable);
+    const tables = document.querySelectorAll('#sb-editor table:not([data-sb-formatted])');
+    for (let i = 0; i < tables.length; i++) {
+      processTable(tables[i]);
+    }
   }
 
   /* ---------------- OBSERVER ---------------- */
 
-  const observer = new MutationObserver(scan);
+  // debounce MutationObserver to avoid repeated calls
+  let scanTimeout;
+  const observer = new MutationObserver(() => {
+    if (scanTimeout) clearTimeout(scanTimeout);
+    scanTimeout = setTimeout(scan, 50);
+  });
   observer.observe(document.body, { childList: true, subtree: true });
 
   scan();
@@ -882,18 +932,21 @@ function mls.table.enableTableRenderer()
 
   window.addEventListener('sb-table-renderer-unload', function cln() {
     observer.disconnect();
-    document
-      .querySelectorAll('[data-sbformatted]')
-      .forEach(c => {
-        c.removeAttribute('data-sbformatted');
-      });
-    document
-      .querySelectorAll('table[data-sb-formatted]')
-      .forEach(t => delete t.dataset.sbFormatted);
+
+    const formattedCells = document.querySelectorAll('[data-sbformatted]');
+    for (let i = 0; i < formattedCells.length; i++) {
+      formattedCells[i].removeAttribute('data-sbformatted');
+    }
+
+    const formattedTables = document.querySelectorAll('table[data-sb-formatted]');
+    for (let i = 0; i < formattedTables.length; i++) {
+      delete formattedTables[i].dataset.sbFormatted;
+    }
+
     window.removeEventListener('sb-table-renderer-unload', cln);
   });
 
-})()
+})();
   ]]
 	js.window.document.body.appendChild(scriptEl)
 end
@@ -927,6 +980,9 @@ end
 
 ## Changelog
 
+* 2026-02-13:
+  * feat:remove date and add `dateshorty` and `dateshortd` for format date  
+  * feat: supoprt tag([0-9]+) format
 - 2026-02-06:
     - fix: evaluation renderer [0-5] instead [1-5]
     - fix: render function
