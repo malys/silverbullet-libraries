@@ -5,10 +5,15 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 ## 📦 Available Libraries
 
 ### 🛠️  Tools
-- [Lru](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md) - LRU cache leveraging @isaacs/lrucache
+- [Lru](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md) - LRU cache leveraging @isaacs/lrucache - (2026-02-11)
+- [Ttl](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md) - TTL cache leveraging @isaacs/ttlcache - (2026-02-11)
+- [Cursorposition](https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md) - Generate and copy links to specific cursor positions and headers in markdown documents - (2026-02-11)
+- [Externaltransclusion](https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md) - Transclude data form external resource. - (2026-02-11)
 - [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2026-02-11)
 
 ### 🆘  Helpers
+- [Customslashcommand](https://github.com/malys/silverbullet-libraries/blob/main/src/CustomSlashCommand.md) - custom slash commands. - (2026-02-11)
+- [Helpshortcuts](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md) - Display most commun shortcuts. - (2026-02-11)
 - [Llminstructions](https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md) - System prompt to pilot LLM in SB plugin coding. - (2026-02-11)
 - [Organization Chart](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md) - Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart. - (2026-02-11)
 - [Organization Company](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md) - Organization Company card template. - (2026-02-11)
@@ -18,6 +23,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md) - Replace Placeholders with specific values - (2026-02-11)
 
 ### 🛎️  Services
+- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2026-02-11)
 - [Markmapmindmap](https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md) - MarkMap mindmap integration. - (2026-02-11)
 - [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - Marp slides integration. - (2026-02-11)
 - [Mdprettier](https://github.com/malys/silverbullet-libraries/blob/main/src/mdPrettier.md) - Beautify md file. - (2026-02-11)
@@ -27,7 +33,8 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 
 ### 👁️  Navigation & Display
 - [Breadcrumb](https://github.com/malys/silverbullet-libraries/blob/main/src/Breadcrumb.md) - Generate breadcrumbs for a page - (2026-02-11)
-- [Mdtablerender](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md) - Automatically formats Markdown table cells based on hashtag column tags. - (2026-02-11)
+- [Fasttagexplorer](https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md) - Generate wall of children page tags - (2026-02-11)
+- [Mdtablerender](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md) - Automatically formats Markdown table cells based on hashtag column tags. - (2026-02-13)
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity - (2026-02-11)
 
 ### 🪲  Debugging
@@ -39,15 +46,6 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 
 ### 💀  Deprecated
 - [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - DEPRECATED universal palette (as VScode Palette), use '>' to execute commands - (2026-02-11)
-
-### None Other
-- [Ttl](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md)
-- [Cursorposition](https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md)
-- [Customslashcommand](https://github.com/malys/silverbullet-libraries/blob/main/src/CustomSlashCommand.md)
-- [Externaltransclusion](https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md)
-- [Fasttagexplorer](https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md)
-- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md)
-- [Helpshortcuts](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md) - (2026-02-11)
 
 
 ## 🛠️ Installation

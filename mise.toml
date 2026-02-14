@@ -16,18 +16,18 @@ run = "python scripts/sync_custom_libs.py"
 
 # tasks git add and commit and push
 [tasks.git]
-run = "sleep 7 && git pull&& git add . && git commit -m 'update' && git push"
+run = "git pull&& git add . && git commit -m 'update' && git push"
 
 # Generate both README and index in one command
 [tasks.gen-all]
-run = "sleep 3 && python scripts/generate_files.py --readme --index"
+run = "python scripts/generate_files.py --readme --index"
 
 # Run sync, generate all files, and commit changes
 [tasks.publish]
-depends = [
-    "sync-libs",
-    "gen-all",
-    "git"
+run = [
+  { task = "sync-libs" }, 
+  { task = "gen-all" },   # puis gen-all
+  { task = "git" }        # puis git
 ]
 
 # Install Python dependencies
