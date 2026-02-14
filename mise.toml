@@ -27,7 +27,8 @@ run = "python scripts/generate_files.py --readme --index"
 run = [
   { task = "sync-libs" }, 
   { task = "gen-all" },   
-  { task = "git" }        
+  { task = "git" },
+  "open-cli https://github.com/malys/silverbullet-libraries"
 ]
 
 # Install Python dependencies
