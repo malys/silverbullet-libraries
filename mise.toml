@@ -26,8 +26,8 @@ run = "python scripts/generate_files.py --readme --index"
 [tasks.publish]
 run = [
   { task = "sync-libs" }, 
-  { task = "gen-all" },   # puis gen-all
-  { task = "git" }        # puis git
+  { task = "gen-all" },   
+  { task = "git" }        
 ]
 
 # Install Python dependencies
