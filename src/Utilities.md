@@ -167,7 +167,7 @@ local findMyFence = function(node,blockId)
         if child.type == "FencedCode" then
           local info = getText(getChild(child, "CodeInfo"))
           --mls.debug(info) -- commented out debug line
-          if info  and info:find(blockId) then
+          if info and info:find(blockId, 1, true) then
             mls.debug(info)
             return getChild(child, "CodeText")
           end
