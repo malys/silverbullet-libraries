@@ -5,11 +5,11 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 ## 📦 Available Libraries
 
 ### 🛠️  Tools
-- [Lru](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md) - LRU cache leveraging @isaacs/lrucache - (2026-02-11)
-- [Ttl](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md) - TTL cache leveraging @isaacs/ttlcache - (2026-02-11)
+- [Lru](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md) - LRU cache leveraging @isaacs/lrucache - (2026-05-29)
+- [Ttl](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md) - TTL cache leveraging @isaacs/ttlcache - (2026-05-29)
 - [Cursorposition](https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md) - Generate and copy links to specific cursor positions and headers in markdown documents - (2026-02-11)
-- [Externaltransclusion](https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md) - Transclude data form external resource. - (2026-02-11)
-- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2026-02-11)
+- [Tableexport](https://github.com/malys/silverbullet-libraries/blob/main/src/TableExport.md) - Export md table to different formats (json,csv,yaml). - (2026-05-29)
+- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2026-05-29)
 
 ### 🆘  Helpers
 - [Customslashcommand](https://github.com/malys/silverbullet-libraries/blob/main/src/CustomSlashCommand.md) - custom slash commands. - (2026-02-11)
@@ -23,13 +23,13 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md) - Replace Placeholders with specific values - (2026-02-11)
 
 ### 🛎️  Services
-- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2026-02-11)
-- [Markmapmindmap](https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md) - MarkMap mindmap integration. - (2026-02-11)
-- [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - Marp slides integration. - (2026-02-11)
+- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2026-05-29)
+- [Markmapmindmap](https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md) - MarkMap mindmap integration. - (2026-05-29)
+- [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - Marp slides integration. - (2026-05-29)
 - [Mdprettier](https://github.com/malys/silverbullet-libraries/blob/main/src/mdPrettier.md) - Beautify md file. - (2026-02-11)
-- [Mdtablesheet](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md) - Integrate FormulaJS in markdown table (table = sheet). - (2026-02-11)
+- [Mdtablesheet](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md) - Integrate FormulaJS in markdown table (table = sheet). - (2026-05-29)
 - [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga project management tool - (2026-02-11)
-- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2026-02-11)
+- [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2026-05-29)
 
 ### 👁️  Navigation & Display
 - [Breadcrumb](https://github.com/malys/silverbullet-libraries/blob/main/src/Breadcrumb.md) - Generate breadcrumbs for a page - (2026-02-11)
@@ -42,7 +42,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Luacheck](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md) - Lua linter. - (2026-02-11)
 
 ### 👮  Security & Audit
-- [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Risk audit  (scripts analyzor) - (2026-02-11)
+- [Riskaudit](https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md) - Risk audit  (scripts analyzor) - (2026-05-29)
 
 ### 💀  Deprecated
 - [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - DEPRECATED universal palette (as VScode Palette), use '>' to execute commands - (2026-02-11)

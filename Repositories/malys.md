@@ -29,11 +29,6 @@ uri: https://github.com/malys/silverbullet-libraries/blob/main/src/CustomSlashCo
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/CustomSlashCommand.md
 description: "custom slash commands."
 ---
-name: "Externaltransclusion"
-uri: https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md
-website: https://github.com/malys/silverbullet-libraries/blob/main/src/ExternalTransclusion.md
-description: "Transclude data form external resource."
----
 name: "Fasttagexplorer"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md
@@ -113,6 +108,11 @@ name: "Riskaudit"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/RiskAudit.md
 description: "Risk audit  (scripts analyzor)"
+---
+name: "Tableexport"
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/TableExport.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/TableExport.md
+description: "Export md table to different formats (json,csv,yaml)."
 ---
 name: "Taiga"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md
