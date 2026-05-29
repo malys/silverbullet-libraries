@@ -185,11 +185,10 @@ local function get_history(file_path)
 
   for _, line in ipairs(lines) do
     if line and line ~= "" then
-      local parts = string.split(line, " ", 3)
-      if #parts == 3 then
-        local hash = parts[1]
-        local ts = tonumber(parts[2]) or 0
-        local msg = parts[3] or ""
+      local hash, ts_str, msg = string.match(line, "^(%S+)%s+(%d+)%s+(.+)$")
+
+      if hash and ts_str and msg then
+        local ts = tonumber(ts_str) or 0
         table.insert(commits, {
           name        = hash,
           description = msg .. " - " .. format_git_timestamp(ts),
