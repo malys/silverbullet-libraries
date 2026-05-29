@@ -38,9 +38,7 @@ ${template.each(
 local function log(...)
 	if LOG_ENABLE and mls and mls.debug then
 		if type(mls.debug) == "function" then
-			mls.debug(table.concat({
-				...
-			}, " "))
+			mls.debug({...})
 		end
 	end
 end

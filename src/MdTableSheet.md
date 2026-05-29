@@ -30,8 +30,10 @@ The \`F\` local function takes two arguments:
 - \`formulajs\`: The formula to evaluate using the [Formulajs](https://formulajs.info/functions/) library.
 - \`label\` (optional): A label to differentiate between the same formula in different tables.
 
-Here's an example usage: \${F("SUM(A1:A5)","1")}\`
-
+Here's an example usage: 
+* \${F("SUM(A1:A5)","1")}\`
+* \${F("A1","1") + 10}\`
+* \${F("A1","1") * F("A10","1") }\`
 
 | Header A | Header B |
 | --- | --- |
@@ -39,7 +41,7 @@ Here's an example usage: \${F("SUM(A1:A5)","1")}\`
 | 3   | 4   |
 | 5   | 6   |
 | 7   | 8   |
-| 9   | 10  |
+| 9   | ${F("A2")}  |
 | ${F("CONCAT(A1,A2)")} | ${F("SUM(A1:B5)")} |
 
 
@@ -183,11 +185,10 @@ ${G("2","","A1:A3",{"B4:B6","B1:B3"},{type="line", serieLabel={"A","B"},width=30
 -- ---------------------------
 mls = mls or {}
 mls.table = mls.table or {}
-
 local function log(...)
   if LOG_ENABLE and mls and mls.debug then
-     if type(mls.debug) == "function" then 
-       mls.debug(table.concat({...}, " "))
+     if type(mls.debug) == "function" then    
+       mls.debug({...})
      end  
   end
 end
@@ -257,7 +258,7 @@ local function extractTable(rows)
       for k, v in pairs(row) do
          if k ~= "ref" and k ~= "tag" and k ~= "tags" and
               k ~= "itags" and k ~= "page" and k ~= "pos" and
-              k ~= "tableref" then
+              k ~= "tableref"  and k ~= "range"  then
             rowData[col] = v
             col = col + 1
          end
@@ -297,6 +298,7 @@ local function extractTables(pageName)
       results[tRef] = extractTable(rows)
    end
    log("Extracted " .. tostring(#(allRows or {})) .. " table rows")
+   log(result)
    return results
 end
 
@@ -310,6 +312,7 @@ end
 -- end
 
 local function toCellMap(tableData)
+   log("toCellMap in") 
    local map = {}
    for r, row in ipairs(tableData) do
       for c, val in ipairs(row) do
@@ -317,6 +320,7 @@ local function toCellMap(tableData)
          map[key] = tonumber(val) or val
       end
    end
+   log("toCellMap out") 
    return map
 end
 
@@ -336,6 +340,7 @@ local function findTableOfFormula(pageName, formulaString, label)
    local allRows = query[[from index.tag "table" where page == pageName]]
    local search = formulaString
    if label then search = '"' .. formulaString .. '","' .. label .. '"' end
+   log("Searching table : "..search)
    for _, row in ipairs(allRows) do
       for k, v in pairs(row) do
          if k ~= "ref" and k ~= "tag" and k ~= "tags" and
@@ -349,6 +354,7 @@ local function findTableOfFormula(pageName, formulaString, label)
       end
    end
    log("Formula not found in any table")
+   editor.reloadPage()
    return nil
 end
 
@@ -396,6 +402,20 @@ end
 local function extractArgsFormula(formulaString)
    return string.match(formulaString, "%((.*)%)")
 end
+
+local function postProcessing(message,value)
+  if message == nil and value == nil then
+     message="Formula return nil"
+  end
+
+  if message ~= nil then
+    message = message or ""
+    editor.flashNotification(message .. " value:"..value,"error")
+    return 0
+  else 
+    return value
+  end
+end  
 -- =========================
 -- Formula evaluator
 -- =========================
@@ -405,15 +425,32 @@ function F(formulaString, label, pageName)
 
    if not pageName then pageName = editor.getCurrentPage() end
    local tRef = findTableOfFormula(pageName, formulaString, label)
-   if not tRef then return "ERROR: formula not in any table" end
+   if not tRef then 
+     return 0 --postProcessing("Formula not in any table","error")
+    end
    local tables = extractTables(pageName)
    local tbl = tables[tRef]
-   if not tbl then return "ERROR: table not found" end
+   if not tbl then 
+     return postProcessing("Table not found","error")
+    end
    local cellMap = toCellMap(tbl)
-
-   local funcName =extractFormula(formulaString)
-   local argsStr   = extractArgsFormula(formulaString)
-   if not funcName then return "ERROR: invalid formula syntax" end
+   log(cellMap)
+   log("extractFormula")
+   local funcName=extractFormula(formulaString)
+   log(funcName)
+   log("funcName")
+   local argsStr= extractArgsFormula(formulaString)
+   log(argsStr)
+   log("extractArgsFormula")
+   if not funcName then
+      local match = string.matchRegex(formulaString, "([A-Z]+)(%d+)")  
+      if match then 
+        log("get Cell " .. formulaString)
+        local value= cellMap[formulaString]
+        return postProcessing(nil,value)
+      end
+      return postProcessing(nil,nil)
+   end
 
    log("Function: " .. funcName .. " Args: " .. (argsStr or ""))
 
@@ -434,21 +471,24 @@ function F(formulaString, label, pageName)
 
    if not formulajs[funcName] then
       log("Unknown function: " .. funcName)
-      return "ERROR: unknown local function " .. funcName
+      return postProcessing("unknown local function " .. funcName,"error")
    end
-   log("local function after: " .. funcName .. " Args: " .. (table.concat(args," ") or ""))
+  -- log("local function after: " .. funcName .. " Args: " .. (table.concat(args," ") or ""))
    local status, result = pcall(function() return formulajs[funcName](table.unpack(args)) end)
-   if not status then return "ERROR: " .. tostring(result) end
+   if not status then 
+      return postProcessing(tostring(result),nil)
+   end 
 
    log("Formula result: " .. tostring(result))
-   return result
+   return postProcessing(nil,result)
 end
 
--- =========================
--- Table helpers for editing (must use live text, not indexed data)
--- =========================
-
-
+-- Returns Fromula result with visual round.
+-- @return float
+---
+function R(formulaString, label, pageName)
+  return string.format("%.2f",F(formulaString, label, pageName))
+end
 
 ---
 -- Returns true if the cursor is currently inside a table.
@@ -1136,6 +1176,8 @@ end
 
 ## Changelog
 
+* 2026-02-19:
+  * feat: support F(“A1”) to return value of cell and to be able to write (F(“A1”)*F(“A5”))/5
 * 2026-02-08:
   * feat: support of multiple series
   * feat: support chartjs options

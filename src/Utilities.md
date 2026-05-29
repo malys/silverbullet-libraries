@@ -20,6 +20,8 @@ tags: meta/library
 *   `table.mergeKV(t1, t2)`: Merges two tables (recursive for nested tables).
 *   `table.map(t, fn)`: Applies a function to each element of an array.
 *   `table.toMd(data)`: Converts a table (or JSON) to a Markdown table.
+*   `embed.md(url)`: Embed external md
+*   `embed.page(url,width,height)`: Embed page in a iframe
 
 ## Debug
 
@@ -167,7 +169,9 @@ local findMyFence = function(node,blockId)
         if child.type == "FencedCode" then
           local info = getText(getChild(child, "CodeInfo"))
           --mls.debug(info) -- commented out debug line
-          if info  and info:find(blockId) then
+          local block= string.gsub(blockId, "[^%w]", "")
+          local inf=string.gsub(info, "[^%w]", "")
+          if info and inf:find(block) then
             mls.debug(info)
             return getChild(child, "CodeText")
           end
@@ -405,12 +409,68 @@ function table.toMd(data)
 
     return table.concat(md, "\n")
 end
----- Events
+---- Embed
+function embed.page(src,width,height)
+  local w=width or "100%"
+  local h=height or "400px"
+  return widget.html(dom.iframe {  
+    src = src,  
+    style = "width: "..w.."; height: "..h.."; border: 0;",  
+    sandbox = "allow-same-origin allow-scripts",  
+  })
+end
 
+function embed.md(url)
+  local result = http.request(url)
+  local tree = markdown.parseMarkdown(result.body)
+  local rendered = markdown.renderParseTree(tree)
+  return widget.new { markdown = rendered:gsub("<[^>]*>","") }
+end
+
+mls.ui = mls.ui or {}
+
+function mls.ui.filterBoxMulti(title, items, hint)
+  hint = hint or "Cancel/Esc when done"
+  local selected = {}
+  local remaining = {}
+
+  for _, item in ipairs(items) do
+    table.insert(remaining, item)
+  end
+
+  while #remaining > 0 do
+    local chosen = editor.filterBox(title, remaining, hint)
+    if not chosen then break end
+
+    table.insert(selected, chosen)
+
+    local new_remaining = {}
+    for _, item in ipairs(remaining) do
+      if item ~= chosen then
+        table.insert(new_remaining, item)
+      end
+    end
+    remaining = new_remaining
+  end
+
+  -- extract the string to return: try common field names, fallback to tostring
+  local results = {}
+  for _, item in ipairs(selected) do
+    if type(item) == "string" then
+      table.insert(results, item)
+    else
+      table.insert(results, item.name or item.label or item.value or item.text or tostring(item))
+    end
+  end
+
+  return table.concat(results, ", ")
+end
 ```
 
 ## Changelog
 
+* 2026-02-25:
+  * feat: embed md and page 
 * 2026-01-22:
   * getStdlibInternal compatible with edge version https://community.silverbullet.md/t/risk-audit/3562/14
 * 2026-01-20:

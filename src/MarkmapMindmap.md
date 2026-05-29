@@ -42,7 +42,6 @@ config.set("markmap.source ","xxxx")
 > **warning** Caution
 > **Depends on** [Utilities.md](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md). It will be installed automatically.
 
-
 ## Code
 
 ```space-lua
@@ -71,8 +70,8 @@ end
 local function show()
   local page_content = editor.getText()
   local contentBase64=encoding.base64Encode(page_content)
-  local content1= mls.getCodeBlock(source,"innerHTML","@CONTENT@", contentBase64)
-  local js = mls.getCodeBlock(source,"jsInject","@CONTENT@",content1)      
+  local content1= mls.getCodeBlock(source,"innerHTML","_CONTENT_", contentBase64)
+  local js = mls.getCodeBlock(source,"jsInject","_CONTENT_",content1)      
   local panel_html= mls.getCodeBlock(source,"template")
   local current_panel_id = config.get("markmap.panelPosition") or "rhs"
   editor.showPanel(current_panel_id,panelSize,  panel_html, js)
@@ -142,7 +141,7 @@ if (existingScript) {
 const script = document.createElement("script");
 script.type = "module";
 script.id = scriptId;
-script.textContent = `@CONTENT@`;
+script.textContent = `_CONTENT_`;
 document.documentElement.appendChild(script);
 ```
 ```js innerHTML  
@@ -150,7 +149,7 @@ function b64DecodeUnicode(str) {
   return decodeURIComponent(
     atob(str)
       .split("")
-      .map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+      .map(c => "%%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
       .join("")
   );
 }
@@ -160,7 +159,7 @@ import { Markmap, deriveOptions } from "https://esm.sh/markmap-view?bundle";
 import { Toolbar } from "https://esm.sh/markmap-toolbar?bundle";
 
 const transformer = new Transformer();
-const { root } = transformer.transform(b64DecodeUnicode("@CONTENT@"));
+const { root } = transformer.transform(b64DecodeUnicode("_CONTENT_"));
 
 const svg = document.getElementById("mindmap");
 const base = deriveOptions(null) || {};
@@ -203,7 +202,7 @@ window.addEventListener("beforeprint", () => {
         html,
         html {
           overflow-y: scroll !important;
-          width: 90% !important;
+          width: 90%% !important;
         }
         @media print {
           .no-print,
@@ -252,11 +251,11 @@ window.addEventListener("beforeprint", () => {
         }
         
         img {
-          max-width: 100%;
+          max-width: 100%%;
         }
         
         table {
-          width: 100%;
+          width: 100%%;
           border-spacing: 0;
         }
         
@@ -372,6 +371,8 @@ window.addEventListener("beforeprint", () => {
 
 ## Changelog
 
+* 2026-05-29:
+  * fix: escape %
 * 2026-02-11:
   * fix: lightweight event management
 * 2026-02-04: fix: panel management
