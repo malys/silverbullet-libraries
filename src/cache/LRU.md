@@ -103,7 +103,7 @@ function mls.cache.lru.new(options)
   -- get
 	function cache.get(key, opti)
 		log("get")
-		local optis = options or {}
+		local optis = opti or {}
 		return js.tolua(jsCache.get(key, optis))
 	end
 
@@ -257,6 +257,8 @@ mls.cache.lru.CacheManager = mls.cache.lru.new({
 
 ## Changelog
 
+* 2026-05-29:
+  * fix: `cache.get` read the constructor's `options` instead of its own `opti` parameter
 * 2026-02-06:
   * fix: copy/paste error
 * 2026-02-06:

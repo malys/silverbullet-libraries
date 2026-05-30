@@ -19,7 +19,7 @@ Use with:
 - Organization-Employee:  employee card
 
 ```space-lua
-function prettyPrint(tbl, indent)
+local function prettyPrint(tbl, indent)
     indent = indent or 0
     local lines = {}
     local indentStr = string.rep("  ", indent)
@@ -64,14 +64,13 @@ local function join(tbl, sep)
 end
 local function cleanAndLower(str)
   if str ~= nil and #str>1 then
-    local cleaned = str:gsub("[^%w]", "")
-    cleaned = str:gsub(" ", "")
+    local cleaned = str:gsub(" ", "")
     return cleaned:lower()
   end
   return ""
 end
 
-local function generatePerson(uml, person, path)
+local function generatePerson(person, path)
     local uml = {}
     table.insert(uml, "Enterprise_Boundary( "..cleanAndLower(person.job.company).." , \""..person.job.company.."\") {")
     for i,department in ipairs(person.job.department) do
@@ -104,7 +103,7 @@ local function generatePerson(uml, person, path)
     return table.concat(uml, "\n")
 end
 
-function children(path)
+local function children(path)
     local crumbsChildren = {}
     local mypage = path or editor.getCurrentPage()
     for page in each(table.sort(space.listPages(), compareDate)) do
@@ -117,11 +116,11 @@ function children(path)
     return crumbsChildren
 end
 
-function getFrontMatter(page)
+local function getFrontMatter(page)
     return index.extractFrontmatter(space.readPage(page)).frontmatter
 end 
 
-function organizationChart(path)
+local function organizationChart(path)
   path = path or editor.getCurrentPage()
   local uml = {}
   table.insert(uml, "```plantuml")
@@ -148,7 +147,7 @@ function organizationChart(path)
           end
           local person = frontM.person
           --table.insert(uml, "'"..frontM.person.first_name) 
-          table.insert(uml, generatePerson(uml, person,path))
+          table.insert(uml, generatePerson(person,path))
         end
   end
   table.insert(uml, "")
@@ -156,7 +155,6 @@ function organizationChart(path)
   table.insert(uml, "```")
   table.insert(uml, "")
   local result= table.concat(uml, "\n")  
-  print(result)
   return result
   --system.invokeFunction("plantuml", result)
 end
@@ -185,7 +183,7 @@ function person.insertImageFromFrontmatter()
     if fm.frontmatter and fm.frontmatter[v] and fm.frontmatter[v].image then  
       local imagePath = fm.frontmatter[v].image  
       local name=""
-      if types == "company" then
+      if v == "company" then
         name =(fm.frontmatter[v].name or "")
       else
         name=(fm.frontmatter[v].first_name or "") .. " " ..  (fm.frontmatter[v].last_name or "")
@@ -201,4 +199,13 @@ function person.insertImageFromFrontmatter()
   return result
 end
 ```
+
+## Changelog
+
+* 2026-05-29:
+  * fix: `insertImageFromFrontmatter` compared the loop table `types` to `"company"` instead of the current element `v`
+  * fix: `generatePerson` declared an unused `uml` parameter that shadowed a fresh local; removed it
+  * cleanup: `cleanAndLower` discarded its first `gsub` result; kept only the effective space-stripping pass
+  * cleanup: made `prettyPrint`, `children`, `getFrontMatter`, `organizationChart` local to avoid global collisions with Organization-VCFExport (`children`/`getFrontMatter`)
+  * cleanup: removed leftover `print(result)` debug call
 

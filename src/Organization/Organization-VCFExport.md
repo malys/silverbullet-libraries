@@ -19,15 +19,14 @@ end
 
 local function cleanAndLower(str)
   if str ~= nil and #str>1 then
-    local cleaned = str:gsub("[^%w]", "")
-    cleaned = str:gsub(" ", "")
-    cleaned = str:gsub("[éè]", "e")
+    local cleaned = str:gsub("[éè]", "e")
+    cleaned = cleaned:gsub("[^%w]", "")
     return cleaned:lower()
   end
   return ""
 end
 
-local function generatePerson(source, person, path)
+local function generatePerson(person, path)
     local uml={}
     table.insert(uml, "BEGIN:VCARD")
     table.insert(uml, "VERSION:3.0")
@@ -37,7 +36,7 @@ local function generatePerson(source, person, path)
     return table.concat(uml, "\n")
 end
 
-function children(path)
+local function children(path)
     local crumbsChildren = {}
     local mypage = path or editor.getCurrentPage()
     for page in each(table.sort(space.listPages(), compareDate)) do
@@ -49,11 +48,11 @@ function children(path)
     return crumbsChildren
 end
 
-function getFrontMatter(page)
+local function getFrontMatter(page)
     return index.extractFrontmatter(space.readPage(page)).frontmatter
 end 
 
-function organizationVcf(path)
+local function organizationVcf(path)
   path = path or editor.getCurrentPage()
   local uml = {}
   local liste= children(path)
@@ -61,12 +60,11 @@ function organizationVcf(path)
         local frontM= getFrontMatter(pag.name)
         if frontM ~= nil and frontM.person ~= nil then
           local person = frontM.person
-          table.insert(uml, generatePerson(uml, person,path))
+          table.insert(uml, generatePerson(person,path))
         end
   end
   table.insert(uml, "")
   local result= table.concat(uml, "\n")  
-  print(result)
   return result
 end
 
@@ -77,4 +75,12 @@ slashcommand.define {
   end
 }
 ```
+
+## Changelog
+
+* 2026-05-29:
+  * fix: `cleanAndLower` ran every `gsub` against the original `str`, discarding all but the last; now chains the replacements (accents → strip non-word → lowercase) for valid email local parts
+  * cleanup: dropped the unused `source`/`uml` parameter from `generatePerson`
+  * cleanup: made `children`, `getFrontMatter`, `organizationVcf` local to avoid global collisions with Organization-Chart
+  * cleanup: removed leftover `print(result)` debug call
 

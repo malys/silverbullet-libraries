@@ -15,7 +15,7 @@ Beautify markdown.
 local prettier = js.import("https://cdn.jsdelivr.net/npm/prettier/standalone/+esm")
 local prettierMarkdown = js.import("https://cdn.jsdelivr.net/npm/prettier/plugins/markdown/+esm")
 
-function formatText(text)
+local function formatText(text)
   return prettier.format(text, {
     parser = "markdown",
     plugins = { prettierMarkdown },
@@ -29,7 +29,7 @@ function formatText(text)
   })
 end
 
-function formatDocument()
+local function formatDocument()
   local text = editor.getText()
   local formattedText = formatText(text)
   editor.setText(formattedText)
@@ -51,6 +51,8 @@ command.define {
 
 ## Changelog
 
+- 2026-05-29:
+    - cleanup: declared `formatText`/`formatDocument` as `local function` instead of leaking them as globals
 - 2026-01-25:
     - feat: add option and ignore code
 

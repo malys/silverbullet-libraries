@@ -40,7 +40,7 @@ ${template.each(
 
 
 ```space-lua
-TAIGA_TOKENS=nil
+local TAIGA_TOKENS=nil
 local baseUrl = "https://api.taiga.io/api/v1"
 
 -- Basic token mangement
@@ -107,6 +107,11 @@ templates.taigaRecurringTasks = function(t)
 end
 ```
 
+
+## Changelog
+
+* 2026-05-29:
+  * cleanup: declared `TAIGA_TOKENS` as `local` instead of leaking it as a global (still shared by `getToken`/`getTaigaTasks` in the same block)
 
 ## Community
 

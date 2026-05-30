@@ -171,7 +171,7 @@ local findMyFence = function(node,blockId)
           --mls.debug(info) -- commented out debug line
           local block= string.gsub(blockId, "[^%w]", "")
           local inf=string.gsub(info, "[^%w]", "")
-          if info and inf:find(block) then
+          if info and info:find(blockId, 1, true) then
             mls.debug(info)
             return getChild(child, "CodeText")
           end
@@ -207,18 +207,16 @@ end
 
 -- Parse ISO Date
 -- Parses an ISO date string into a Unix timestamp.
--- This function appears incomplete and has a potential error in the offset calculation.
--- The `xoffset` variable is not defined.
 function mls.parseISODate(isoDate)
     local pattern = "(%d+)%-(%d+)%-(%d+)%a(%d+)%:%d+:%d+([Z%+%-])(%d?%d?)%:?(%d?%d?)"
     local year, month, day, hour, minute, 
-        seconds, offsetsign, offsethour, offsetmin = json_date:match(pattern)
+        seconds, offsetsign, offsethour, offsetmin = string.match(isoDate, pattern)
     local timestamp = os.time{year = year, month = month, 
         day = day, hour = hour, min = minute, sec = seconds}
     local offset = 0
     if offsetsign ~= 'Z' then
       offset = tonumber(offsethour) * 60 + tonumber(offsetmin)
-      if xoffset == "-" then offset = offset * -1 end
+      if offsetsign == "-" then offset = offset * -1 end
     end
     
     return timestamp + offset
@@ -249,10 +247,11 @@ function mls.getStdlibInternal()
         table.insert(results, key)  
       end
     end  
-    result=table.sort(results)
+    table.sort(results)
+    result = results
     mls.cache.ttl.CacheManager.set(KEY,result)
   end  
-  return table.sort(result)
+  return result
 end
 
 -- Position to Line Column
@@ -331,7 +330,7 @@ end
 function  table.mergeKV(t1, t2)
     for k, v in pairs(t2) do
         if type(v) == "table" and type(t1[k]) == "table"  then
-            mergeTablesRecursive(t1[k], v)
+            table.mergeKV(t1[k], v)
         else
             t1[k] = v
         end
@@ -469,6 +468,10 @@ end
 
 ## Changelog
 
+* 2026-05-29:
+  * fix: `parseISODate` referenced undefined `json_date`/`xoffset` (now `isoDate`/`offsetsign`)
+  * fix: `getStdlibInternal` used `table.sort`'s return value (always `nil`); now sorts in place and returns the list
+  * fix: `table.mergeKV` called undefined `mergeTablesRecursive`; now recurses into `table.mergeKV`
 * 2026-02-25:
   * feat: embed md and page 
 * 2026-01-22:

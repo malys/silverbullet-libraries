@@ -432,7 +432,14 @@ local function hide()
   editor.hidePanel(current_panel_id) 
 end
 
-local update = function(mode)  
+local update
+
+local function luaHandler(event)  
+  local data = js.tolua(event.detail)  
+  update(data.mode)
+end 
+
+update = function(mode)  
   local isVisibleT = isVisible()  
   if (not isVisibleT and mode) or (not mode and isVisibleT) then  
     show()  
@@ -453,11 +460,6 @@ local update = function(mode)
       listenerAdded = false  
     end  
   end  
-end 
-
-local function luaHandler(event)  
-  local data = js.tolua(event.detail)  
-  update(data.mode)
 end 
 
 -- Define the command
@@ -487,20 +489,13 @@ event.listen {
   end  
 }  
 ```
-```
-
-command.define({
-	name = "Beautify: to clipboard",
-	description = "Show code with lint info on the right",
-	run = function()
-		mls.debugger("beautify")
-	end
-})
-```
 
 
 ## Changelog
 
+* 2026-05-29:
+  * fix: `update` referenced `luaHandler` before its `local function` declaration, so the panel auto-refresh listeners were bound to a nil handler; forward-declared `update` and moved `luaHandler` ahead of it
+  * cleanup: removed an orphaned `command.define("Beautify: to clipboard")` that lived in a non-`space-lua` fence (never registered; duplicates the `debugger:beautify` slash command)
 * 2026-02-06:
   * chore: apply panel mechanism
 * 2026-01-23

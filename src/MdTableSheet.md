@@ -196,6 +196,14 @@ end
 -- Import Formulajs
 local formulajs = js.import("https://esm.sh/@formulajs/formulajs")
 
+-- Index metadata keys that are NOT table cell values.
+-- Centralized so every consumer filters the same set (used to be duplicated
+-- and out of sync between extractTable / findTableOfFormula).
+local META = {
+   ref = true, tag = true, tags = true, itags = true,
+   page = true, pos = true, tableref = true, range = true,
+}
+
 -- =========================
 -- Helper functions (kept only conversion helpers)
 -- =========================
@@ -256,9 +264,7 @@ local function extractTable(rows)
       local rowData = {}
       local col = 1
       for k, v in pairs(row) do
-         if k ~= "ref" and k ~= "tag" and k ~= "tags" and
-              k ~= "itags" and k ~= "page" and k ~= "pos" and
-              k ~= "tableref"  and k ~= "range"  then
+         if not META[k] then
             rowData[col] = v
             col = col + 1
          end
@@ -266,6 +272,34 @@ local function extractTable(rows)
       table.insert(data, rowData)
    end
    return data
+end
+
+-- =========================
+-- Per-page query cache
+-- =========================
+-- Every ${F(...)} / ${G(...)} on a page used to issue its own index query.
+-- This short-lived cache lets all formulas/charts in a single render pass share
+-- ONE query. The TTL is intentionally tiny: edits self-heal on the next render,
+-- and a "not found" lookup forces a fresh query (see F), so newly typed formulas
+-- resolve immediately rather than waiting for the TTL to lapse.
+mls.table._cache = mls.table._cache or {}
+mls.table.cacheTTL = mls.table.cacheTTL or 1 -- seconds (set 0 to disable caching)
+
+local function nowSec()
+   return os.time()
+end
+
+-- Returns the page's table rows (cached) plus the cache entry's per-table
+-- cellMap memo. Pass force=true to bypass/refresh the cache.
+local function getPageRows(pageName, force)
+   local entry = mls.table._cache[pageName]
+   if not force and entry and (nowSec() - entry.time) < mls.table.cacheTTL then
+      return entry.rows, entry.cellMaps
+   end
+   local rows = query[[from index.tag "table" where page == pageName order by pos]]
+   entry = { rows = rows, time = nowSec(), cellMaps = {} }
+   mls.table._cache[pageName] = entry
+   return rows, entry.cellMaps
 end
 
 -- Returns a table of tables where each inner table is a row in the table.
@@ -286,7 +320,7 @@ local function extractTables(pageName)
    if not pageName then pageName = editor.getCurrentPage() end
    log("Extracting tables from page: " .. pageName)
 
-   local allRows = query[[from index.tag "table" where page == pageName order by pos]]
+   local allRows = getPageRows(pageName)
    local tableGroups = {}
    for _, row in ipairs(allRows) do
       if not tableGroups[row.tableref] then tableGroups[row.tableref] = {} end
@@ -298,7 +332,7 @@ local function extractTables(pageName)
       results[tRef] = extractTable(rows)
    end
    log("Extracted " .. tostring(#(allRows or {})) .. " table rows")
-   log(result)
+   log(results)
    return results
 end
 
@@ -312,50 +346,45 @@ end
 -- end
 
 local function toCellMap(tableData)
-   log("toCellMap in") 
+   log("toCellMap in")
    local map = {}
+   local colLetters = {} -- memo: column number -> letters (depends only on column)
    for r, row in ipairs(tableData) do
       for c, val in ipairs(row) do
-         local key = numberToColLetters(c) .. r
-         map[key] = tonumber(val) or val
+         local letters = colLetters[c]
+         if not letters then
+            letters = numberToColLetters(c)
+            colLetters[c] = letters
+         end
+         map[letters .. r] = tonumber(val) or val
       end
    end
    log("toCellMap out") 
    return map
 end
 
--- Returns the table that contains the given formula.
--- If no table is found, returns nil.
---
--- Example usage:
---
--- local table = findTableOfFormula('Page 1', 'SUM(A1:A5)')
--- if table then
---    print(table)
--- end
-
-local function findTableOfFormula(pageName, formulaString, label)
-   log("Searching table for formula: " .. formulaString .. " / label=" .. (label or "nil"))
-   if not pageName then pageName = editor.getCurrentPage() end
-   local allRows = query[[from index.tag "table" where page == pageName]]
-   local search = formulaString
-   if label then search = '"' .. formulaString .. '","' .. label .. '"' end
-   log("Searching table : "..search)
-   for _, row in ipairs(allRows) do
+-- Returns the tableref of the table whose cells contain `search`, or nil.
+local function findFormulaRef(rows, search)
+   for _, row in ipairs(rows) do
       for k, v in pairs(row) do
-         if k ~= "ref" and k ~= "tag" and k ~= "tags" and
-              k ~= "itags" and k ~= "page" and k ~= "pos" and
-              k ~= "tableref" then
-            if type(v) == "string" and string.find(v, search, 1, true) then
-               log("Formula found in table: " .. row.tableref)
-               return row.tableref
-            end
+         if not META[k] and type(v) == "string" and string.find(v, search, 1, true) then
+            return row.tableref
          end
       end
    end
-   log("Formula not found in any table")
-   editor.reloadPage()
    return nil
+end
+
+-- Returns the cellMap for a single tableref, memoized in the cache entry.
+local function cellMapForTable(tRef, rows, cellMaps)
+   if cellMaps[tRef] then return cellMaps[tRef] end
+   local trows = {}
+   for _, row in ipairs(rows) do
+      if row.tableref == tRef then table.insert(trows, row) end
+   end
+   local cm = toCellMap(extractTable(trows))
+   cellMaps[tRef] = cm
+   return cm
 end
 
 ---
@@ -424,16 +453,29 @@ function F(formulaString, label, pageName)
    log("Evaluating F: " .. formulaString .. " / label=" .. (label or "nil"))
 
    if not pageName then pageName = editor.getCurrentPage() end
-   local tRef = findTableOfFormula(pageName, formulaString, label)
-   if not tRef then 
-     return 0 --postProcessing("Formula not in any table","error")
-    end
-   local tables = extractTables(pageName)
-   local tbl = tables[tRef]
-   if not tbl then 
-     return postProcessing("Table not found","error")
-    end
-   local cellMap = toCellMap(tbl)
+
+   local search = formulaString
+   if label then search = '"' .. formulaString .. '","' .. label .. '"' end
+   log("Searching table : " .. search)
+
+   -- Locate AND extract the formula's table from the shared per-page cache, so
+   -- all formulas on the page reuse a single index query. (Previously every F()
+   -- ran two queries and extracted every table on the page.)
+   local allRows, cellMaps = getPageRows(pageName)
+   local tRef = findFormulaRef(allRows, search)
+   if not tRef then
+      -- The cache may be stale (e.g. formula just typed). Force one fresh query.
+      allRows, cellMaps = getPageRows(pageName, true)
+      tRef = findFormulaRef(allRows, search)
+   end
+
+   if not tRef then
+      log("Formula not found in any table")
+      editor.reloadPage()
+      return 0 --postProcessing("Formula not in any table","error")
+   end
+
+   local cellMap = cellMapForTable(tRef, allRows, cellMaps)
    log(cellMap)
    log("extractFormula")
    local funcName=extractFormula(formulaString)
@@ -443,8 +485,9 @@ function F(formulaString, label, pageName)
    log(argsStr)
    log("extractArgsFormula")
    if not funcName then
-      local match = string.matchRegex(formulaString, "([A-Z]+)(%d+)")  
-      if match then 
+      -- Bare cell reference, e.g. F("A1"). Use a Lua pattern (string.matchRegex
+      -- expects a JS regex, where %d is not valid).
+      if string.match(formulaString, "^%u+%d+$") then
         log("get Cell " .. formulaString)
         local value= cellMap[formulaString]
         return postProcessing(nil,value)
@@ -487,150 +530,13 @@ end
 -- @return float
 ---
 function R(formulaString, label, pageName)
-  return string.format("%.2f",F(formulaString, label, pageName))
-end
-
----
--- Returns true if the cursor is currently inside a table.
--- @return boolean
--- @see isCursorInTable
----
-
-local function isCursorInTable()
-   local line = editor.getCurrentLine()
-   if line == nil then
-     line =false 
-      return false
+  local value = F(formulaString, label, pageName)
+  local number = tonumber(value)
+  if number == nil then
+    -- Non-numeric result (e.g. CONCAT) -> nothing to round, return as-is.
+    return tostring(value)
   end
-   local result=string.match(line.text, "^%s*|.*|%s*$")
-   if result == nil then 
-       return false
-   else 
-    return true
-   end
-end
-
----
--- Returns the block of text that contains the cursor.
--- @return string
--- @see getTableBlock
----
-local function getTableBlock()
-   local lines = string.split(editor.getText(), "\n") 
-   local cursorLine = editor.getCursor() or 1
-   local startLine=cursorLine
-   local endLine =  cursorLine
-   local pointer=true
-  
-   while lines and #lines>2 and startLine > 1 and pointer do 
-     pointer=string.match(lines[startLine - 1], "^%s*|.*|%s*$") 
-     if pointer == nil then
-       pointer=false
-     else 
-       pointer=true
-     end
-     startLine = startLine - 1 
-   end
-   pointer=true
-   while lines and #lines>2 and endLine > 1 and pointer do 
-     pointer=string.match(lines[endLine + 1], "^%s*|.*|%s*$") 
-     if pointer == nil then
-       pointer=false
-     else 
-       pointer=true
-     end
-     endLine = endLine + 1 
-   end
-   return  lines,startLine,endLine
-end
-
----
--- Splits a row into cells.
--- @param line string
--- @return table
----
-local function splitRow(line)
-   local cells = {}
-   for cell in string.gmatch(line, "|([^|]*)") do
-      table.insert(cells, string.trim(cell)) 
-   end
-   while #cells > 0 and (cells[#cells] == nil or string.trim(cells[#cells]) == "") do
-      table.remove(cells)
-   end
-
-   return cells
-end
-
----
--- Joins a row of cells into a single string.
--- @param cells table
--- @return string
----
-local function joinRow(cells)
-   local out = {}
-   for i = 1, #cells do out[i] = tostring(cells[i] or "") end
-   log(out)
-   return "| " .. table.concat(out, " | ") .. " |" -- Use table.concat
-end
-
----
--- Returns the offset of the first non-empty character in a cell.
--- @param cellText string
--- @return number
----
-local function firstNonEmptyOffset(cellText)
-   if not cellText or cellText == "" then return 1 end
-   return string.find(cellText, "%S") or 1
-end
-
----
--- Returns the absolute position of a cell in a table.
--- @param lines table
--- @param lineIndex number
--- @param colIndex number
--- @return number
----
-local function getCellAbsolutePosition(lines, lineIndex, colIndex)
-    local line = lines[lineIndex] or ""
-    local currentPos = 1 -- Start position in the string (1-indexed)
-    local colCount = 0
-    local pos = nil
-
-    -- Find the first pipe, which usually starts the table
-    local firstPipe = string.find(line, "|", currentPos)
-    if not firstPipe then
-        return (string.find(line, "|") or 1) + 1 -- Fallback logic
-    end
-    currentPos = firstPipe + 1
-
-    -- Iterate through the cells until the target column is found
-    while currentPos <= string.len(line) do
-        -- Find the next pipe starting from currentPos
-        local nextPipe = string.find(line, "|", currentPos)
-        if not nextPipe then
-            -- We've reached the end of the line
-            break
-        end
-
-        colCount = colCount + 1
-
-        -- Extract the cell content (text between currentPos and nextPipe)
-        local cellText = string.sub(line, currentPos, nextPipe - 1)
-        
-        if colCount == colIndex then
-            -- Calculate the absolute position:
-            -- 1. nextPipe - string.len(cellText) is the index just before the cell's content starts.
-            -- 2. Add firstNonEmptyOffset to find the first non-whitespace character.
-            pos = (nextPipe - string.len(cellText)) + firstNonEmptyOffset(cellText) - 1
-            break
-        end
-
-        -- Move to the position after the pipe for the next cell
-        currentPos = nextPipe + 1
-    end
-
-    -- Return the calculated position, or fall back to the start of the first cell
-    return pos or (string.find(line, "|") or 1) + 1
+  return string.format("%.2f", number)
 end
 
 ---
@@ -668,51 +574,6 @@ local function expandSingleRange(rangeStr,cellMap)
     log("expandSingleRange: end")
     return dest
 end
-
----
--- Edits a table in place.
--- @param fn function
----
-local function withTableEdit(fn)
-   if not isCursorInTable() then return end
-   local lines, s, e = getTableBlock()
-   fn(lines, s, e)
-   editor.setText(table.concat(lines, "\n")) 
-end
-
--- =========================
--- Cell Navigation (Ctrl+Arrow)
--- =========================
-
----
--- Moves the cursor to the specified cell.
--- @param dx number
--- @param dy number
----
-local function moveCell(dx, dy)
-   if not isCursorInTable() then return end
-   local lines, s, e = getTableBlock()
-   local cur = editor.getCursor()
-   local relRow = cur.line - s + 1
-   local rowText = lines[cur.line] or ""
-   local colIndex = 1
-   local acc = 0
-   for i, cell in ipairs(splitRow(rowText)) do
-      acc = acc + string.len(cell) + 3 -- Use string.len
-      if acc >= cur.ch then colIndex = i break end
-   end
-
-   local targetRow, targetCol = relRow + dy, colIndex + dx
-   if targetRow < 1 or targetRow > (e - s + 1) then return end
-   local targetCells = splitRow(lines[s + targetRow - 1])
-   if targetCol < 1 or targetCol > #targetCells then return end
-
-   local newCh = getCellAbsolutePosition(lines, s + targetRow - 1, targetCol)
-   editor.moveCursor({ line = s + targetRow - 1, ch = newCh })
-end
-
--- TODO add commands
-
 
 -- =========================
 -- Chartjs
@@ -826,7 +687,7 @@ end
 
 local function getClosestTable(label,pageName,tables)
    log("getClosestTable: start")
-   functionPosition=tonumber(findPosition(pageName, 'G("'..label..'"'))
+   local functionPosition=tonumber(findPosition(pageName, 'G("'..label..'"'))
 
    local minDiff = 100000
    local nearestTable
@@ -1176,6 +1037,15 @@ end
 
 ## Changelog
 
+* 2026-05-29:
+  * perf: `F()` now runs a single index query and extracts only the table that contains the formula (previously 2 queries per formula + extraction of every table on the page)
+  * fix: bare cell reference `F("A1")` now uses a Lua pattern instead of `string.matchRegex` (a JS regex where `%d` is invalid)
+  * fix: `functionPosition` was a leaked global in `getClosestTable`; `log(result)` referenced an undefined variable in `extractTables`
+  * fix: `R()` no longer errors on non-numeric results (e.g. `CONCAT`); returns the value as-is when it can't be rounded
+  * perf: `toCellMap` memoizes column letters per column instead of recomputing them for every cell
+  * perf: added a short-lived per-page query cache so every `${F(...)}`/`${G(...)}` on a page shares ONE index query per render pass (TTL `mls.table.cacheTTL`, default 1 s via `os.time()`; set `0` to disable; a "not found" lookup forces a fresh query so newly typed formulas resolve immediately)
+  * refactor: centralized the index-metadata key set (`META`) shared by all consumers
+  * cleanup: removed dead/broken cursor-navigation code (`isCursorInTable`, `getTableBlock`, `splitRow`, `joinRow`, `firstNonEmptyOffset`, `getCellAbsolutePosition`, `withTableEdit`, `moveCell`) — never wired to a command and built on a wrong `editor.getCursor()` model (it returns a numeric offset, not a `{line, ch}` object)
 * 2026-02-19:
   * feat: support F(“A1”) to return value of cell and to be able to write (F(“A1”)*F(“A5”))/5
 * 2026-02-08:
