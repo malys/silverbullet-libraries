@@ -5,30 +5,30 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 ## 📦 Available Libraries
 
 ### 🛠️  Tools
-- [Lru](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md) - LRU cache leveraging @isaacs/lrucache - (2026-05-29)
+- [Lru](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/LRU.md) - LRU cache leveraging @isaacs/lrucache - (2026-05-30)
 - [Ttl](https://github.com/malys/silverbullet-libraries/blob/main/src/cache/TTL.md) - TTL cache leveraging @isaacs/ttlcache - (2026-05-29)
 - [Cursorposition](https://github.com/malys/silverbullet-libraries/blob/main/src/CursorPosition.md) - Generate and copy links to specific cursor positions and headers in markdown documents - (2026-02-11)
 - [Tableexport](https://github.com/malys/silverbullet-libraries/blob/main/src/TableExport.md) - Export md table to different formats (json,csv,yaml). - (2026-05-29)
-- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2026-05-29)
+- [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2026-05-30)
 
 ### 🆘  Helpers
 - [Customslashcommand](https://github.com/malys/silverbullet-libraries/blob/main/src/CustomSlashCommand.md) - custom slash commands. - (2026-02-11)
-- [Helpshortcuts](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md) - Display most commun shortcuts. - (2026-02-11)
+- [Helpshortcuts](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md) - Display most commun shortcuts. - (2026-05-30)
 - [Llminstructions](https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md) - System prompt to pilot LLM in SB plugin coding. - (2026-02-11)
-- [Organization Chart](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md) - Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart. - (2026-02-11)
+- [Organization Chart](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md) - Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart. - (2026-05-30)
 - [Organization Company](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Company.md) - Organization Company card template. - (2026-02-11)
 - [Organization Completion](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-completion.md) - Organization autocompletion on person @ and company #. - (2026-02-11)
 - [Organization Employee](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Employee.md) - Organization employee template - (2026-02-11)
-- [Organization Vcfexport](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md) - Generate VCF of company's employees. - (2026-02-11)
+- [Organization Vcfexport](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-VCFExport.md) - Generate VCF of company's employees. - (2026-05-30)
 - [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md) - Replace Placeholders with specific values - (2026-02-11)
 
 ### 🛎️  Services
-- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2026-05-29)
+- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2026-05-30)
 - [Markmapmindmap](https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md) - MarkMap mindmap integration. - (2026-05-29)
 - [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - Marp slides integration. - (2026-05-29)
-- [Mdprettier](https://github.com/malys/silverbullet-libraries/blob/main/src/mdPrettier.md) - Beautify md file. - (2026-02-11)
-- [Mdtablesheet](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md) - Integrate FormulaJS in markdown table (table = sheet). - (2026-05-29)
-- [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga project management tool - (2026-02-11)
+- [Mdprettier](https://github.com/malys/silverbullet-libraries/blob/main/src/mdPrettier.md) - Beautify md file. - (2026-05-30)
+- [Mdtablesheet](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md) - Integrate FormulaJS in markdown table (table = sheet). - (2026-05-30)
+- [Taiga](https://github.com/malys/silverbullet-libraries/blob/main/src/Taiga.md) - Taiga project management tool - (2026-05-30)
 - [Vikunja](https://github.com/malys/silverbullet-libraries/blob/main/src/Vikunja.md) - Vikunja, open-source project management tool, integration. - (2026-05-29)
 
 ### 👁️  Navigation & Display
@@ -38,7 +38,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity - (2026-02-11)
 
 ### 🪲  Debugging
-- [Debugger](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Debugger.md) - Tooling to debug (linter, postion, beautify) - (2026-02-11)
+- [Debugger](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Debugger.md) - Tooling to debug (linter, postion, beautify) - (2026-05-30)
 - [Luacheck](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities/Luacheck.md) - Lua linter. - (2026-02-11)
 
 ### 👮  Security & Audit
@@ -46,6 +46,9 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 
 ### 💀  Deprecated
 - [Vscodepalette](https://github.com/malys/silverbullet-libraries/blob/main/src/VSCodePalette.md) - DEPRECATED universal palette (as VScode Palette), use '>' to execute commands - (2026-02-11)
+
+### 🛎️➕  Other
+- [Mdtablesheetextras](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheetExtras.md) - Advanced spreadsheet extras for Markdown tables (pivot, formula palette, conditional formatting, CSV import). Companion to MdTableSheet / MdTableRender. - (2026-05-30)
 
 
 ## 🛠️ Installation

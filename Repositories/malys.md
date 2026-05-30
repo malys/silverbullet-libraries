@@ -74,6 +74,11 @@ uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheet.md
 description: "Integrate FormulaJS in markdown table (table = sheet)."
 ---
+name: "Mdtablesheetextras"
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheetExtras.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableSheetExtras.md
+description: "Advanced spreadsheet extras for Markdown tables (pivot, formula palette, conditional formatting, CSV import). Companion to MdTableSheet / MdTableRender."
+---
 name: "Organization Chart"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md
