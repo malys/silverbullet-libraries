@@ -189,7 +189,6 @@ local function get_history(file_path)
 
       if hash and ts_str and msg then
         local ts = tonumber(ts_str) or 0
-        local msg = parts[3] or ""
         table.insert(commits, {
           name        = hash,
           description = msg .. " - " .. format_git_timestamp(ts),
