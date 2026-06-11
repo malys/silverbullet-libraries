@@ -83,8 +83,8 @@ local function generatePerson(person, path)
           local positionPerson=", \""..join(person.job.position, ", ").."\""
           local spritePerson=""
           if person.image == nil then
-            person.image="https://static.wikia.nocookie.net/villains/images/4/4a/Kevin_Spacey_John_Doe_Se7en.jpeg"
-            person.image_scale=0.1
+            person.image="https://as1.ftcdn.net/jpg/02/73/16/24/220_F_273162497_ShAAB1TH0vhM4UUWbhBuao8jtGBDubwD.jpg"
+          person.image_scale=1
           end  
           local scalePerson=0.6
           if person.image_scale ~= nil then

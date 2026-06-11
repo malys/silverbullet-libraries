@@ -2,7 +2,7 @@
 author: malys
 description: Advanced spreadsheet extras for Markdown tables (pivot, formula palette, conditional formatting, CSV import). Companion to MdTableSheet / MdTableRender.
 tags: userscript
-pageDecoration.prefix: "🛎️➕ "
+pageDecoration.prefix: "🛎️"
 name: "Library/Malys/MdTableSheetExtras"
 ---
 # Md Table Sheet — Extras
