@@ -13,7 +13,7 @@ slashcommand.define {
   name = "luaeditor",
   description= "insert lua editor",
   run = function()
-  tpl=[[${mls.embedUrl("https://glot.io/new/lua","100%","1000px")}]]
+  local tpl=[[${mls.embedUrl("https://glot.io/new/lua","100%","1000px")}]]
   editor.insertAtCursor(tpl, false, true)
   end
 }
@@ -21,7 +21,7 @@ slashcommand.define {
   name = "luacheck: globals",
   description= "insert lua editor",
   run = function()
-  tpl=[[-- luacheck: globals |^|]]
+  local tpl=[[-- luacheck: globals |^|]]
   editor.insertAtCursor(tpl, false, true)
   end
 }
@@ -32,7 +32,7 @@ slashcommand.define {
   name = "plantumleditor",
   description= "insert plantuml editor",
   run = function()
-  tpl=[[${mls.embedUrl("https://plantuml.online/uml/","100%","1000px")}]]
+  local tpl=[[${mls.embedUrl("https://plantuml.online/uml/","100%","1000px")}]]
   editor.insertAtCursor(tpl, false, true)
   end
 }
@@ -45,42 +45,8 @@ slashcommand.define {
   description= "convert Json or Lua table to md table",
   run = function()
     local data = editor.prompt("Lua or Json array")
-    if pageName then editor.navigate(pageName) end
     editor.insertAtCursor(table.toMd(data), false, true)
   end
-}
-```
-
-# Mood
-
-```space-lua
-slashCommand.define {  
-  name = "mood",  
-  description = "Insert daily health tracking",  
-  run = function()  
-    -- Collect inputs using dropdown dialogs  
-    local night =mls.table.render("Night","evaluation")  
-    local mMood = mls.table.render("Morning mood", "mood")  
-    local eMood = mls.table.render("Night mood","mood")  
-    local recover = mls.table.render("Recover","posneg")
-    local pacing =  mls.table.render("Pacing","logical")  
-    local crash =  mls.table.render("Crash","logical")  
-    local comments =mls.table.render("Comment")  
-      
-    -- Build template with collected values  
-    local template = string.format("| %s | %s    | %s           | %s                | %s                 | %s                   | %s             | %s              | %s                          |\n",  
-      os.date("%Y-%m-%d"),  
-      os.date("%a", os.time()):sub(1,2):upper(),  
-      night or "3",  
-      mMood or "3",  
-      eMood  or "3",   
-      recover or "0",  
-      pacing or "1",  
-      crash or "1",  
-      comments or ""  
-    )  
-    editor.insertAtCursor(template)  
-  end  
 }
 ```
 
@@ -91,7 +57,7 @@ slashcommand.define {
   name = "bash",
   description="bash code",
   run = function()
-tpl=[[```bash
+local tpl=[[```bash
 #|^|
 ```]]
   editor.insertAtCursor(tpl, false, true)
@@ -106,7 +72,7 @@ slashcommand.define {
   name = "utility",
   description="utility code",
   run = function()
-tpl=[[```space-lua
+local tpl=[[```space-lua
 --priority: 15     
 --|^|
 ```]]
@@ -122,7 +88,7 @@ slashcommand.define {
   name = "config",
   description="config code",
   run = function()
-tpl=[[```space-lua
+local tpl=[[```space-lua
 --priority: 19        
 #|^|
 ```]]
@@ -130,3 +96,10 @@ tpl=[[```space-lua
   end
 }
 ```
+
+## Changelog
+
+* 2026-05-29:
+  * fix: `toMdTable` referenced an undefined `pageName` and called `editor.navigate` for no reason; removed the stray line
+  * fix: the `mood` command used `slashCommand.define` (wrong casing); now `slashcommand.define`
+  * cleanup: declared the `tpl` template variables `local` instead of leaking them as globals

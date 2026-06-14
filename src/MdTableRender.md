@@ -105,11 +105,56 @@ mls.table.renderer["euro"] = {
 }
 ```
 
+### Private renderers (optional)
+
+You can keep the main script public and define private renderers in a separate `space-lua` script.
+
+#### How it works
+
+The public script freezes its formatters into the injected JS at the moment `enableTableRenderer()` runs. So a private renderer added *after* that won't appear until the renderer is relaunched.
+
+Give the **private** script a **lower** priority, e.g. on the first line of the block: `-- priority: 10`
+Space-lua runs higher priorities first, so the public script initializes before the private one — meaning `mls.table.enableTableRenderer` exists when the private script runs.
+
+In the **private** script: add your renderers to `mls.table.renderer[...]`, then relaunch to re-inject the formatters (the JS is frozen at enable time, so simply adding a renderer afterwards is not enough):
+
+```lua
+   mls.table.cleanupRenderer()
+   mls.table.enableTableRenderer()
+```
+
+The public script stays standalone: without a private script, its autostart activates it normally.
+
+#### Example private script
+
+```lua
+-- priority: 10
+mls = mls or {}
+mls.table = mls.table or {}
+mls.table.renderer = mls.table.renderer or {}
+
+mls.table.renderer["mytag"] = {
+    completion = {
+        { name = "Option A", value = "a" },
+        { name = "Option B", value = "b" },
+    },
+    multiple = true,
+    visual = [[return v;]],
+    validation = function(v)
+        return true
+    end
+}
+
+-- Relaunch to inject the private formatters
+if mls.table.enableTableRenderer and mls.table.cleanupRenderer then
+    mls.table.cleanupRenderer()
+    mls.table.enableTableRenderer()
+end
+```
 ## Code
 
 ```space-lua
-
-
+-- priority: 15
 -- Table Renderer (Formatter)
 mls = mls or {}
 mls.table = mls.table or {}
@@ -250,13 +295,13 @@ mls.table.renderer = {
 	},
 	logical = {
 		completion = {
+          	{
+				name = "✅",
+				value = "1"
+			},
 			{
 				name = "❌",
 				value = "0"
-			},
-			{
-				name = "✅",
-				value = "1"
 			},
 		},
 		visual = [[
@@ -749,15 +794,15 @@ mls.table.renderer = {
 			return isBetween(v, 1, 10)
 		end
 	},
-	badge = {
-		completion = {},
-		visual = [[
+    badge = {
+        completion = {},
+        visual = [[
     return `<span style="background:#2196f3;color:white;padding:2px 6px;border-radius:8px;font-size:0.9em;">${v}</span>`;
-  ]],
-		validation = function(v)
-			return v ~= nil
-		end
-	},
+    ]],
+        validation = function(v)
+            return v ~= nil
+        end
+    },
 }
 
 ------------------------------------------------
@@ -781,10 +826,12 @@ mls.table.render = function(label, rendererN)
         rendererName= rendererName or ""
         local renderer = mls.table.renderer[rendererName]
         if renderer then
-    		if renderer.completion and # renderer.completion > 0 then
-    			input = editor.filterBox(label, renderer.completion)
+    		if renderer.completion and # renderer.completion > 0 and not renderer.multiple then
+            	input = editor.filterBox(label, renderer.completion)
+            elseif renderer.completion and # renderer.completion > 0 and renderer.multiple then 
+                input = mls.ui.filterBoxMulti(label, renderer.completion)
     		else
-              input = editor.prompt(label)
+                input = editor.prompt(label)
             end
         else
           input = editor.prompt(label)
