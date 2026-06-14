@@ -144,12 +144,6 @@ mls.table.renderer["mytag"] = {
         return true
     end
 }
-
--- Relaunch to inject the private formatters
-if mls.table.enableTableRenderer and mls.table.cleanupRenderer then
-    mls.table.cleanupRenderer()
-    mls.table.enableTableRenderer()
-end
 ```
 ## Code
 

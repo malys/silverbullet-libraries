@@ -34,6 +34,11 @@ uri: https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplor
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md
 description: "Generate wall of children page tags"
 ---
+name: "Getoutlinesync"
+uri: https://github.com/malys/silverbullet-libraries/blob/main/src/GetOutlineSync.md
+website: https://github.com/malys/silverbullet-libraries/blob/main/src/GetOutlineSync.md
+description: "Two-way sync between SilverBullet and GetOutline (documents + images)"
+---
 name: "Githistory"
 uri: https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md
 website: https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md
