@@ -12,7 +12,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Utilities](https://github.com/malys/silverbullet-libraries/blob/main/src/Utilities.md) - List of reusable functions. - (2026-05-30)
 
 ### 🆘  Helpers
-- [Customslashcommand](https://github.com/malys/silverbullet-libraries/blob/main/src/CustomSlashCommand.md) - custom slash commands. - (2026-02-11)
+- [Customslashcommand](https://github.com/malys/silverbullet-libraries/blob/main/src/CustomSlashCommand.md) - custom slash commands. - (2026-06-14)
 - [Helpshortcuts](https://github.com/malys/silverbullet-libraries/blob/main/src/HelpShortcuts.md) - Display most commun shortcuts. - (2026-05-30)
 - [Llminstructions](https://github.com/malys/silverbullet-libraries/blob/main/src/LLMInstructions.md) - System prompt to pilot LLM in SB plugin coding. - (2026-02-11)
 - [Organization Chart](https://github.com/malys/silverbullet-libraries/blob/main/src/Organization/Organization-Chart.md) - Organization chart create [Plantuml](https://plantuml.com/fr/) organization chart. - (2026-06-11)
@@ -23,7 +23,8 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 - [Replaceplaceholders](https://github.com/malys/silverbullet-libraries/blob/main/src/ReplacePlaceholders.md) - Replace Placeholders with specific values - (2026-02-11)
 
 ### 🛎️  Services
-- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2026-06-11)
+- [Getoutlinesync](https://github.com/malys/silverbullet-libraries/blob/main/src/GetOutlineSync.md) - Two-way sync between SilverBullet and GetOutline (documents + images) - (2026-06-14)
+- [Githistory](https://github.com/malys/silverbullet-libraries/blob/main/src/GitHistory.md) - Implement Git commands (log, diff, revert) - (2026-06-14)
 - [Markmapmindmap](https://github.com/malys/silverbullet-libraries/blob/main/src/MarkmapMindmap.md) - MarkMap mindmap integration. - (2026-05-29)
 - [Marpslides](https://github.com/malys/silverbullet-libraries/blob/main/src/MarpSlides.md) - Marp slides integration. - (2026-05-29)
 - [Mdprettier](https://github.com/malys/silverbullet-libraries/blob/main/src/mdPrettier.md) - Beautify md file. - (2026-05-30)
@@ -35,7 +36,7 @@ A curated collection of plugins, templates, and utilities for [SilverBullet](htt
 ### 👁️  Navigation & Display
 - [Breadcrumb](https://github.com/malys/silverbullet-libraries/blob/main/src/Breadcrumb.md) - Generate breadcrumbs for a page - (2026-02-11)
 - [Fasttagexplorer](https://github.com/malys/silverbullet-libraries/blob/main/src/FastTagExplorer.md) - Generate wall of children page tags - (2026-02-11)
-- [Mdtablerender](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md) - Automatically formats Markdown table cells based on hashtag column tags. - (2026-02-13)
+- [Mdtablerender](https://github.com/malys/silverbullet-libraries/blob/main/src/MdTableRender.md) - Automatically formats Markdown table cells based on hashtag column tags. - (2026-06-14)
 - [Theme Malys](https://github.com/malys/silverbullet-libraries/blob/main/src/Theme/theme-malys.md) - Dark theme thought for readibility and productivity - (2026-02-11)
 
 ### 🪲  Debugging
