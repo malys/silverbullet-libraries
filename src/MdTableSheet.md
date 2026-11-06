@@ -142,7 +142,7 @@ All settings are optional and go in your `CONFIG` page.
 
 ### Formulajs module
 
-The formula engine is imported as an ES module. By default it comes from esm.sh, pinned to version `4.6.1`, so the library behaves the same until you change the setting:
+The formula engine is imported as an ES module. By default it comes from esm.sh, latest release (`https://esm.sh/@formulajs/formulajs`). To pin a version or load it from elsewhere:
 
 ```lua
 config.set("formulajs", {
@@ -152,7 +152,7 @@ config.set("formulajs", {
 })
 ```
 
-To only switch the version on esm.sh:
+To only pin the version on esm.sh:
 
 ```lua
 config.set("formulajs", {
@@ -239,10 +239,9 @@ config.define("formulajs", {
   type = "object"
 })
 
--- Resolve the module URL from config with a pinned default. `url` wins over
--- `version`; `version` only changes the version in the default esm.sh URL.
-local FORMULAJS_DEFAULT_VERSION = "4.6.1"
-local FORMULAJS_DEFAULT_URL = "https://esm.sh/@formulajs/formulajs@" .. FORMULAJS_DEFAULT_VERSION
+-- Resolve the module URL from config. `url` wins over `version`; `version`
+-- pins a version on esm.sh. The default is unchanged: the latest release.
+local FORMULAJS_DEFAULT_URL = "https://esm.sh/@formulajs/formulajs"
 
 local function formulajsUrl()
   local cfg = config.get("formulajs") or {}
@@ -1124,7 +1123,7 @@ end
 ## Changelog
 
 * 2026-11-06:
-  * feat: the Formulajs module URL is configurable (`config.set("formulajs", { url = ... })` or `{ version = ... }`); the default is pinned to `@formulajs/formulajs@4.6.1` instead of following the latest release at every load
+  * feat: the Formulajs module URL is configurable (`config.set("formulajs", { url = ... })` or `{ version = ... }`); the default is unchanged (latest release from esm.sh)
   * fix: a failed import of Formulajs no longer breaks the whole library; `F()` reports it as a notification and returns `0`, and retries the import on the next call
   * docs: new "Configuration" section (Formulajs module, QuickChart)
 * 2026-05-29:
