@@ -136,6 +136,43 @@ ${G("2","","A1:A3",{"B4:B6","B1:B3"},{type="line", serieLabel={"A","B"},width=30
 *   
 ![](https://community.silverbullet.md/uploads/default/original/2X/e/ec9b8a44f48b1854b94544da609e24fb1c9bf888.gif)
 
+## Configuration
+
+All settings are optional and go in your `CONFIG` page.
+
+### Formulajs module
+
+The formula engine is imported as an ES module. By default it comes from esm.sh, pinned to version `4.6.1`, so the library behaves the same until you change the setting:
+
+```lua
+config.set("formulajs", {
+  -- Full module URL: wins over `version`. Any URL works, also a bundle
+  -- hosted in your space, e.g. ".fs/Library/formulajs.min.js".
+  url = "https://esm.sh/@formulajs/formulajs@4.6.1",
+})
+```
+
+To only switch the version on esm.sh:
+
+```lua
+config.set("formulajs", {
+  version = "4.6.1",
+})
+```
+
+If the module cannot be loaded (wrong URL, no network), every `F(...)` shows a notification `Formulajs not loaded from <url>: <reason>` and returns `0`; the rest of the library (charts, table inserts) keeps working. The import is retried on the next `F(...)` call.
+
+### QuickChart
+
+Charts are rendered by [QuickChart](https://quickchart.io). `baseUrl` points to a self-hosted instance, `version` selects the Chart.js version:
+
+```lua
+config.set("quickchart", {
+  baseUrl = "https://quickchart.io",
+  version = "2.9.4",
+})
+```
+
 ## Code source
 
 
@@ -193,8 +230,53 @@ local function log(...)
   end
 end
 
--- Import Formulajs
-local formulajs = js.import("https://esm.sh/@formulajs/formulajs")
+-- =========================
+-- Formulajs module (configurable, see "Configuration")
+-- =========================
+
+-- Define configurable Formulajs settings
+config.define("formulajs", {
+  type = "object"
+})
+
+-- Resolve the module URL from config with a pinned default. `url` wins over
+-- `version`; `version` only changes the version in the default esm.sh URL.
+local FORMULAJS_DEFAULT_VERSION = "4.6.1"
+local FORMULAJS_DEFAULT_URL = "https://esm.sh/@formulajs/formulajs@" .. FORMULAJS_DEFAULT_VERSION
+
+local function formulajsUrl()
+  local cfg = config.get("formulajs") or {}
+  if type(cfg) ~= "table" then cfg = {} end
+  if type(cfg.url) == "string" and cfg.url ~= "" then
+    return cfg.url
+  end
+  if type(cfg.version) == "string" and cfg.version ~= "" then
+    return "https://esm.sh/@formulajs/formulajs@" .. cfg.version
+  end
+  return FORMULAJS_DEFAULT_URL
+end
+
+-- Import Formulajs. A failed import (wrong URL, offline) must not break the
+-- whole library, so it is caught here and reported by F() instead.
+local formulajs = nil
+local formulajsError = nil
+
+local function loadFormulajs()
+  if formulajs then return formulajs end
+  local url = formulajsUrl()
+  log("Importing Formulajs from " .. url)
+  local ok, result = pcall(js.import, url)
+  if ok and result then
+    formulajs = result
+    formulajsError = nil
+  else
+    formulajsError = "Formulajs not loaded from " .. url .. ": " .. tostring(result)
+    log(formulajsError)
+  end
+  return formulajs
+end
+
+loadFormulajs()
 
 -- Index metadata keys that are NOT table cell values.
 -- Centralized so every consumer filters the same set (used to be duplicated
@@ -510,6 +592,10 @@ function F(formulaString, label, pageName)
       else
          table.insert(args, tonumber(a) or a)
       end
+   end
+
+   if not loadFormulajs() then
+      return postProcessing(formulajsError, "error")
    end
 
    if not formulajs[funcName] then
@@ -1037,6 +1123,10 @@ end
 
 ## Changelog
 
+* 2026-11-06:
+  * feat: the Formulajs module URL is configurable (`config.set("formulajs", { url = ... })` or `{ version = ... }`); the default is pinned to `@formulajs/formulajs@4.6.1` instead of following the latest release at every load
+  * fix: a failed import of Formulajs no longer breaks the whole library; `F()` reports it as a notification and returns `0`, and retries the import on the next call
+  * docs: new "Configuration" section (Formulajs module, QuickChart)
 * 2026-05-29:
   * perf: `F()` now runs a single index query and extracts only the table that contains the formula (previously 2 queries per formula + extraction of every table on the page)
   * fix: bare cell reference `F("A1")` now uses a Lua pattern instead of `string.matchRegex` (a JS regex where `%d` is invalid)
